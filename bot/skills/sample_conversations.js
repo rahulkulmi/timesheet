@@ -110,9 +110,11 @@ module.exports = function(controller) {
       bot.reply(message, {
         text: appMessages.helpText,
         attachments:[{
-          title: 'timesheet : ' + appMessages.helpTSText
+          title: appMessages.helpTSText,
+          color: '#3AA3E3'
         }, {
-          title: 'view : ' + appMessages.helpViewText
+          title: appMessages.helpViewText,
+          color: '#4C9900'
         }]
       });
     });
@@ -224,7 +226,7 @@ module.exports = function(controller) {
     var userId = message.user;
     var callback_id = message.callback_id;
 
-    var regex = new RegExp('([0-1][0-9]|2[0-3]):([0-5][0-9])');
+    var regex = new RegExp('([0-1][0-9]|2[0-9]):([0-5][0-9])');
     if (submission.officeIn && !regex.test(submission.officeIn)) {
       bot.dialogError({
          "name":"officeIn",
@@ -279,7 +281,7 @@ module.exports = function(controller) {
     var tab_06 = '\t\t\t\t\t\t';
 
     var attachmentArray = [{
-      "title": 'Date ' + tab_06 + 'IN' + tab_03 + 'OUT' + tab_03 + 'IN' + tab_03 + 'OUT' + tab_03 + 'Total',
+      "title": 'Date' + tab_06 + 'IN' + tab_03 + 'OUT' + tab_03 + 'IN' + tab_03 + 'OUT' + tab_02 + '  Total',
       "color": "#3AA3E3",
     }];
     userId = message.user;
