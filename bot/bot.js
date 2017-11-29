@@ -77,8 +77,8 @@ var bot_options = {
 // Mongo is automatically configured when deploying to Heroku
 if (process.env.MONGO_URI) {
   var URL = process.env.MONGO_URI + process.env.MONGODB_PORT_27017_TCP_ADDR + ':' + process.env.MONGODB_PORT_27017_TCP_PORT + '/slackdb'
+  // var URL = process.env.MONGO_URI
   var mongoStorage = require('botkit-storage-mongo')({mongoUri: URL, tables: ['timesheet']});
-  // var mongoStorage = require('botkit-storage-mongo')({mongoUri: process.env.MONGO_URI, tables: ['timesheet']});
   bot_options.storage = mongoStorage;
 } else {
   // store user data in a simple JSON format
