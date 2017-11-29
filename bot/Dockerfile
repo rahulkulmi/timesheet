@@ -3,6 +3,8 @@ FROM ubuntu:16.04
 
 # Install Node.js
 RUN apt-get update && apt-get install -y curl
+# Fix for sudo user in latest ubuntu image
+RUN apt-get update && apt-get install -y sudo && rm -rf /var/lib/apt/lists/*
 RUN curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
 RUN apt-get install -y nodejs
 RUN apt-get install -y build-essential

@@ -12,14 +12,14 @@ api['getTitleText'] = function(controller, date, userId, color, cb) {
   var tab_05 = '\t\t\t\t\t';
   var tab_06 = '\t\t\t\t\t\t';
   var row = {
-    "title": "",
-    "text": date,
+    "title": date,
+    "text": "",
     "color": color
   }
   var dateUserId = date + ':' + userId;
   controller.storage.timesheet.get(dateUserId, function(error, data){
     if (data) {
-      row['title'] = data.status;
+      row['text'] = data.status;
       var text = date + tab_02;
       if (data.officeIn) {
         text += data.officeIn + tab_02
@@ -42,7 +42,7 @@ api['getTitleText'] = function(controller, date, userId, color, cb) {
         text += tab_04 + ' ';
       }
       text += data.dayTotal;
-      row['text'] = text;
+      row['title'] = text;
     }
     cb(row);
   });

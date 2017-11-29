@@ -106,6 +106,17 @@ module.exports = function(controller) {
     //   });
     // });
 
+    controller.hears('help', 'direct_message', function(bot, message) {
+      bot.reply(message, {
+        text: appMessages.helpText,
+        attachments:[{
+          title: 'timesheet : ' + appMessages.helpTSText
+        }, {
+          title: 'view : ' + appMessages.helpViewText
+        }]
+      });
+    });
+
     controller.hears('timesheet', 'direct_message', function(bot, message) {
       bot.reply(message, {
         text: appMessages.askTimeSheetText,
@@ -187,8 +198,8 @@ module.exports = function(controller) {
               callback_id_user_date,
               'Submit'
             ).addText(appMessages.dialogTextStatus, 'status', null, {placeholder: appMessages.dialogTextStatusPh})
-            .addText(appMessages.dialogTextOfficeIn, 'officeIn', null, {optional: true, placeholder: appMessages.dialogTextOfficeOut})
-            .addText(appMessages.dialogTextOfficeIn, 'officeOut', null, {optional: true, placeholder: appMessages.dialogTextOfficeOutPh})
+            .addText(appMessages.dialogTextOfficeIn, 'officeIn', null, {optional: true, placeholder: appMessages.dialogTextOfficeInPh})
+            .addText(appMessages.dialogTextOfficeOut, 'officeOut', null, {optional: true, placeholder: appMessages.dialogTextOfficeOutPh})
             .addText(appMessages.dialogTextHomeIn, 'homeIn', null, {optional: true, placeholder: appMessages.dialogTextHomeInPh})
             .addText(appMessages.dialogTextHomeOut, 'homeOut', null, {optional: true, placeholder: appMessages.dialogTextHomeOutPh})
           }
