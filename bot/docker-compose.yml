@@ -1,0 +1,19 @@
+mongodb:
+  image: mongo:latest
+  container_name: mongodb-server
+  volumes:
+    - /home/ubuntu/mongodb-data:/data/db
+  ports:
+    - "27017:27017"
+
+application:
+  image: newput/timesheet:2.0
+  container_name: ts-dev-server
+  volumes:
+    - ./:/ts-bot
+  environment:
+    - NODE_ENV=development
+  ports:
+    - "8085:8085"
+  links:
+    - mongodb:mongodb
