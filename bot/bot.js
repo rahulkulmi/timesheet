@@ -78,7 +78,7 @@ var bot_options = {
 if (process.env.MONGO_URI) {
   var URL = process.env.MONGO_URI + process.env.MONGODB_PORT_27017_TCP_ADDR + ':' + process.env.MONGODB_PORT_27017_TCP_PORT + '/slackdb'
   // var URL = process.env.MONGO_URI
-  var mongoStorage = require('botkit-storage-mongo')({mongoUri: URL, tables: ['timesheet']});
+  var mongoStorage = require('botkit-storage-mongo')({mongoUri: URL, tables: ['timesheet', 'employee']});
   bot_options.storage = mongoStorage;
 } else {
   // store user data in a simple JSON format

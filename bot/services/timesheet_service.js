@@ -53,7 +53,7 @@ api['getDetailById'] = function(controller, date, userId, cb) {
   var dateUserId = date + ':' + userId;
   controller.storage.timesheet.get(dateUserId, function(error, data) {
     if (error) {
-      console.log('Error inside getTitleText()');
+      console.log('Error inside timesheet getDetailById()');
       console.log(error);
     }
     if (data) {

@@ -11,7 +11,7 @@ api['deleteMessage'] = function(bot, token, channel, ts) {
     ts: ts
   }
   var requestData = {
-    uri: bot.botkit.config.slack_root_url + 'delete',
+    uri: bot.botkit.config.slack_root_url + 'chat.delete',
     method: 'POST',
     headers: {
       'Authorization': 'Bearer ' + bot.team_info.token
@@ -30,5 +30,6 @@ api['deleteMessage'] = function(bot, token, channel, ts) {
     }
   });
 };
+
 
 module.exports = api;

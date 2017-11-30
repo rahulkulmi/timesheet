@@ -9,10 +9,12 @@ through the conversation are chosen based on the user's response.
 
 */
 var async = require('async')
-var helper = require('../app_util/helpers');
+var helper = require('../app_util/helper');
+var dialogHelper = require('../app_util/dialog_helper');
 var appMessages = require('../app_util/app_messages');
 var coreAPI = require('../services/core_api');
 var timesheetService = require('../services/timesheet_service');
+var employeeService = require('../services/employee_service');
 
 module.exports = function(controller) {
 
@@ -115,6 +117,9 @@ module.exports = function(controller) {
         }, {
           title: appMessages.helpViewText,
           color: '#4C9900'
+        }, {
+          title: appMessages.helpRegistrationText,
+          color: '#B266FF'
         }]
       });
     });
@@ -128,7 +133,7 @@ module.exports = function(controller) {
           callback_id: '1111',
           attachment_type: 'default',
           actions: [{
-            "name": "days_list",
+            "name": "dialog_timesheet",
             "text": appMessages.askTimeSheetActionsText,
             "type": "select",
             "options": [{
@@ -152,13 +157,13 @@ module.exports = function(controller) {
             }, {
               "text": helper.getDate(7) + ' - Sunday',
               "value": helper.getDate(7)
-            }],
-            "confirm": {
-              "title": appMessages.askTimeSheetConfirmTitle,
-              "text": appMessages.askTimeSheetConfirmText,
-              "ok_text": "Yes",
-              "dismiss_text": "No"
-            }
+            }] //,
+            // "confirm": {
+            //   "title": appMessages.askTimeSheetConfirmTitle,
+            //   "text": appMessages.askTimeSheetConfirmText,
+            //   "ok_text": "Yes",
+            //   "dismiss_text": "No"
+            // }
           }, {
               "name":"no",
               "text": "No",
@@ -169,50 +174,185 @@ module.exports = function(controller) {
       });
     });
 
+    controller.hears('view', 'direct_message', function(bot, message) {
+      var tab_01 = '\t';
+      var tab_02 = '\t\t';
+      var tab_03 = '\t\t\t';
+      var tab_04 = '\t\t\t\t';
+      var tab_05 = '\t\t\t\t\t';
+      var tab_06 = '\t\t\t\t\t\t';
+
+      var attachmentArray = [{
+        "title": 'Date' + tab_06 + 'IN' + tab_03 + 'OUT' + tab_03 + 'IN' + tab_03 + 'OUT' + tab_02 + '  Total',
+        "color": "#3AA3E3",
+      }];
+      userId = message.user;
+      var callbackId = 'view_' + userId;
+
+      async.series([
+        // Get value for day 1.
+  			function(callback) {
+          timesheetService.getTitleText(controller, helper.getDate(1), userId, '#FF0000', function(resData) {
+            attachmentArray.push(resData);
+            return callback();
+          });
+  			},
+        // Get value for day 2.
+  			function(callback) {
+          timesheetService.getTitleText(controller, helper.getDate(2), userId, '#4C9900', function(resData) {
+            attachmentArray.push(resData);
+            return callback();
+          });
+  			},
+        // Get value for day 3.
+  			function(callback) {
+          timesheetService.getTitleText(controller, helper.getDate(3), userId, '#FF9933', function(resData) {
+            attachmentArray.push(resData);
+            return callback();
+          });
+  			},
+        // Get value for day 4.
+  			function(callback) {
+          timesheetService.getTitleText(controller, helper.getDate(4), userId, '#B266FF', function(resData) {
+            attachmentArray.push(resData);
+            return callback();
+          });
+  			},
+        // Get value for day 5.
+  			function(callback) {
+          timesheetService.getTitleText(controller, helper.getDate(5), userId, '#CC6600', function(resData) {
+            attachmentArray.push(resData);
+            return callback();
+          });
+  			},
+        // Get value for day 6.
+  			function(callback) {
+          timesheetService.getTitleText(controller, helper.getDate(6), userId, '#CCCC00', function(resData) {
+            attachmentArray.push(resData);
+            return callback();
+          });
+  			},
+        // Get value for day 7.
+  			function(callback) {
+          timesheetService.getTitleText(controller, helper.getDate(7), userId, '#00CCCC', function(resData) {
+            attachmentArray.push(resData);
+            return callback();
+          });
+  			},
+        // Add close view mode button.
+  			function(callback) {
+          var closeButton = {
+            "fallback": appMessages.viewTimeSheetBtnFallback,
+            "title": appMessages.viewTimeSheetBtnTitle,
+            "callback_id": callbackId,
+            "color": "#FF66FF",
+            "attachment_type": "default",
+            "actions": [{
+              "name": "yes",
+              "text": "Yes",
+              "type": "button",
+              "value": "yes"
+            }]
+          }
+          attachmentArray.push(closeButton);
+          return callback();
+        },
+        // Send response to user.
+  			function(callback) {
+          bot.reply(message, {
+            text: appMessages.viewTimeSheetTitle,
+            attachments: attachmentArray
+          });
+          return callback();
+        }
+      ], function(err) {
+        attachmentArray = null;
+        console.log('Error inside controller.hears(view) async()');
+        console.log(err);
+      })
+    });
+
+    controller.hears('register', 'direct_message', function(bot, message) {
+      // console.log('message');
+      // console.log(message);
+      var userId = message.user;
+
+      bot.api.users.info({user: userId}, function(error, resData) {
+        if (resData) {
+          // console.log('resData');
+          // console.log(resData.user.profile);
+          var user_hash = resData.user.profile;
+          user_hash['id'] = userId;
+          employeeService.saveEmployeeDetail(controller, user_hash, function(resEmpData) {
+            if (resEmpData) {
+              // console.log('resEmpData');
+              // console.log(resEmpData);
+              var msg = appMessages.userRegister1 + resEmpData.email + appMessages.userRegister2 + resEmpData.password + ')';
+              bot.reply(message, msg);
+            } else {
+              bot.reply(message, appMessages.closeDialogFlowError);
+            }
+          });
+        } else {
+          bot.reply(message, appMessages.closeDialogFlowError);
+        }
+      });
+
+      // var callbackId = 'registration_' + userId;
+      // bot.reply(message, {
+      //   attachments:[{
+      //     title: appMessages.askRegistrationTitle,
+      //     fallback: appMessages.askRegistrationFallback,
+      //     callback_id: callbackId,
+      //     attachment_type: 'default',
+      //     color: '#3AA3E3',
+      //     actions: [{
+      //         "name":"dialog_registration",
+      //         "text": "Yes",
+      //         "value": "yes",
+      //         "type": "button",
+      //     }, {
+      //         "name":"no",
+      //         "text": "No",
+      //         "value": "no",
+      //         "type": "button",
+      //     }]
+      //   }]
+      // });
+    });
+
     // launch a dialog from a button click
     controller.on('interactive_message_callback', function(bot, trigger) {
       console.log('trigger');
+      var userId = trigger.user;
       var token = trigger.token;
       var channel = trigger.channel;
       var ts = trigger.original_message.ts;
       // console.log(trigger);
 
-      // is the name of the clicked button "yes"
-      // if (trigger.actions[0].name.match(/^yes/)) {
-      if (trigger.actions[0].name.match(/^days_list/)) {
+      // Is the name of the clicked button "dialog_timesheet"
+      if (trigger.actions[0].name.match(/^dialog_timesheet/)) {
         var date = trigger.actions[0].selected_options[0].value;
-        var callback_id_user_date = trigger.user + '_' + date
+        var callbackId = 'timesheet_' + userId + '_' + date
         console.log(date);
-        timesheetService.getDetailById(controller, date, trigger.user, function(resData) {
-          if (resData) {
-            var dialog = bot.createDialog(
-              'Date: ' + date,
-              callback_id_user_date,
-              'Submit'
-            ).addText(appMessages.dialogTextStatus, 'status', resData.status, {placeholder: appMessages.dialogTextStatusPh})
-            .addText(appMessages.dialogTextOfficeIn, 'officeIn', resData.officeIn, {optional: true, placeholder: appMessages.dialogTextOfficeInPh})
-            .addText(appMessages.dialogTextOfficeOut, 'officeOut', resData.officeOut, {optional: true, placeholder: appMessages.dialogTextOfficeOutPh})
-            .addText(appMessages.dialogTextHomeIn, 'homeIn', resData.homeIn, {optional: true, placeholder: appMessages.dialogTextHomeInPh})
-            .addText(appMessages.dialogTextHomeOut, 'homeOut', resData.homeOut, {optional: true, placeholder: appMessages.dialogTextHomeOutPh})
-          } else {
-            var dialog = bot.createDialog(
-              'Date: ' + date,
-              callback_id_user_date,
-              'Submit'
-            ).addText(appMessages.dialogTextStatus, 'status', null, {placeholder: appMessages.dialogTextStatusPh})
-            .addText(appMessages.dialogTextOfficeIn, 'officeIn', null, {optional: true, placeholder: appMessages.dialogTextOfficeInPh})
-            .addText(appMessages.dialogTextOfficeOut, 'officeOut', null, {optional: true, placeholder: appMessages.dialogTextOfficeOutPh})
-            .addText(appMessages.dialogTextHomeIn, 'homeIn', null, {optional: true, placeholder: appMessages.dialogTextHomeInPh})
-            .addText(appMessages.dialogTextHomeOut, 'homeOut', null, {optional: true, placeholder: appMessages.dialogTextHomeOutPh})
-          }
+        timesheetService.getDetailById(controller, date, userId, function(resData) {
+          var dialog = dialogHelper.getTimesheetDialog(
+            bot, resData, callbackId, date);
           bot.replyWithDialog(trigger, dialog.asObject(), function(err, res) {
             // handle your errors!
             coreAPI.deleteMessage(bot, token, channel, ts);
           });
         });
-        // .addSelect('Select','select',null,[{label:'Foo',value:'foo'},{label:'Bar',value:'bar'}],{placeholder: 'Select One'})
-        // .addTextarea('Textarea','textarea','some longer text',{placeholder: 'Put words here'});
-        // .addUrl('Website','url','http://botkit.ai');
+      // } else if (trigger.actions[0].name.match(/^dialog_registration/)) {
+      //   var callbackId = 'registration_' + userId;
+      //   employeeService.getDetailById(controller, userId, function(resData) {
+      //     var dialog = dialogHelper.getRegistrationDialog(
+      //       bot, resData, callbackId);
+      //     bot.replyWithDialog(trigger, dialog.asObject(), function(err, res) {
+      //       // handle your errors!
+      //       coreAPI.deleteMessage(bot, token, channel, ts);
+      //     });
+      //   });
       } else {
         bot.reply(trigger, appMessages.closeTimeSheetFlow);
         coreAPI.deleteMessage(bot, token, channel, ts);
@@ -224,149 +364,66 @@ module.exports = function(controller) {
   controller.on('dialog_submission', function(bot, message) {
     var submission = message.submission;
     var userId = message.user;
-    var callback_id = message.callback_id;
+    var callbackId = message.callback_id;
+    console.log('message');
+    console.log(message);
+    var actionArray = callbackId.split('_');
 
-    var regex = new RegExp('([0-1][0-9]|2[0-9]):([0-5][0-9])');
-    if (submission.officeIn && !regex.test(submission.officeIn)) {
-      bot.dialogError({
-         "name":"officeIn",
-         "error":appMessages.errorOfficeIn
-      });
-      return;
-    } else if (submission.officeOut && !regex.test(submission.officeOut)) {
-       bot.dialogError({
-         "name":"officeOut",
-         "error":appMessages.errorOfficeOut
-      });
-      return;
-    } else if (submission.homeIn && !regex.test(submission.homeIn)) {
-       bot.dialogError({
-         "name":"homeIn",
-         "error":appMessages.errorHomeIn
-      });
-      return;
-    } else if (submission.homeOut && !regex.test(submission.homeOut)) {
-       bot.dialogError({
-         "name":"homeOut",
-         "error":appMessages.errorHomeOut
-      });
-      return;
-    } else {
-      var req_hash = submission;
-      req_hash['userId'] = userId;
-      var arr = callback_id.split('_');
-      req_hash['date'] = arr[1];
-      console.log(req_hash);
-
-      if (userId == arr[0]) {
-        req_hash['dayTotal'] = helper.getDayTotalHours(req_hash);
-        req_hash['id'] = req_hash['date'] + ':' + req_hash['userId']
-        bot.reply(message, appMessages.closeDialogFlowSuccess);
-        // call dialogOk or else Slack will think this is an error
-        bot.dialogOk();
-        controller.storage.timesheet.save(req_hash);
+    if (actionArray[0] == 'timesheet') {
+      var regex = new RegExp('([0-1][0-9]|2[0-9]):([0-5][0-9])');
+      if (submission.officeIn && !regex.test(submission.officeIn)) {
+        bot.dialogError({
+           "name":"officeIn",
+           "error":appMessages.errorOfficeIn
+        });
+        return;
+      } else if (submission.officeOut && !regex.test(submission.officeOut)) {
+         bot.dialogError({
+           "name":"officeOut",
+           "error":appMessages.errorOfficeOut
+        });
+        return;
+      } else if (submission.homeIn && !regex.test(submission.homeIn)) {
+         bot.dialogError({
+           "name":"homeIn",
+           "error":appMessages.errorHomeIn
+        });
+        return;
+      } else if (submission.homeOut && !regex.test(submission.homeOut)) {
+         bot.dialogError({
+           "name":"homeOut",
+           "error":appMessages.errorHomeOut
+        });
+        return;
       } else {
-        bot.reply(message, appMessages.closeDialogFlowError);
-        bot.dialogOk();
-      }
-    }
-  });
+        var req_hash = submission;
+        req_hash['userId'] = userId;
+        req_hash['date'] = actionArray[2];
+        console.log(req_hash);
 
-  controller.hears('view', 'direct_message', function(bot, message) {
-    var tab_01 = '\t';
-    var tab_02 = '\t\t';
-    var tab_03 = '\t\t\t';
-    var tab_04 = '\t\t\t\t';
-    var tab_05 = '\t\t\t\t\t';
-    var tab_06 = '\t\t\t\t\t\t';
-
-    var attachmentArray = [{
-      "title": 'Date' + tab_06 + 'IN' + tab_03 + 'OUT' + tab_03 + 'IN' + tab_03 + 'OUT' + tab_02 + '  Total',
-      "color": "#3AA3E3",
-    }];
-    userId = message.user;
-
-    async.series([
-      // Get value for day 1.
-			function(callback) {
-        timesheetService.getTitleText(controller, helper.getDate(1), userId, '#FF0000', function(resData) {
-          attachmentArray.push(resData);
-          return callback();
-        });
-			},
-      // Get value for day 2.
-			function(callback) {
-        timesheetService.getTitleText(controller, helper.getDate(2), userId, '#4C9900', function(resData) {
-          attachmentArray.push(resData);
-          return callback();
-        });
-			},
-      // Get value for day 3.
-			function(callback) {
-        timesheetService.getTitleText(controller, helper.getDate(3), userId, '#FF9933', function(resData) {
-          attachmentArray.push(resData);
-          return callback();
-        });
-			},
-      // Get value for day 4.
-			function(callback) {
-        timesheetService.getTitleText(controller, helper.getDate(4), userId, '#B266FF', function(resData) {
-          attachmentArray.push(resData);
-          return callback();
-        });
-			},
-      // Get value for day 5.
-			function(callback) {
-        timesheetService.getTitleText(controller, helper.getDate(5), userId, '#CC6600', function(resData) {
-          attachmentArray.push(resData);
-          return callback();
-        });
-			},
-      // Get value for day 6.
-			function(callback) {
-        timesheetService.getTitleText(controller, helper.getDate(6), userId, '#CCCC00', function(resData) {
-          attachmentArray.push(resData);
-          return callback();
-        });
-			},
-      // Get value for day 7.
-			function(callback) {
-        timesheetService.getTitleText(controller, helper.getDate(7), userId, '#00CCCC', function(resData) {
-          attachmentArray.push(resData);
-          return callback();
-        });
-			},
-      // Add close view mode button.
-			function(callback) {
-        var closeButton = {
-          "fallback": appMessages.viewTimeSheetBtnFallback,
-          "title": appMessages.viewTimeSheetBtnTitle,
-          "callback_id": "3333",
-          "color": "#FF66FF",
-          "attachment_type": "default",
-          "actions": [{
-            "name": "yes",
-            "text": "Yes",
-            "type": "button",
-            "value": "yes"
-          }]
+        if (userId == actionArray[1]) {
+          req_hash['dayTotal'] = helper.getDayTotalHours(req_hash);
+          req_hash['id'] = req_hash['date'] + ':' + req_hash['userId']
+          bot.reply(message, appMessages.closeDialogFlowSuccess);
+          // call dialogOk or else Slack will think this is an error
+          bot.dialogOk();
+          controller.storage.timesheet.save(req_hash);
+        } else {
+          bot.reply(message, appMessages.closeDialogFlowError);
+          bot.dialogOk();
         }
-        attachmentArray.push(closeButton);
-        return callback();
-      },
-      // Send response to user.
-			function(callback) {
-        bot.reply(message, {
-          text: appMessages.viewTimeSheetTitle,
-          attachments: attachmentArray
-        });
-        return callback();
       }
-    ], function(err) {
-      attachmentArray = null;
-      console.log('Error inside controller.hears(view) async()');
-      console.log(err);
-    })
+    // } else if (actionArray[0] == 'registration') {
+    //   var req_hash = submission;
+    //   req_hash['id'] = userId;
+    //   console.log(req_hash);
+    //   bot.reply(message, appMessages.closeDialogFlowSuccess);
+    //   bot.dialogOk();
+    //   controller.storage.employee.save(req_hash);
+    } else {
+      bot.reply(message, appMessages.closeDialogFlowError);
+      bot.dialogOk();
+    }
   });
 
 };
