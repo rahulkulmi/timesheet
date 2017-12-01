@@ -376,12 +376,13 @@ module.exports = function(controller) {
       } else {
         var req_hash = submission;
         req_hash['userId'] = userId;
-        req_hash['date'] = actionArray[2];
+        req_hash['dateString'] = actionArray[2];
         console.log(req_hash);
 
         if (userId == actionArray[1]) {
           req_hash['dayTotal'] = helper.getDayTotalHours(req_hash);
-          req_hash['id'] = req_hash['date'] + ':' + req_hash['userId']
+          req_hash['date'] = helper.getDateByString(actionArray[2]);
+          req_hash['id'] = req_hash['dateString'] + ':' + req_hash['userId']
           bot.reply(message, appMessages.closeDialogFlowSuccess);
           // call dialogOk or else Slack will think this is an error
           bot.dialogOk();

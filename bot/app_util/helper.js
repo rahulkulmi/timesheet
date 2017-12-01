@@ -56,4 +56,10 @@ api['getDate'] = function(userDay) {
   return newDate;
 };
 
+api['getDateByString'] = function(dateString) {
+  var newDateString = dateString.split('-').reverse().join('-');
+  var date = new Date(newDateString);
+  return date;
+};
+
 module.exports = api;
