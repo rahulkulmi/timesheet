@@ -297,28 +297,6 @@ module.exports = function(controller) {
           bot.reply(message, appMessages.closeDialogFlowError);
         }
       });
-
-      // var callbackId = 'registration_' + userId;
-      // bot.reply(message, {
-      //   attachments:[{
-      //     title: appMessages.askRegistrationTitle,
-      //     fallback: appMessages.askRegistrationFallback,
-      //     callback_id: callbackId,
-      //     attachment_type: 'default',
-      //     color: '#3AA3E3',
-      //     actions: [{
-      //         "name":"dialog_registration",
-      //         "text": "Yes",
-      //         "value": "yes",
-      //         "type": "button",
-      //     }, {
-      //         "name":"no",
-      //         "text": "No",
-      //         "value": "no",
-      //         "type": "button",
-      //     }]
-      //   }]
-      // });
     });
 
     // launch a dialog from a button click

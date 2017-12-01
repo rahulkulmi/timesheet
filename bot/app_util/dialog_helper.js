@@ -23,7 +23,7 @@ api['getTimesheetDialog'] = function(bot, resData, callbackId, date) {
     'Date: ' + date,
     callbackId,
     'Submit'
-  ).addText(appMessages.dialogTextStatus, 'status', status, {placeholder: appMessages.dialogTextStatusPh})
+  ).addText(appMessages.dialogTextStatus, 'status', status, {optional: true, placeholder: appMessages.dialogTextStatusPh})
   .addText(appMessages.dialogTextOfficeIn, 'officeIn', officeIn, {optional: true, placeholder: appMessages.dialogTextOfficeInPh})
   .addText(appMessages.dialogTextOfficeOut, 'officeOut', officeOut, {optional: true, placeholder: appMessages.dialogTextOfficeOutPh})
   .addText(appMessages.dialogTextHomeIn, 'homeIn', homeIn, {optional: true, placeholder: appMessages.dialogTextHomeInPh})
