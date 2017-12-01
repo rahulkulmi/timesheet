@@ -7,8 +7,8 @@ msg.askTimeSheetText = 'Do you want to enter timesheet details?';
 msg.askTimeSheetTitle = 'If yes please select a day from dropdown list.';
 msg.askTimeSheetFallback = 'You are unable to select a button.';
 msg.askTimeSheetActionsText = 'Pick a day...';
-msg.askTimeSheetConfirmTitle = 'Are you sure?';
-msg.askTimeSheetConfirmText = 'Do you want to enter details now?';
+// msg.askTimeSheetConfirmTitle = 'Are you sure?';
+// msg.askTimeSheetConfirmText = 'Do you want to enter details now?';
 
 
 // msg.askRegistrationTitle = 'Do you want to register your details now?';
@@ -49,9 +49,9 @@ msg.dialogTextHomeOutPh = '23:00';
 // msg.dialogRegSelectGenderMail = 'Male';
 // msg.dialogRegSelectGenderFemale = 'Female';
 
-msg.userRegister1 = 'Your details has been recorded successfully. Use this to login your dashboard (URL : www.newput.com, LoginId : ';
-msg.userRegister2 = ', Password : ';
-// msg.userRegister3 = '';
+msg.userRegister1 = 'Thank you ';
+msg.userRegister2 = ' for registration. Now you can login our dashboard using (URL : www.newput.com, UserId : ';
+msg.userRegister3 = ', Password : ';
 
 
 msg.closeTimeSheetFlow = 'Thank you! Please use me when you want to fill timesheet.';

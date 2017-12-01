@@ -287,7 +287,7 @@ module.exports = function(controller) {
             if (resEmpData) {
               // console.log('resEmpData');
               // console.log(resEmpData);
-              var msg = appMessages.userRegister1 + resEmpData.email + appMessages.userRegister2 + resEmpData.password + ')';
+              var msg = appMessages.userRegister1 + resEmpData.fullName + appMessages.userRegister2 + resEmpData.email + appMessages.userRegister3 + resEmpData.password + ')';
               bot.reply(message, msg);
             } else {
               bot.reply(message, appMessages.closeDialogFlowError);
