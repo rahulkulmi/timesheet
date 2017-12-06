@@ -14,8 +14,8 @@ RUN npm install -g pm2
 
 ENV NODE_ENV development
 
-# ADD start.sh /start.sh
-# RUN chmod 755 /start.sh
+ADD start.sh /start.sh
+RUN chmod 755 /start.sh
 
 # Define working directory
 WORKDIR /backend
@@ -30,5 +30,5 @@ EXPOSE 9095
 # ENTRYPOINT ["node"]
 # Defines your runtime(define default command)
 # pm2 start app.js --max-memory-restart 120M -i 4
-CMD ["pm2-docker", "process.yml"]
-# CMD ["/start.sh"]
+# CMD ["pm2-docker", "process.yml"]
+CMD ["/start.sh"]

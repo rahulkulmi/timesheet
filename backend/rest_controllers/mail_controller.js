@@ -28,25 +28,28 @@ function getTotalHours(reqData, callback) {
 }
 
 function getTotalHoursData(reqData, callback) {
-  timesheetService.getWeeklyData(reqData, function(err, timesheetRes) {
+  timesheetService.getWeeklyData(reqData, function(err, timesheetRes, reqData) {
     if (err) return callback(null);
     if (timesheetRes) {
-      var resHash = {
-        totalHours: '00:00',
-        sheetData: helper.prepareTimesheetData(timesheetRes)
-      }
+      // var resHash = {
+      //   totalHours: '00:00',
+      //   sheetData: helper.prepareTimesheetData(timesheetRes)
+      // }
       var totalMin = 0;
       timesheetRes.forEach(function(sheet) {
         // console.log(sheet);
         var a = sheet.dayTotal.split(':');
         totalMin = totalMin + (a[0]*60 + a[1]*1);
       });
-      resHash['totalHours'] = helper.convertMinToHour(totalMin);
-      callback(resHash);
+      // resHash['totalHours'] = helper.convertMinToHour(totalMin);
+      // return callback(null, resHash);
+      reqData['sheetData'] = helper.prepareTimesheetData(timesheetRes);
+      reqData['totalHours'] = helper.convertMinToHour(totalMin);
+      return callback(null, reqData);
     } else {
       // no timesheet found
       console.log('no timesheet found');
-      return callback(null);
+      return callback(null, null);
     }
   });
 }
@@ -83,8 +86,8 @@ api['sendWeeklyHourSheet'] = function(req, res) {
           var reqData = helper.prepareWeeklyStartEndDate(hash);
           console.log('reqData');
           console.log(reqData);
-          // calculate total hours and timesheet data
-          getTotalHoursData(reqData, function(timesheetRes) {
+          // calculate total hours
+          getTotalHours(reqData, function(timesheetRes) {
             if (timesheetRes) {
               recordHash['totalHours'] = timesheetRes;
             }
@@ -114,50 +117,38 @@ api['sendWeeklyHourSheet'] = function(req, res) {
 
 api['sendWeeklyTimeSheet'] = function(req, res) {
   try {
-    var date = new Date();
     employeeService.getEmployeeList(function(err, empRes) {
       if (err) response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err.stack);
       if (empRes) {
-        var mailHash = {
-          emailId: 'rahul@newput.com',
-          filePath: 'timesheet.html',
-          empName: '',
-          month: helper.getCurrentMonthName(),
-          year: helper.getCurrentYear(),
-          sheetData: [],
-          totalHours: '00:00'
-        };
-        var count = 1;
+        var mailHashArray = [];
         empRes.forEach(function(element) {
-          mailHash['empName'] = element.fullName;
           var hash = {
+            emailId: 'rahul@newput.com',
+            filePath: 'timesheet.html',
+            empName: element.fullName,
+            month: helper.getCurrentMonthName(),
+            year: helper.getCurrentYear(),
+            sheetData: [],
+            totalHours: '00:00',
             userId: element.id,
             weekStartDate: helper.getDate(1),
             weekEndDate: helper.getDate(7)
-          }
-          var reqData = helper.prepareWeeklyStartEndDate(hash);
-          // console.log('reqData');
-          // console.log(reqData);
-          // calculate total hours
-          getTotalHoursData(reqData, function(timesheetRes) {
-            if (timesheetRes) {
-              mailHash['totalHours'] = timesheetRes.totalHours;
-              mailHash['sheetData'] = timesheetRes.sheetData;
-              // console.log('mailHash');
-              // console.log(mailHash);
-              emailService.sendWeeklyTimeSheet(mailHash, function(error, mailRes) {
-                if (error) response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err.stack);
-                if (mailRes) {
-                  console.log(mailRes);
-                }
-              });
-            }
-            if (empRes.length == count) {
-              response.successResponse(req, res, 'end send mail.');
-            }
-            count += 1;
+          };
+          var mailHash = helper.prepareWeeklyStartEndDate(hash);
+          mailHashArray.push(mailHash);
+        });
+
+        mailHashArray.forEach(function(hashNew) {
+          getTotalHoursData(hashNew, function(error, resData) {
+            emailService.sendWeeklyTimeSheet(resData, function(error, mailRes) {
+              if (error) response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err.stack);
+              if (mailRes) {
+                console.log(mailRes);
+              }
+            });
           });
         });
+        response.successResponse(req, res, 'end send mail.');
       } else {
         // no employee found
         console.log('no employee found.');
@@ -168,6 +159,5 @@ api['sendWeeklyTimeSheet'] = function(req, res) {
     response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err.stack);
   }
 };
-
 
 module.exports = api;

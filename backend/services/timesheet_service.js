@@ -26,15 +26,14 @@ service['getWeeklyData'] = function(reqData, callback) {
     Timesheet.find({userId: reqData.userId, date: { $gte: reqData.startDate, $lte: reqData.endDate }}, function(err, feedRes) {
       if (err) return callback(err);
       if (feedRes) {
-        return callback(null, feedRes);
+        return callback(null, feedRes, reqData);
       } else {
-        return callback(null, null);
+        return callback(null, null, null);
       }
     });
   } catch (err) {
     return callback(err);
   }
 };
-
 
 module.exports = service;
