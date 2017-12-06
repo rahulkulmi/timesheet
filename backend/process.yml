@@ -1,0 +1,6 @@
+apps:
+  - script   : 'app.js'
+    name     : 'APP'
+    exec_mode: 'cluster'
+    instances: 2
+    max_memory_restart: '120M'

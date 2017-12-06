@@ -1,0 +1,9 @@
+###############
+Remove for repo
+###############
+
+.project
+.env
+node_modules
+log/
+.DS_Store

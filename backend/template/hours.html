@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Monthly Timesheet</title>
+    <style>
+      * {
+          box-sizing: border-box;
+      }
+      .company-name {
+          color: #CD3E2D;
+          font-size: 30px;
+          margin-top: 50px;
+          text-align: center;
+      }
+
+      .title {
+          font-size: 20px;
+          padding-top: 20px;
+          text-align: center;
+      }
+      table {
+          margin: 0 auto;
+          width: 800px;
+      }
+
+      .date-cycle {
+          font-size: 19px;
+          padding: 30px 0px;
+      }
+
+      .date {
+          text-align: right;
+          padding-right: 10px;
+      }
+      .start-date {
+          width: 160px;
+      }
+
+      .end-date {
+          text-align: right;
+          width: 400px;
+      }
+
+      .table, .cell, .sr-no {
+          border: 2px solid black;
+          border-collapse: collapse;
+      }
+
+      .cell {
+          box-sizing: border-box;
+          height: 35px;
+          min-width: 250px;
+          padding: 4px;
+          text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="company-name">
+      Newput Infotech Pvt. Ltd. Indore
+    </div>
+    <div class="title">
+        Total Working Hours of Employees
+    </div>
+    <table class="date-cycle">
+      <tr>
+        <td class="start-date">Start Date:</td>
+        <td>{{startDate}}</td>
+        <td class="end-date">End Date:</td>
+        <td class="date">{{endDate}}</td>
+      </tr>
+    </table>
+    <table class="table">
+      <tr>
+        <th class="sr-no">Sr. No.</th>
+        <th class="cell">Employee Name</th>
+        <th class="cell">Total hours</th>
+      </tr>
+      {{#each empData}}
+      <tr>
+        <th class="sr-no">{{inc @index}}</th>
+        <td class="cell">{{empName}}</td>
+        <td class="cell">{{totalHours}}</td>
+      </tr>
+      {{/each}}
+    </table>
+  </body>
+</html>
