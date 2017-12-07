@@ -31,6 +31,7 @@ function appConfig() {
     PORT: process.env.PORT,
     SECRET_KEY: process.env.SECRET_KEY,
     SENDGRID_KEY: process.env.SENDGRID_KEY,
+    EMAIL_IDS: process.env.EMAIL_IDS,
 
     MONGOOSE_INSTANCE: initDB()
   };

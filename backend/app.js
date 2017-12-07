@@ -8,6 +8,7 @@ var log = require('./app_util/logger');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
+var cronjob = require('./app_util/cronjobs');
 
 // create express app
 var app = express();

@@ -53,9 +53,10 @@ service['sendHourSheet'] = function(reqData, callback) {
       endDate: reqData.endDate
     });
 
+    var emailIds = config.EMAIL_IDS.split(',');
     var mailOptions = {
-      from: 'timesheet@newput.com',
-      to: reqData.emailId,
+      from: 'Newput Timesheet <timesheet@newput.com>',
+      to: emailIds,
       subject: 'Employee Working Hours Sheet',
       html: htmlToSend
     };
@@ -79,9 +80,10 @@ service['sendTimeSheet'] = function(reqData, callback) {
       totalHours: reqData.totalHours
     });
 
+    var emailIds = config.EMAIL_IDS.split(',');
     var mailOptions = {
-      from: 'timesheet@newput.com',
-      to: reqData.emailId,
+      from: 'Newput Timesheet <timesheet@newput.com>',
+      to: emailIds,
       subject: 'Employee Timesheet',
       html: htmlToSend
     };

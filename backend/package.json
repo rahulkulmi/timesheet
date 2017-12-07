@@ -19,6 +19,7 @@
     "method-override": "2.3.10",
     "mongoose": "4.13.6",
     "morgan": "1.9.0",
+    "node-crontab": "0.0.8",
     "node-env-file": "0.1.8",
     "winston": "2.4.0"
   },

@@ -108,7 +108,6 @@ function getSheetDataArray(empList, fileName, startDate, endDate) {
   var reqHashArray = [];
   empList.forEach(function(emp) {
     var hash = {
-      emailId: 'rahul@newput.com',
       fileName: fileName,
       empName: emp.fullName,
       month: helper.getCurrentMonthName(),
@@ -131,7 +130,6 @@ function getSheetDataArray(empList, fileName, startDate, endDate) {
 
 function getHourData(fileName, startDate, endDate) {
   var hash = {
-    emailId: 'rahul@newput.com',
     fileName: fileName,
     empName: '',
     month: helper.getCurrentMonthName(),
