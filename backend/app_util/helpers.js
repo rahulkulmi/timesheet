@@ -48,11 +48,11 @@ utility['prepareMonthlyStartEndDate'] = function(reqData) {
   return reqData;
 };
 
-utility['prepareWeeklyStartEndDate'] = function(reqData) {
-  var startDate = reqData.weekStartDate.split('-').reverse().join('-');
-  var endDate = reqData.weekEndDate.split('-').reverse().join('-');
-  reqData['startDate'] = new Date(startDate);
-  reqData['endDate'] = new Date(endDate);
+utility['prepareFormattedStartEndDate'] = function(reqData) {
+  var reverseStartDate = reqData.startDate.split('-').reverse().join('-');
+  var reverseEndDate = reqData.endDate.split('-').reverse().join('-');
+  reqData['formattedStartDate'] = new Date(reverseStartDate);
+  reqData['formattedEndDate'] = new Date(reverseEndDate);
   return reqData;
 };
 

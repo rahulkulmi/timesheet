@@ -45,15 +45,15 @@ handlebars.registerHelper('inc', function(value, options) {
 // public
 var service = {};
 
-service['sendWeeklyHourSheet'] = function(reqData, callback) {
-  var filePath = path.join(__dirname, '..', 'template/') + reqData.filePath;
+service['sendHourSheet'] = function(reqData, callback) {
+  var filePath = path.join(__dirname, '..', 'template/') + reqData.fileName;
 
   readHTMLFile(filePath, function(err, html) {
     if (err) return callback(err);
     var template = handlebars.compile(html);
 
     var htmlToSend = template({
-      empData: reqData.empData,
+      empData: reqData.hourSheetData,
       startDate: reqData.startDate,
       endDate: reqData.endDate
     });
@@ -69,15 +69,15 @@ service['sendWeeklyHourSheet'] = function(reqData, callback) {
   });
 }
 
-service['sendWeeklyTimeSheet'] = function(reqData, callback) {
-  var filePath = path.join(__dirname, '..', 'template/') + reqData.filePath;
+service['sendTimeSheet'] = function(reqData, callback) {
+  var filePath = path.join(__dirname, '..', 'template/') + reqData.fileName;
 
   readHTMLFile(filePath, function(err, html) {
     if (err) return callback(err);
     var template = handlebars.compile(html);
 
     var htmlToSend = template({
-      sheetData: reqData.sheetData,
+      sheetData: reqData.timeSheetData,
       empName: reqData.empName,
       month: reqData.month,
       year: reqData.year,
