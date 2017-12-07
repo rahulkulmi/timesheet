@@ -34,13 +34,9 @@
           text-align: right;
           padding-right: 10px;
       }
-      .start-date {
-          width: 160px;
-      }
 
       .end-date {
-          text-align: right;
-          width: 400px;
+          float: right;
       }
 
       .table, .cell, .sr-no {
@@ -58,19 +54,17 @@
     </style>
   </head>
   <body>
-    <div class="company-name">
-      Newput Infotech Pvt. Ltd. Indore
+    <div class="company-name" style="text-align:center">
+      <img src="http://www.newput.com/wp/wp-content/uploads/2016/01/newput-logo.png" alt="Newput Logo" class="retina">
     </div>
     <div class="title">
         Total Working Hours of Employees
     </div>
     <table class="date-cycle">
-      <tr>
-        <td class="start-date">Start Date:</td>
-        <td>{{startDate}}</td>
-        <td class="end-date">End Date:</td>
-        <td class="date">{{endDate}}</td>
-      </tr>
+      <div>
+        <span>Start Date: {{startDate}}</span>
+        <span class="end-date">End Date: {{endDate}}</span>
+      </div>
     </table>
     <table class="table">
       <tr>

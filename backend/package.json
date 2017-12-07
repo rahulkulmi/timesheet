@@ -9,6 +9,7 @@
   "author": "Rahul Kulmi",
   "license": "ISC",
   "dependencies": {
+    "@sendgrid/mail": "6.1.4",
     "async": "2.6.0",
     "body-parser": "1.18.2",
     "express": "4.16.2",
@@ -19,8 +20,6 @@
     "mongoose": "4.13.6",
     "morgan": "1.9.0",
     "node-env-file": "0.1.8",
-    "nodemailer": "4.4.0",
-    "nodemailer-express-handlebars": "2.0.0",
     "winston": "2.4.0"
   },
   "devDependencies": {

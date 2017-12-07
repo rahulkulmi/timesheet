@@ -17,7 +17,7 @@ api['sendWeeklyHourSheet'] = function(req, res) {
         var recordArray = [];
         var count = 1;
         empRes.forEach(function(element) {
-          var mailData = getHourData('hoursheet.html', helper.getDate(1), helper.getDate(7));
+          var mailData = getHourData('hoursheet.html', helper.getMonthStartDate(), helper.getDate(7));
           mailData['userId'] = element.id;
           var recordHash = {
             empName: element.fullName,
@@ -57,7 +57,7 @@ api['sendWeeklyTimeSheet'] = function(req, res) {
     employeeService.getEmployeeList(function(err, empRes) {
       if (err) response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err);
       if (empRes) {
-        var hashArray = getSheetDataArray(empRes, 'timesheet.html', helper.getDate(1), helper.getDate(7));
+        var hashArray = getSheetDataArray(empRes, 'timesheet.html', helper.getMonthStartDate(), helper.getDate(7));
 
         hashArray.forEach(function(element) {
           getTotalHoursSheetData(element, function(error, dataRes) {
@@ -66,7 +66,7 @@ api['sendWeeklyTimeSheet'] = function(req, res) {
                 console.log(error);
               }
               if (mailRes) {
-                console.log(mailRes);
+                console.log(mailRes[0].statusCode);
               }
             });
           });

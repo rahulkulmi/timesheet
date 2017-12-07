@@ -1,13 +1,12 @@
 'use strict';
-var nodemailer = require('nodemailer');
-var mailerhbs = require('nodemailer-express-handlebars');
-var path = require("path");
+var sendGrid = require('@sendgrid/mail');
+var path = require('path');
 var handlebars = require('handlebars');
 var fs = require('fs');
 var log = require('../app_util/logger');
+var config = require('../app_util/config');
 
 // private
-
 function readHTMLFile(path, callback) {
   fs.readFile(path, {encoding: 'utf-8'}, function (err, html) {
     if (err) {
@@ -19,23 +18,16 @@ function readHTMLFile(path, callback) {
 };
 
 function sendMailTransporter(mailOptions, callback) {
-  var transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: 'shubhamkatariya126@gmail.com',
-      pass: 'newput1234'
-    }
-  });
+  sendGrid.setApiKey(config.SENDGRID_KEY);
 
-  transporter.sendMail(mailOptions, function(error, info) {
+  sendGrid.send(mailOptions, function(error, mailRes){
     if (error) {
       console.log(error);
       log.error(error);
       return callback(error);
     } else {
-      console.log('Email sent: ' + info.response);
-      log.info('Email sent: ' + info.response);
-      return callback(null, info);
+      log.info('Email sent: ', mailRes[0].statusCode);
+      return callback(null, mailRes);
     }
   });
 }
@@ -62,9 +54,9 @@ service['sendHourSheet'] = function(reqData, callback) {
     });
 
     var mailOptions = {
-      from: 'shubhamkatariya126@gmail.com',
+      from: 'timesheet@newput.com',
       to: reqData.emailId,
-      subject: 'Employee Hours',
+      subject: 'Employee Working Hours Sheet',
       html: htmlToSend
     };
 
@@ -88,7 +80,7 @@ service['sendTimeSheet'] = function(reqData, callback) {
     });
 
     var mailOptions = {
-      from: 'shubhamkatariya126@gmail.com',
+      from: 'timesheet@newput.com',
       to: reqData.emailId,
       subject: 'Employee Timesheet',
       html: htmlToSend
