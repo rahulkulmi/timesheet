@@ -12,19 +12,10 @@ var api = {};
 api['sendWeeklyHourSheet'] = function(req, res) {
   try {
     employeeService.getEmployeeList(function(err, empRes) {
-      if (err) response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err.stack);
+      if (err) response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err);
       if (empRes) {
-        // var mailData = {
-        //   startDate: helper.getDate(1),
-        //   endDate: helper.getDate(7),
-        //   emailId: 'rahul@newput.com',
-        //   filePath: 'hours.html',
-        //   empData: []
-        // };
-
         var recordArray = [];
         var count = 1;
-
         empRes.forEach(function(element) {
           var mailData = getHourData('hoursheet.html', helper.getDate(1), helper.getDate(7));
           mailData['userId'] = element.id;
@@ -32,14 +23,6 @@ api['sendWeeklyHourSheet'] = function(req, res) {
             empName: element.fullName,
             totalHours: '00:00'
           };
-          // var hash = {
-          //   userId: element.id,
-          //   startDate: mailData.startDate,
-          //   endDate: mailData.endDate
-          // }
-          // var reqData = helper.prepareWeeklyStartEndDate(mailData);
-          // console.log('reqData');
-          // console.log(reqData);
           // calculate total hours
           getTotalHoursSheetData(mailData, function(error, dataRes) {
             if (dataRes) {
@@ -49,7 +32,7 @@ api['sendWeeklyHourSheet'] = function(req, res) {
             if (empRes.length == count) {
               mailData['hourSheetData'] = recordArray;
               emailService.sendHourSheet(mailData, function(error, mailRes) {
-                if (error) response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err.stack);
+                if (error) response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), error);
                 if (mailRes) {
                   response.successResponse(req, res, mailRes);
                 }
@@ -57,24 +40,7 @@ api['sendWeeklyHourSheet'] = function(req, res) {
             }
             count += 1;
           });
-          // getTotalHours(mailData, function(timesheetRes) {
-          //   if (timesheetRes) {
-          //     recordHash['totalHours'] = timesheetRes;
-          //   }
-          //   recordArray.push(recordHash);
-          //   if (empRes.length == count) {
-          //     mailData['empData'] = recordArray;
-          //     emailService.sendHourSheet(mailData, function(error, mailRes) {
-          //       if (error) response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err.stack);
-          //       if (mailRes) {
-          //         response.successResponse(req, res, mailRes);
-          //       }
-          //     });
-          //   }
-          //   count += 1;
-          // });
         });
-
       } else {
         // no employee found
         console.log('no employee found.');
@@ -89,25 +55,27 @@ api['sendWeeklyHourSheet'] = function(req, res) {
 api['sendWeeklyTimeSheet'] = function(req, res) {
   try {
     employeeService.getEmployeeList(function(err, empRes) {
-      if (err) response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err.stack);
+      if (err) response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err);
       if (empRes) {
         var hashArray = getSheetDataArray(empRes, 'timesheet.html', helper.getDate(1), helper.getDate(7));
 
         hashArray.forEach(function(element) {
           getTotalHoursSheetData(element, function(error, dataRes) {
             emailService.sendTimeSheet(dataRes, function(error, mailRes) {
-              if (error) response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err.stack);
+              if (error) {
+                console.log(error);
+              }
               if (mailRes) {
                 console.log(mailRes);
               }
             });
           });
         });
-        response.successResponse(req, res, 'end send mail.');
+        response.successResponse(req, res, 'Mail start sending.');
       } else {
         // no employee found
         console.log('no employee found.');
-        response.successResponse(req, res, 'no employee found.');
+        response.successResponse(req, res, 'No employee found.');
       }
     });
   } catch (err) {
@@ -116,25 +84,6 @@ api['sendWeeklyTimeSheet'] = function(req, res) {
 };
 
 // private
-// function getTotalHours(reqData, callback) {
-//   timesheetService.getWeeklyData(reqData, function(err, timesheetRes) {
-//     if (err) return callback(null);
-//     if (timesheetRes) {
-//       var totalMin = 0;
-//       timesheetRes.forEach(function(sheet) {
-//         var a = sheet.dayTotal.split(':');
-//         totalMin = totalMin + (a[0]*60 + a[1]*1);
-//       });
-//       var totalHours = helper.convertMinToHour(totalMin);
-//       callback(totalHours);
-//     } else {
-//       // no timesheet found
-//       console.log('no timesheet found');
-//       return callback(null);
-//     }
-//   });
-// }
-
 function getTotalHoursSheetData(reqData, callback) {
   timesheetService.getTimesheetByDate(reqData, function(err, timesheetRes, reqData) {
     if (err) return callback(null);

@@ -4,6 +4,7 @@ var mailerhbs = require('nodemailer-express-handlebars');
 var path = require("path");
 var handlebars = require('handlebars');
 var fs = require('fs');
+var log = require('../app_util/logger');
 
 // private
 
@@ -29,9 +30,11 @@ function sendMailTransporter(mailOptions, callback) {
   transporter.sendMail(mailOptions, function(error, info) {
     if (error) {
       console.log(error);
+      log.error(error);
       return callback(error);
     } else {
       console.log('Email sent: ' + info.response);
+      log.info('Email sent: ' + info.response);
       return callback(null, info);
     }
   });
