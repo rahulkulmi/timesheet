@@ -5,15 +5,27 @@ var log = require('./logger');
 
 function startCronJobs() {
 
-  var hoursheetJob = crontab.scheduleJob("5 20 * * THU", function() {
+  var weekHoursheetJob = crontab.scheduleJob("35 15 * * SUN", function() {
     request('http://34.211.76.6:9095/rest/hoursheet/weekly', function (error, response, body) {
-      log.info('Cron hoursheetJob running.');
+      log.info('Cron weekly hoursheetJob running.');
      });
   });
 
-  var timesheetJob = crontab.scheduleJob("0 20 * * THU", function() {
+  var weekTimesheetJob = crontab.scheduleJob("30 15 * * SUN", function() {
     request('http://34.211.76.6:9095/rest/timesheet/weekly', function (error, response, body) {
-      log.info('Cron timesheetJob running.');
+      log.info('Cron weekly timesheetJob running.');
+     });
+  });
+
+  var monthHoursheetJob = crontab.scheduleJob("54 23 28 * *", function() {
+    request('http://34.211.76.6:9095/rest/hoursheet/weekly', function (error, response, body) {
+      log.info('Cron monthly hoursheetJob running.');
+     });
+  });
+
+  var monthTimesheetJob = crontab.scheduleJob("59 23 28 * *", function() {
+    request('http://34.211.76.6:9095/rest/timesheet/weekly', function (error, response, body) {
+      log.info('Cron monthly timesheetJob running.');
      });
   });
 };

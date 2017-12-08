@@ -7,7 +7,7 @@ var employeeSchema = new Schema({
   id: { type: String, index: true },
   firstName: { type: String },
   lastName: { type: String },
-  fullName: { type: String },
+  fullName: { type: String, index: true },
   email: { type: String, index: true },
   password: { type: String, index: true },
   profileImgSmall: { type: String },

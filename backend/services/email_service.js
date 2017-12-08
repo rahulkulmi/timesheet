@@ -55,7 +55,7 @@ service['sendHourSheet'] = function(reqData, callback) {
 
     var emailIds = config.EMAIL_IDS.split(',');
     var mailOptions = {
-      from: 'Newput Timesheet <timesheet@newput.com>',
+      from: 'Newput Hoursheet <timesheet@newput.com>',
       to: emailIds,
       subject: 'Employee Working Hours Sheet',
       html: htmlToSend

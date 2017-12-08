@@ -55,11 +55,23 @@ utility['getMonthStartDate'] = function() {
   if (month < 10) {
     month = '0' + month;
   }
-  // var startDate = year + '-' + month + '-' + '01';
-  // var newDate = new Date(startDate);
-  // return newDate;
   var startDate = '01' + '-' + month + '-' + year;
   return startDate;
+};
+
+utility['getTodayDate'] = function() {
+  var date = new Date();
+  var year = date.getFullYear();
+  var month = date.getMonth() + 1;
+  if (month < 10) {
+    month = '0' + month;
+  }
+  var day = date.getDate();
+  if (day < 10) {
+    day = '0' + day;
+  }
+  var todayDate = day + '-' + month + '-' + year;
+  return todayDate;
 };
 
 utility['prepareFormattedStartEndDate'] = function(reqData) {
