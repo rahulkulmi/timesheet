@@ -9,7 +9,7 @@ var helper = require('../app_util/helpers');
 // public
 var api = {};
 
-api['sendWeeklyHourSheet'] = function(req, res) {
+api['sendHourSheet'] = function(req, res) {
   try {
     employeeService.getEmployeeList(function(err, empRes) {
       if (err) response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err);
@@ -52,7 +52,7 @@ api['sendWeeklyHourSheet'] = function(req, res) {
   }
 };
 
-api['sendWeeklyTimeSheet'] = function(req, res) {
+api['sendTimeSheet'] = function(req, res) {
   try {
     employeeService.getEmployeeList(function(err, empRes) {
       if (err) response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err);
