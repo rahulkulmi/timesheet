@@ -8,13 +8,15 @@ var helper = require('../app_util/helpers');
 // public
 var api = {};
 
-api['getMonthlyData'] = function(req, res) {
+api['getMonthlyTimeSheet'] = function(req, res) {
   try {
     // var reqData = req.body;
     var reqData = helper.prepareMonthlyStartEndDate(req.query);
-    reqData['userId'] = 'U0DDVDL21';
-    // reqData.session = req.session.session;
-    timesheetService.getMonthlyData(reqData, function(err, empRes) {
+    reqData['userId'] = req.session.user_id;
+    reqData['startDate'] = helper.getMonthStartDate();
+    reqData['endDate'] = helper.getTodayDate();
+    var updatedHash = helper.prepareFormattedStartEndDate(reqData);
+    timesheetService.getTimesheetByDate(updatedHash, function(err, empRes) {
       if (err) {
         response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err.stack);
       } else {

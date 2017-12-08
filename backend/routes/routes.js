@@ -8,6 +8,7 @@ module.exports = function(app, router) {
 
   // api routes
   router.get('/employee/detail', validate.validateToken, employeeController.getDetailById);
+  router.get('/timesheet', validate.validateToken, timesheetController.getMonthlyTimeSheet);
   // router.post('/employee/email', employeeController.sendMailToUserId);
   router.get('/email/timesheet', emailController.sendTimeSheet);
   router.get('/email/hoursheet', emailController.sendHourSheet);
