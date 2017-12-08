@@ -8,6 +8,7 @@ var log = require('./app_util/logger');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
+var expressValidator = require('express-validator');
 var cronjob = require('./app_util/cronjobs');
 
 // create express app
@@ -20,6 +21,7 @@ app.use(session({
   saveUninitialized: true,
   cookie: { secure: true }
 }));
+app.use(expressValidator());
 log.format = ':remote-addr :remote-user ":method :url :status :response-time ms :res[content-length] HTTP/:http-version" ":user-agent"';
 app.use(logger(log.format, { 'stream': log.stream}));
 app.use(bodyParser.json());

@@ -10,8 +10,7 @@ var api = {};
 api['getDetailById'] = function(req, res) {
   try {
     var reqData = req.body;
-    reqData['userId'] = 'U0DDVDL21';
-    // reqData.session = req.session.session;
+    reqData['userId'] = req.session.user_id;
     employeeService.getDetailById(reqData, function(err, empRes) {
       if (err) {
         response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err.stack);

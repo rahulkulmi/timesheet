@@ -30,6 +30,7 @@ function appConfig() {
   return {
     PORT: process.env.PORT,
     SECRET_KEY: process.env.SECRET_KEY,
+    JWT_SECRET_KEY: process.env.JWT_SECRET_KEY,
     SENDGRID_KEY: process.env.SENDGRID_KEY,
     EMAIL_IDS: process.env.EMAIL_IDS,
 
