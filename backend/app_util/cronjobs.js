@@ -5,13 +5,13 @@ var log = require('./logger');
 
 function startCronJobs() {
 
-  var weekHoursheetJob = crontab.scheduleJob("35 15 * * SUN", function() {
+  var weekHoursheetJob = crontab.scheduleJob("35 15 * * 0", function() {
     request('http://34.211.76.6:9095/rest/hoursheet/weekly', function (error, response, body) {
       log.info('Cron weekly hoursheetJob running.');
      });
   });
 
-  var weekTimesheetJob = crontab.scheduleJob("30 15 * * SUN", function() {
+  var weekTimesheetJob = crontab.scheduleJob("30 15 * * 0", function() {
     request('http://34.211.76.6:9095/rest/timesheet/weekly', function (error, response, body) {
       log.info('Cron weekly timesheetJob running.');
      });
