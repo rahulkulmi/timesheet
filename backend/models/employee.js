@@ -10,7 +10,6 @@ var employeeSchema = new Schema({
   fullName: { type: String, index: true },
   email: { type: String, index: true },
   password: { type: String, index: true },
-  // hashPassword: { type: String, index: true },
   profileImgSmall: { type: String },
   profileImg: { type: String }
 });

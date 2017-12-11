@@ -5,6 +5,7 @@ var handlebars = require('handlebars');
 var fs = require('fs');
 var log = require('../app_util/logger');
 var config = require('../app_util/config');
+var helper = require('../app_util/helpers');
 
 // private
 function readHTMLFile(path, callback) {
@@ -57,7 +58,7 @@ service['sendHourSheet'] = function(reqData, callback) {
     var mailOptions = {
       from: 'Newput Hoursheet <timesheet@newput.com>',
       to: emailIds,
-      subject: 'Employee Working Hours Sheet',
+      subject: 'Employee Working Hours Sheet Date : ' + helper.getTodayDate(),
       html: htmlToSend
     };
 
@@ -75,6 +76,7 @@ service['sendTimeSheet'] = function(reqData, callback) {
     var htmlToSend = template({
       sheetData: reqData.timeSheetData,
       empName: reqData.empName,
+      empEmail: reqData.empEmail,
       month: reqData.month,
       year: reqData.year,
       totalHours: reqData.totalHours
@@ -84,7 +86,7 @@ service['sendTimeSheet'] = function(reqData, callback) {
     var mailOptions = {
       from: 'Newput Timesheet <timesheet@newput.com>',
       to: emailIds,
-      subject: 'Employee Timesheet',
+      subject: 'Employee Timesheet Date : ' + helper.getTodayDate(),
       html: htmlToSend
     };
 

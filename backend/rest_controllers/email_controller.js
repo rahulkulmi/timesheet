@@ -110,6 +110,7 @@ function getSheetDataArray(empList, fileName, startDate, endDate) {
     var hash = {
       fileName: fileName,
       empName: emp.fullName,
+      empEmail: emp.email,
       month: helper.getCurrentMonthName(),
       year: helper.getCurrentYear(),
       timeSheetData: [],
