@@ -136,28 +136,29 @@ module.exports = function(controller) {
             "name": "dialog_timesheet",
             "text": appMessages.askTimeSheetActionsText,
             "type": "select",
-            "options": [{
-              "text": helper.getDate(1) + ' - Monday',
-              "value": helper.getDate(1)
-            }, {
-              "text": helper.getDate(2) + ' - Tuesday',
-              "value": helper.getDate(2)
-            }, {
-              "text": helper.getDate(3) + ' - Wednesday',
-              "value": helper.getDate(3)
-            }, {
-              "text": helper.getDate(4) + ' - Thursday',
-              "value": helper.getDate(4)
-            }, {
-              "text": helper.getDate(5) + ' - Friday',
-              "value": helper.getDate(5)
-            }, {
-              "text": helper.getDate(6) + ' - Saturday',
-              "value": helper.getDate(6)
-            }, {
-              "text": helper.getDate(7) + ' - Sunday',
-              "value": helper.getDate(7)
-            }] //,
+            "options": helper.getDayOptionList()
+            // "options": [{
+            //   "text": helper.getDate(1) + ' - Monday',
+            //   "value": helper.getDate(1)
+            // }, {
+            //   "text": helper.getDate(2) + ' - Tuesday',
+            //   "value": helper.getDate(2)
+            // }, {
+            //   "text": helper.getDate(3) + ' - Wednesday',
+            //   "value": helper.getDate(3)
+            // }, {
+            //   "text": helper.getDate(4) + ' - Thursday',
+            //   "value": helper.getDate(4)
+            // }, {
+            //   "text": helper.getDate(5) + ' - Friday',
+            //   "value": helper.getDate(5)
+            // }, {
+            //   "text": helper.getDate(6) + ' - Saturday',
+            //   "value": helper.getDate(6)
+            // }, {
+            //   "text": helper.getDate(7) + ' - Sunday',
+            //   "value": helper.getDate(7)
+            // }] //,
             // "confirm": {
             //   "title": appMessages.askTimeSheetConfirmTitle,
             //   "text": appMessages.askTimeSheetConfirmText,
@@ -287,7 +288,7 @@ module.exports = function(controller) {
             if (resEmpData) {
               // console.log('resEmpData');
               // console.log(resEmpData);
-              var msg = appMessages.userRegister1 + resEmpData.fullName + appMessages.userRegister2 + resEmpData.email + appMessages.userRegister3 + 'newput123)';
+              var msg = appMessages.userRegister1 + resEmpData.fullName + appMessages.userRegister2 + resEmpData.email + appMessages.userRegister3;
               bot.reply(message, msg);
             } else {
               bot.reply(message, appMessages.closeDialogFlowError);

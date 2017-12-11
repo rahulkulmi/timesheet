@@ -1,9 +1,9 @@
 'use strict';
 
 // public
-var api = {};
+var utility = {};
 
-api['getDayTotalHours'] = function(hash) {
+utility['getDayTotalHours'] = function(hash) {
   var totalMin = 0;
   var total = '00:00';
   if (hash.officeIn && hash.officeOut) {
@@ -35,7 +35,7 @@ api['getDayTotalHours'] = function(hash) {
   return total;
 };
 
-api['getDate'] = function(userDay) {
+utility['getDate'] = function(userDay) {
   var todayDate = new Date();
   var todayDay = todayDate.getDay();
   if (userDay > todayDay) {
@@ -56,10 +56,32 @@ api['getDate'] = function(userDay) {
   return newDate;
 };
 
-api['getDateByString'] = function(dateString) {
+utility['getDateByString'] = function(dateString) {
   var newDateString = dateString.split('-').reverse().join('-');
   var date = new Date(newDateString);
   return date;
 };
 
-module.exports = api;
+utility['getDayOptionList'] = function() {
+  var optionsArray = [];
+  var dayNames = [' - Monday', ' - Tuesday', ' - Wednesday', ' - Thursday',
+    ' - Friday', ' - Saturday', ' - Sunday'];
+
+  var todayDate = new Date();
+  var todayDay = todayDate.getDay();
+  if (todayDay == 0) {
+    todayDay = 7;
+  }
+
+  for (var i=1; i<=todayDay; i++) {
+    var listHash = {
+      text: utility.getDate(i) + dayNames[i - 1],
+      value: utility.getDate(i)
+    }
+    optionsArray.push(listHash);
+  }
+
+  return optionsArray;
+};
+
+module.exports = utility;
