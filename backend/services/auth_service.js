@@ -14,11 +14,15 @@ var service = {};
 
 service['userLogin'] = function(reqData, callback) {
   try {
-    Employee.findOne({ email: reqData.email, password: reqData.password }, function(err, empRes) {
+    Employee.findOne({ email: reqData.email }, function(err, empRes) {
       if (err) return callback(err);
       if (empRes) {
-        var tokan = jwt.sign({ email: empRes.email, fullName: empRes.fullName, user_id: empRes.id}, config.JWT_SECRET_KEY, { expiresIn: '1h' });
-        return callback(null, tokan);
+        if (!empRes.comparePassword(reqData.password)) {
+          return callback(null, 'Authentication failed. Wrong password.');
+        } else {
+          var tokan = jwt.sign({ email: empRes.email, fullName: empRes.fullName, user_id: empRes.id}, config.JWT_SECRET_KEY, { expiresIn: '1h' });
+          return callback(null, tokan);
+        }
       } else {
         return callback(null, null);
       }

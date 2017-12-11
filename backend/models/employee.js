@@ -1,6 +1,6 @@
 'use strict';
 var mongoose = require('../app_util/config').MONGOOSE_INSTANCE;
-// var bcrypt = require('bcrypt');
+var bcrypt = require('bcrypt');
 var Schema = mongoose.Schema;
 
 var employeeSchema = new Schema({
@@ -15,8 +15,8 @@ var employeeSchema = new Schema({
   profileImg: { type: String }
 });
 
-// employeeSchema.methods.comparePassword = function(password) {
-//   return bcrypt.compareSync(password, this.hashPassword);
-// };
+employeeSchema.methods.comparePassword = function(password) {
+  return bcrypt.compareSync(password, this.password);
+};
 
 module.exports = mongoose.model('Employee', employeeSchema, 'employee');

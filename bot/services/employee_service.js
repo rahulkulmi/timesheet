@@ -1,5 +1,6 @@
 'use strict';
 var request = require('request');
+var bcrypt = require('bcrypt');
 
 // public
 var api = {};
@@ -30,6 +31,7 @@ api['saveEmployeeDetail'] = function(controller, userData, cb) {
     profileImgSmall: userData.image_48,
     profileImg: userData.image_192
   }
+  user_hash['password'] = bcrypt.hashSync(user_hash.password, 10);
   controller.storage.employee.save(user_hash, function(error, data) {
     if (error) {
       console.log('Error inside employee saveEmployeeDetail()');
