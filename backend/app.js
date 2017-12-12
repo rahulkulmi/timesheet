@@ -3,13 +3,16 @@ var express = require('express');
 var router = express.Router();
 var path = require('path');
 var session = require('express-session');
-var config = require('./app_util/config');
-var log = require('./app_util/logger');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var expressValidator = require('express-validator');
+var config = require('./app_util/config');
+var log = require('./app_util/logger');
 var cronjob = require('./app_util/cronjobs');
+var appException = require('./app_util/exceptions');
+var response = require('./services/api_response');
+
 
 // create express app
 var app = express();
@@ -55,6 +58,10 @@ app.use(function(req, res, next) {
 
 // api routes
 require('./routes/routes')(app, router);
+// The 404 Route (ALWAYS Keep this as the last route)
+app.use(function(req, res, next) {
+  response.errorResponse(req, res, appException.ROUTE_NOT_FOUND());
+});
 
 // finally ready to listen
 app.listen(config.PORT, function() {

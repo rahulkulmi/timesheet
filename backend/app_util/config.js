@@ -33,6 +33,7 @@ function appConfig() {
     JWT_SECRET_KEY: process.env.JWT_SECRET_KEY,
     SENDGRID_KEY: process.env.SENDGRID_KEY,
     EMAIL_IDS: process.env.EMAIL_IDS,
+    ROOT_PATH: process.env.ROOT_PATH,
 
     MONGOOSE_INSTANCE: initDB()
   };

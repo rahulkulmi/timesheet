@@ -27,5 +27,9 @@ module.exports = {
   VALIDATION_EXCEPTION: function(rcode, customMsg) {
     return {'rcode': rcode, 'httpCode': 400,
       'message': 'Bad request', 'customMsg': customMsg};
+  },
+  ROUTE_NOT_FOUND: function(customMsg) {
+    return {'rcode': 404, 'httpCode': 404,
+      'message': 'Route not found', 'customMsg': customMsg};
   }
 };
