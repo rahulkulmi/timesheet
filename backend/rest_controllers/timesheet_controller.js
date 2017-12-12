@@ -13,8 +13,6 @@ api['getMonthlyTimeSheet'] = function(req, res) {
     // var reqData = req.body;
     var reqData = helper.prepareMonthlyStartEndDate(req.query);
     reqData['userId'] = req.session.user_id;
-    reqData['startDate'] = helper.getMonthStartDate();
-    reqData['endDate'] = helper.getTodayDate();
     var updatedHash = helper.prepareFormattedStartEndDate(reqData);
     timesheetService.getTimesheetByDate(updatedHash, function(err, empRes) {
       if (err) {

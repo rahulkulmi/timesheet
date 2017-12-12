@@ -42,10 +42,10 @@ utility['prepareMonthlyStartEndDate'] = function(reqData) {
   if (month < 10) {
     month = '0' + month;
   }
-  var startDate = year + '-' + month + '-' + '01';
-  var endDate = year + '-' + month + '-' + utility.daysInMonth(year, month);
-  reqData['startDate'] = new Date(startDate);
-  reqData['endDate'] = new Date(endDate);
+  var startDate = '01' + '-' + month + '-' + year;
+  var endDate = utility.daysInMonth(year, month) + '-' + month + '-' + year;
+  reqData['startDate'] = startDate;
+  reqData['endDate'] = endDate;
   return reqData;
 };
 
