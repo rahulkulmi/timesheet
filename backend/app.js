@@ -62,6 +62,11 @@ require('./routes/routes')(app, router);
 app.use(function(req, res, next) {
   response.errorResponse(req, res, appException.ROUTE_NOT_FOUND());
 });
+// Add error handler
+app.use(function (err, req, res, next) {
+  log.error(err);
+  response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err.stack);
+})
 
 // finally ready to listen
 app.listen(config.PORT, function() {
