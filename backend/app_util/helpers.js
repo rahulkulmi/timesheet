@@ -1,4 +1,5 @@
 'use strict';
+var bcrypt = require('bcrypt');
 
 // public
 var utility = {};
@@ -137,6 +138,11 @@ utility['prepareTimesheetData'] = function(reqData) {
   }
 
   return responseData;
+};
+
+utility['getEncryptedPassword'] = function(plainPassword) {
+  var encryptedPassword = bcrypt.hashSync(plainPassword, 12);
+  return encryptedPassword;
 };
 
 module.exports = utility;

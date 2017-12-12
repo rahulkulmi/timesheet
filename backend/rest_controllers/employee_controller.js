@@ -23,6 +23,22 @@ api['getDetailById'] = function(req, res) {
   }
 };
 
+api['resetPassword'] = function(req, res) {
+  try {
+    var reqData = req.body;
+    reqData['userId'] = req.session.user_id;
+    employeeService.resetPassword(reqData, function(err, empRes) {
+      if (err) {
+        response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err.stack);
+      } else {
+        response.successResponse(req, res, empRes);
+      }
+    });
+  } catch (err) {
+    response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err.stack);
+  }
+};
+
 api['sendMailToUserId'] = function(req, res) {
   try {
     var reqData = req.body;

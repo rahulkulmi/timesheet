@@ -8,11 +8,13 @@ module.exports = function(app, router) {
 
   // api routes
   router.get('/employee/detail', validate.validateToken, employeeController.getDetailById);
+  router.put('/employee/reset/password', validate.validateToken, employeeController.resetPassword);
   router.get('/timesheet', validate.validateToken, timesheetController.getMonthlyTimeSheet);
   // router.post('/employee/email', employeeController.sendMailToUserId);
   router.get('/email/timesheet', emailController.sendTimeSheet);
   router.get('/email/hoursheet', emailController.sendHourSheet);
   router.post('/auth/login', authController.userLogin);
+
   // router.get('/auth/status', validate.validateDeviceIdDeviceToken, authController.userStatus);
 
   app.use('/rest', router);

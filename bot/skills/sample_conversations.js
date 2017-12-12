@@ -124,7 +124,7 @@ module.exports = function(controller) {
       });
     });
 
-    controller.hears('timesheet', 'direct_message', function(bot, message) {
+    controller.hears(['timesheet', 'time'], 'direct_message', function(bot, message) {
       bot.reply(message, {
         text: appMessages.askTimeSheetText,
         attachments:[{
