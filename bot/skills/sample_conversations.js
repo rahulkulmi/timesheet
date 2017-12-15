@@ -302,7 +302,7 @@ module.exports = function(controller) {
 
     // launch a dialog from a button click
     controller.on('interactive_message_callback', function(bot, trigger) {
-      console.log('trigger');
+      // console.log('trigger');
       var userId = trigger.user;
       var token = trigger.token;
       var channel = trigger.channel;
@@ -313,7 +313,7 @@ module.exports = function(controller) {
       if (trigger.actions[0].name.match(/^dialog_timesheet/)) {
         var date = trigger.actions[0].selected_options[0].value;
         var callbackId = 'timesheet_' + userId + '_' + date
-        console.log(date);
+        // console.log(date);
         timesheetService.getDetailById(controller, date, userId, function(resData) {
           var dialog = dialogHelper.getTimesheetDialog(
             bot, resData, callbackId, date);
