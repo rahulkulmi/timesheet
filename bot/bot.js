@@ -66,7 +66,7 @@ var debug = require('debug')('botkit:main');
 var bot_options = {
   clientId: process.env.clientId,
   clientSecret: process.env.clientSecret,
-  // debug: true,
+  debug: true,
   scopes: ['bot'],
   slack_root_url: process.env.slack_root_url
   // studio_token: process.env.studio_token,
