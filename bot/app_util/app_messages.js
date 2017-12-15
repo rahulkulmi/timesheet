@@ -50,7 +50,7 @@ msg.dialogTextHomeOutPh = '23:00';
 // msg.dialogRegSelectGenderFemale = 'Female';
 
 msg.userRegister1 = 'Thank you ';
-msg.userRegister2 = ' for registration. Now you can login our dashboard using (URL : www.newput.com, UserId : ';
+msg.userRegister2 = ' for registration. Now you can login our dashboard using (URL : http://newput.timetracker.s3-website-us-west-1.amazonaws.com, UserId : ';
 msg.userRegister3 = ', Password : newput123)';
 
 
