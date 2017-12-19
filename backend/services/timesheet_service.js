@@ -23,7 +23,9 @@ var service = {};
 
 service['getTimesheetByDate'] = function(reqData, callback) {
   try {
-    Timesheet.find({userId: reqData.userId, date: {$gte: reqData.formattedStartDate, $lte: reqData.formattedEndDate}}, function(err, feedRes) {
+    var query = { userId: reqData.userId, date: {$gte: reqData.formattedStartDate, $lte: reqData.formattedEndDate} };
+    var sort = {sort: {date: 1}};
+    Timesheet.find(query, null, sort, function(err, feedRes) {
       if (err) return callback(err);
       if (feedRes) {
         return callback(null, feedRes, reqData);
