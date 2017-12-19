@@ -69,16 +69,24 @@ utility['getDayOptionList'] = function() {
 
   var todayDate = new Date();
   var todayDay = todayDate.getDay();
+  // Add this conduction due to showing wrong date on sunday.
   if (todayDay == 0) {
     todayDay = 7;
-  }
-
-  for (var i=1; i<=todayDay; i++) {
-    var listHash = {
-      text: utility.getDate(i) + dayNames[i - 1],
-      value: utility.getDate(i)
+    for (var i=1; i<=todayDay; i++) {
+      var listHash = {
+        text: utility.getDate(i-7) + dayNames[i - 1],
+        value: utility.getDate(i-7)
+      }
+      optionsArray.push(listHash);
     }
-    optionsArray.push(listHash);
+  } else {
+    for (var i=1; i<=todayDay; i++) {
+      var listHash = {
+        text: utility.getDate(i) + dayNames[i - 1],
+        value: utility.getDate(i)
+      }
+      optionsArray.push(listHash);
+    }
   }
 
   return optionsArray;
