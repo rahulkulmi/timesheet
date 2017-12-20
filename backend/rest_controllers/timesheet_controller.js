@@ -22,7 +22,8 @@ api['getMonthlyTimeSheet'] = function(req, res) {
       if (err) {
         response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err.stack);
       } else {
-        resDate['timesheetData'] = timesheetRes;
+        resDate['timesheetData'] = helper.prepareTimesheetData(timesheetRes);
+        // resDate['timesheetData'] = timesheetRes;
         resDate['totalHours'] = helper.calculateTotalHours(timesheetRes);
         response.successResponse(req, res, resDate);
       }
