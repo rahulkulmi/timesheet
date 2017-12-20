@@ -30,7 +30,7 @@ api['sendHourSheet'] = function(req, res) {
             }
             recordArray.push(recordHash);
             if (empRes.length == count) {
-              mailData['hourSheetData'] = recordArray;
+              mailData['hoursheetData'] = recordArray;
               emailService.sendHourSheet(mailData, function(error, mailRes) {
                 if (error) response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), error);
                 if (mailRes) {
@@ -88,7 +88,7 @@ function getTotalHoursSheetData(reqData, callback) {
   timesheetService.getTimesheetByDate(reqData, function(err, timesheetRes, reqData) {
     if (err) return callback(null);
     if (timesheetRes) {
-      reqData['timeSheetData'] = helper.prepareTimesheetData(timesheetRes);
+      reqData['timesheetData'] = helper.prepareTimesheetData(timesheetRes);
       reqData['totalHours'] = helper.calculateTotalHours(timesheetRes);
       return callback(null, reqData);
     } else {

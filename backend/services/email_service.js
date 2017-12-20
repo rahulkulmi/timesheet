@@ -49,7 +49,7 @@ service['sendHourSheet'] = function(reqData, callback) {
     var template = handlebars.compile(html);
 
     var htmlToSend = template({
-      empData: reqData.hourSheetData,
+      empData: reqData.hoursheetData,
       startDate: reqData.startDate,
       endDate: reqData.endDate
     });
@@ -74,7 +74,7 @@ service['sendTimeSheet'] = function(reqData, callback) {
     var template = handlebars.compile(html);
 
     var htmlToSend = template({
-      sheetData: reqData.timeSheetData,
+      sheetData: reqData.timesheetData,
       empName: reqData.empName,
       empEmail: reqData.empEmail,
       month: reqData.month,

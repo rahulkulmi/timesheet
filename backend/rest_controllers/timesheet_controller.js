@@ -15,14 +15,14 @@ api['getMonthlyTimeSheet'] = function(req, res) {
     reqData['userId'] = req.session.user_id;
     var updatedHash = helper.prepareFormattedStartEndDate(reqData);
     var resDate = {
-      timeSheetData: [],
+      timesheetData: [],
       totalHours: '00:00'
     }
     timesheetService.getTimesheetByDate(updatedHash, function(err, timesheetRes) {
       if (err) {
         response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err.stack);
       } else {
-        resDate['timeSheetData'] = timesheetRes;
+        resDate['timesheetData'] = timesheetRes;
         resDate['totalHours'] = helper.calculateTotalHours(timesheetRes);
         response.successResponse(req, res, resDate);
       }
