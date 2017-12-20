@@ -88,13 +88,8 @@ function getTotalHoursSheetData(reqData, callback) {
   timesheetService.getTimesheetByDate(reqData, function(err, timesheetRes, reqData) {
     if (err) return callback(null);
     if (timesheetRes) {
-      var totalMin = 0;
-      timesheetRes.forEach(function(sheet) {
-        var a = sheet.dayTotal.split(':');
-        totalMin = totalMin + (a[0]*60 + a[1]*1);
-      });
       reqData['timeSheetData'] = helper.prepareTimesheetData(timesheetRes);
-      reqData['totalHours'] = helper.convertMinToHour(totalMin);
+      reqData['totalHours'] = helper.calculateTotalHours(timesheetRes);
       return callback(null, reqData);
     } else {
       // no timesheet found

@@ -14,11 +14,17 @@ api['getMonthlyTimeSheet'] = function(req, res) {
     var reqData = helper.prepareMonthlyStartEndDate(req.query);
     reqData['userId'] = req.session.user_id;
     var updatedHash = helper.prepareFormattedStartEndDate(reqData);
-    timesheetService.getTimesheetByDate(updatedHash, function(err, empRes) {
+    var resDate = {
+      timeSheetData: [],
+      totalHours: '00:00'
+    }
+    timesheetService.getTimesheetByDate(updatedHash, function(err, timesheetRes) {
       if (err) {
         response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err.stack);
       } else {
-        response.successResponse(req, res, empRes);
+        resDate['timeSheetData'] = timesheetRes;
+        resDate['totalHours'] = helper.calculateTotalHours(timesheetRes);
+        response.successResponse(req, res, resDate);
       }
     });
   } catch (err) {

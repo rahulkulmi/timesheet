@@ -145,4 +145,15 @@ utility['getEncryptedPassword'] = function(plainPassword) {
   return encryptedPassword;
 };
 
+utility['calculateTotalHours'] = function(resArray) {
+  var totalMin = 0;
+  var totalHours = '00:00';
+  resArray.forEach(function(sheet) {
+    var a = sheet.dayTotal.split(':');
+    totalMin = totalMin + (a[0]*60 + a[1]*1);
+  });
+  totalHours = utility.convertMinToHour(totalMin);
+  return totalHours;
+};
+
 module.exports = utility;
