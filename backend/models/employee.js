@@ -5,6 +5,8 @@ var Schema = mongoose.Schema;
 
 var employeeSchema = new Schema({
   id: { type: String, index: true },
+  channelId: { type: String },
+  teamId: { type: String },
   firstName: { type: String },
   lastName: { type: String },
   fullName: { type: String, index: true },

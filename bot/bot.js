@@ -68,7 +68,8 @@ var bot_options = {
   clientSecret: process.env.clientSecret,
   debug: true,
   scopes: ['bot'],
-  slack_root_url: process.env.slack_root_url
+  slack_root_url: process.env.slack_root_url,
+  appToken: process.env.appToken,
   // studio_token: process.env.studio_token,
   // studio_command_uri: process.env.studio_command_uri
 };
@@ -92,6 +93,9 @@ controller.startTicking();
 
 // Set up an Express-powered webserver to expose oauth and webhook endpoints
 var webserver = require(__dirname + '/components/express_webserver.js')(controller);
+
+// setup cron job
+var cronjob = require('./app_util/cronjobs')(controller);
 
 if (!process.env.clientId || !process.env.clientSecret) {
 

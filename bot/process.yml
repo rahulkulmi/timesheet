@@ -2,6 +2,6 @@ apps:
   - script   : 'bot.js'
     name     : 'APP'
     exec_mode: 'cluster'
-    instances: 2
+    instances: 1
     max_memory_restart: '120M'
-    cron_restart: '0 3 * * *'
+    cron_restart: '0 5,10,15,20 * * *'

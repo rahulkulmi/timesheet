@@ -23,6 +23,8 @@ api['saveEmployeeDetail'] = function(controller, userData, cb) {
   var resData = null;
   var user_hash = {
     id: userData.id,
+    teamId: userData.teamId,
+    channelId: userData.channelId,
     firstName: userData.first_name,
     lastName: userData.last_name,
     fullName: userData.real_name,
@@ -35,6 +37,20 @@ api['saveEmployeeDetail'] = function(controller, userData, cb) {
   controller.storage.employee.save(user_hash, function(error, data) {
     if (error) {
       console.log('Error inside employee saveEmployeeDetail()');
+      console.log(error);
+    }
+    if (data) {
+      resData = data;
+    }
+    cb(resData);
+  });
+};
+
+api['getEmployeeList'] = function(controller, cb) {
+  var resData = null;
+  controller.storage.employee.all(function(error, data) {
+    if (error) {
+      console.log('Error inside employee getEmployeeList()');
       console.log(error);
     }
     if (data) {

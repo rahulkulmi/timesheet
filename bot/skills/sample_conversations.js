@@ -276,6 +276,8 @@ module.exports = function(controller) {
       // console.log('message');
       // console.log(message);
       var userId = message.user;
+      var channelId = message.channel;
+      var teamId = message.team;
 
       bot.api.users.info({user: userId}, function(error, resData) {
         if (resData) {
@@ -283,6 +285,8 @@ module.exports = function(controller) {
           // console.log(resData.user.profile);
           var user_hash = resData.user.profile;
           user_hash['id'] = userId;
+          user_hash['channelId'] = channelId;
+          user_hash['teamId'] = teamId;
           employeeService.saveEmployeeDetail(controller, user_hash, function(resEmpData) {
             if (resEmpData) {
               // console.log('resEmpData');
