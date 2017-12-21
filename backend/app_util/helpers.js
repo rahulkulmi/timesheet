@@ -29,6 +29,21 @@ utility['getDate'] = function(userDay) {
   return newDate;
 };
 
+utility['getDateByNumber'] = function(number) {
+  var todayDate = new Date();
+  var date = number;
+  if (date < 10) {
+    date = '0' + date;
+  }
+  var month = 1 + todayDate.getMonth();
+  if (month < 10) {
+    month = '0' + month;
+  }
+  var year = todayDate.getFullYear();
+  var newDate = date + '-' + month + '-' + year;
+  return newDate;
+};
+
 utility['prepareMonthlyStartEndDate'] = function(reqData) {
   var date = new Date();
   var year = date.getFullYear();
@@ -118,16 +133,17 @@ utility['getCurrentMonthName'] = function() {
 
 utility['prepareTimesheetData'] = function(reqData) {
   var responseData = [];
-  var defaultObject = {
-    officeIn: '',
-    officeOut: '',
-    homeIn: '',
-    homeOut: '',
-    dayTotal: '',
-    status: ''
-  }
   // create blank space array
-  for(var i=0; i<31; i++) {
+  for(var i=1; i<32; i++) {
+    var defaultObject = {
+      officeIn: '',
+      officeOut: '',
+      homeIn: '',
+      homeOut: '',
+      dateString: utility.getDateByNumber(i),
+      dayTotal: '',
+      status: ''
+    }
     responseData.push(defaultObject);
   }
   // now fill the blank space
