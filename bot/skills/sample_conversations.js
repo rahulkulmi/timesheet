@@ -19,7 +19,6 @@ var employeeService = require('../services/employee_service');
 module.exports = function(controller) {
 
     controller.hears(['color'], 'direct_message, direct_mention', function(bot, message) {
-
         bot.startConversation(message, function(err, convo) {
             convo.say('This is an example of using convo.ask with a single callback.');
 
@@ -344,31 +343,31 @@ module.exports = function(controller) {
     var submission = message.submission;
     var userId = message.user;
     var callbackId = message.callback_id;
-    console.log('message');
-    console.log(message);
+    // console.log('message');
+    // console.log(message);
     var actionArray = callbackId.split('_');
 
     if (actionArray[0] == 'timesheet') {
       var regex = new RegExp('([0-1][0-9]|2[0-9]):([0-5][0-9])');
-      if (submission.officeIn && !regex.test(submission.officeIn)) {
+      if (submission.officeIn && (!regex.test(submission.officeIn) || submission.officeIn.length != 5)) {
         bot.dialogError({
            "name":"officeIn",
            "error":appMessages.errorOfficeIn
         });
         return;
-      } else if (submission.officeOut && !regex.test(submission.officeOut)) {
+      } else if (submission.officeOut && (!regex.test(submission.officeOut) || submission.officeOut.length != 5)) {
          bot.dialogError({
            "name":"officeOut",
            "error":appMessages.errorOfficeOut
         });
         return;
-      } else if (submission.homeIn && !regex.test(submission.homeIn)) {
+      } else if (submission.homeIn && (!regex.test(submission.homeIn) || submission.homeIn.length != 5)) {
          bot.dialogError({
            "name":"homeIn",
            "error":appMessages.errorHomeIn
         });
         return;
-      } else if (submission.homeOut && !regex.test(submission.homeOut)) {
+      } else if (submission.homeOut && (!regex.test(submission.homeOut) || submission.homeOut.length != 5)) {
          bot.dialogError({
            "name":"homeOut",
            "error":appMessages.errorHomeOut
