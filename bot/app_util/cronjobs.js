@@ -5,7 +5,8 @@ var coreAPI = require('../services/core_api');
 
 module.exports = function(controller) {
   var bot = controller.spawn();
-  var dailyJob = crontab.schedule("30 9,17,22 * * 1-6", function() {
+  // 0 4,12,17 * * 1-6
+  var dailyJob = crontab.schedule("0 4,12,17 * * 1-6", function() {
     console.log('Cron daily running.');
     employeeService.getEmployeeList(controller, function(resEmpData) {
       if (resEmpData) {
