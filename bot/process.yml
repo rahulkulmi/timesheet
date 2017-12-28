@@ -4,4 +4,3 @@ apps:
     exec_mode: 'cluster'
     instances: 1
     max_memory_restart: '120M'
-    cron_restart: '0 5,10,15,20 * * *'

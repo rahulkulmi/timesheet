@@ -107,21 +107,7 @@ module.exports = function(controller) {
     //   });
     // });
 
-    controller.hears('help', 'direct_message', function(bot, message) {
-      bot.reply(message, {
-        text: appMessages.helpText,
-        attachments:[{
-          title: appMessages.helpTSText,
-          color: '#3AA3E3'
-        }, {
-          title: appMessages.helpViewText,
-          color: '#4C9900'
-        }, {
-          title: appMessages.helpRegistrationText,
-          color: '#B266FF'
-        }]
-      });
-    });
+
 
     controller.hears(['timesheet', 'time'], 'direct_message', function(bot, message) {
       bot.reply(message, {
@@ -300,6 +286,22 @@ module.exports = function(controller) {
         } else {
           bot.reply(message, appMessages.closeDialogFlowError);
         }
+      });
+    });
+
+    controller.hears(['help', '.*'], 'direct_message', function(bot, message) {
+      bot.reply(message, {
+        text: appMessages.helpText,
+        attachments:[{
+          title: appMessages.helpTSText,
+          color: '#3AA3E3'
+        }, {
+          title: appMessages.helpViewText,
+          color: '#4C9900'
+        }, {
+          title: appMessages.helpRegistrationText,
+          color: '#B266FF'
+        }]
       });
     });
 
