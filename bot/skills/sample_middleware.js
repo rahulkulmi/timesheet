@@ -7,6 +7,9 @@ module.exports = function(controller) {
         if (message.type == 'message_deleted') {
           console.log('Delete message response.');
           next();
+        } else if (message.type == 'bot_message') {
+          console.log('Bot message for cron response.');
+          next();
         } else {
           global.start = new Date().getTime();
           global.timeout = setTimeout(function() {
