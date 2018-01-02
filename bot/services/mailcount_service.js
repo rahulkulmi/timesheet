@@ -13,7 +13,7 @@ api['getTodayMailCount'] = function(controller, cb) {
     server: 'Backend',
     count: 1
   }
-  controller.storage.mailcount.get(todayDate, function(error, data) {
+  controller.storage.mailcount.get(mailcount_hash.id, function(error, data) {
     if (error) {
       console.log('Error inside mailcount get getTodayMailCount()');
       console.log(error);
