@@ -15,7 +15,9 @@ module.exports = function(controller) {
           global.timeout = setTimeout(function() {
             global.timeout = null;
             var msg = 'This is not related to text event.'
-            if (message.event.text) {
+            console.log('RCVD: ', message);
+            if (message.event && message.event.text) {
+            // if (message.event.text) {
               msg = message.event.text
             }
             var error = new Error('[' + new Date() + '] Request did not respond within 20 seconds. User text message : ' + msg);

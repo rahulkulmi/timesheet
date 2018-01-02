@@ -15,4 +15,9 @@ module.exports = function(webserver, controller) {
 
     });
 
+    // To check server health
+    webserver.get('/slack/ping', function(req, res) {
+        res.status(200).send('Server is running.');
+    });
+
 }
