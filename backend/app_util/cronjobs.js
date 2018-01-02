@@ -3,6 +3,7 @@ var crontab = require('node-cron');
 var request = require('request');
 var log = require('./logger');
 var config = require('./config');
+var mailcountService = require('../services/mailcount_service');
 
 function startCronJobs() {
 
@@ -51,6 +52,19 @@ function startCronJobs() {
   var monthTimesheet28Day = crontab.schedule("59 23 28 2 *", function() {
     request(config.ROOT_PATH + 'email/timesheet', function (error, response, body) {
       log.info('Cron monthly 28Day timesheet running.');
+     });
+  });
+
+  var healthJob = crontab.schedule("*/1 * * * *", function() {
+    log.info('Cron slack bot server health check running.');
+    request(config.BOT_ROOT_PATH + 'ping', function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+        console.log('body');
+        console.log(body);
+      } else {
+        log.info('Send mail to admin Timesheet slack bot server down.');
+        mailcountService.getTodayMailCount();
+      }
      });
   });
 };

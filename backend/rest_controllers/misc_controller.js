@@ -1,7 +1,6 @@
 'use strict';
 var response = require('../services/api_response');
 var appException = require('../app_util/exceptions');
-// var helper = require('../app_util/helpers');
 
 // public
 var api = {};

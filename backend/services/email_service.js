@@ -94,4 +94,16 @@ service['sendTimeSheet'] = function(reqData, callback) {
   });
 }
 
+service['sendNotificationMail'] = function(callback) {
+  var emailIds = config.ADMIN_EMAIL_IDS.split(',');
+  var mailOptions = {
+    from: 'Timesheet Notification <timesheet@newput.com>',
+    to: emailIds,
+    subject: 'Timesheet Slack Bot Notification Date : ' + helper.getTodayDate(),
+    html: 'Slack Bot server is down.'
+  };
+
+  sendMailTransporter(mailOptions, callback);
+}
+
 module.exports = service;

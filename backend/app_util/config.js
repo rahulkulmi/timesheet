@@ -34,6 +34,8 @@ function appConfig() {
     SENDGRID_KEY: process.env.SENDGRID_KEY,
     EMAIL_IDS: process.env.EMAIL_IDS,
     ROOT_PATH: process.env.ROOT_PATH,
+    ADMIN_EMAIL_IDS: process.env.ADMIN_EMAIL_IDS,
+    BOT_ROOT_PATH: process.env.BOT_ROOT_PATH,
 
     MONGOOSE_INSTANCE: initDB()
   };
