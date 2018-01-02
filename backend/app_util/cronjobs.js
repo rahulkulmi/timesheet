@@ -55,7 +55,7 @@ function startCronJobs() {
      });
   });
 
-  var healthJob = crontab.schedule("*/1 * * * *", function() {
+  var healthJob = crontab.schedule("*/5 * * * *", function() {
     log.info('Cron slack bot server health check running.');
     request(config.BOT_ROOT_PATH + 'ping', function (error, response, body) {
       if (!error && response.statusCode == 200) {

@@ -29,6 +29,7 @@ service['getTodayMailCount'] = function() {
         log.info(error);
       }
       if (dataRes) {
+        // here check count if count is 4 send mail.
         if (dataRes.count == 4) {
           emailService.sendNotificationMail(function(err, mailRes) {
             if (err) {

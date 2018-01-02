@@ -27,7 +27,7 @@ module.exports = function(controller) {
 
   // Check backend server health
   var healthJob = crontab.schedule("*/5 * * * *", function() {
-    console.log('Cron server health check running.');
+    console.log('Cron backend server health check running.');
     request(bot.botkit.config.rootPath + 'ping', function (error, response, body) {
       if (!error && response.statusCode == 200) {
         console.log('body');
