@@ -1,6 +1,9 @@
 'use strict';
 var crontab = require('node-cron');
+var request = require('request');
 var employeeService = require('../services/employee_service');
+var emailService = require('../services/email_service');
+var mailcountService = require('../services/mailcount_service');
 var coreAPI = require('../services/core_api');
 
 module.exports = function(controller) {
@@ -20,6 +23,31 @@ module.exports = function(controller) {
         console.log('Do not find any employee data.');
       }
     });
+  });
+
+  // Check backend server health
+  var healthJob = crontab.schedule("*/5 * * * *", function() {
+    console.log('Cron server health check running.');
+    request(bot.botkit.config.rootPath + 'ping', function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+        console.log('body');
+        console.log(body);
+      } else {
+        console.log('Send mail to admin Timesheet backend server down.');
+        mailcountService.getTodayMailCount(controller, function(resMailcountData) {
+          if (resMailcountData) {
+            // here check count if count is 4 send mail.
+            if (resMailcountData.count == 4) {
+              emailService.sendNotificationMail(bot);
+            } else {
+              console.log('Mail count value : ', resMailcountData.count);
+            }
+          } else {
+            console.log('Do not find any mailcount data.');
+          }
+        });
+      }
+     });
   });
 };
 

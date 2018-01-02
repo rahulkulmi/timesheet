@@ -55,7 +55,7 @@ var env = require('node-env-file');
 env(__dirname + '/.env');
 
 
-if (!process.env.clientId || !process.env.clientSecret || !process.env.PORT || !process.env.slack_root_url) {
+if (!process.env.clientId || !process.env.clientSecret || !process.env.PORT || !process.env.slackRootUrl) {
   usage_tip();
   // process.exit(1);
 }
@@ -68,8 +68,11 @@ var bot_options = {
   clientSecret: process.env.clientSecret,
   // debug: true,
   scopes: ['bot'],
-  slack_root_url: process.env.slack_root_url,
+  slackRootUrl: process.env.slackRootUrl,
   appToken: process.env.appToken,
+  adminEmailIds: process.env.adminEmailIds,
+  sendGridKey: process.env.sendGridKey,
+  rootPath: process.env.rootPath
   // studio_token: process.env.studio_token,
   // studio_command_uri: process.env.studio_command_uri
 };
@@ -79,7 +82,7 @@ var bot_options = {
 if (process.env.MONGO_URI) {
   var URL = process.env.MONGO_URI + process.env.MONGODB_PORT_27017_TCP_ADDR + ':' + process.env.MONGODB_PORT_27017_TCP_PORT + '/slackdb'
   // var URL = process.env.MONGO_URI
-  var mongoStorage = require('botkit-storage-mongo')({mongoUri: URL, tables: ['timesheet', 'employee']});
+  var mongoStorage = require('botkit-storage-mongo')({mongoUri: URL, tables: ['timesheet', 'employee', 'mailcount']});
   bot_options.storage = mongoStorage;
 } else {
   // store user data in a simple JSON format

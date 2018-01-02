@@ -7,6 +7,7 @@
     "start": "node bot.js"
   },
   "dependencies": {
+    "@sendgrid/mail": "6.1.4",
     "async": "2.6.0",
     "bcrypt": "1.0.3",
     "body-parser": "1.15.2",

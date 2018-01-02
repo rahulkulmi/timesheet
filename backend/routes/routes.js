@@ -5,15 +5,20 @@ module.exports = function(app, router) {
   var timesheetController = require('../rest_controllers/timesheet_controller');
   var employeeController = require('../rest_controllers/employee_controller');
   var emailController = require('../rest_controllers/email_controller');
+  var miscController = require('../rest_controllers/misc_controller');
 
   // api routes
+  router.post('/auth/login', authController.userLogin);
+
   router.get('/employee/detail', validate.validateToken, employeeController.getDetailById);
   router.put('/employee/reset/password', validate.validateToken, employeeController.resetPassword);
+
   router.get('/timesheet', validate.validateToken, timesheetController.getMonthlyTimeSheet);
-  // router.post('/employee/email', employeeController.sendMailToUserId);
+
   router.get('/email/timesheet', emailController.sendTimeSheet);
   router.get('/email/hoursheet', emailController.sendHourSheet);
-  router.post('/auth/login', authController.userLogin);
+
+  router.get('/ping', miscController.pingServer);
 
   // router.get('/auth/status', validate.validateDeviceIdDeviceToken, authController.userStatus);
 

@@ -11,7 +11,7 @@ api['deleteMessage'] = function(bot, token, channel, ts) {
     ts: ts
   }
   var requestData = {
-    uri: bot.botkit.config.slack_root_url + 'chat.delete',
+    uri: bot.botkit.config.slackRootUrl + 'chat.delete',
     method: 'POST',
     headers: {
       'Authorization': 'Bearer ' + bot.team_info.token
@@ -39,7 +39,7 @@ api['sendMessage'] = function(bot, channel, text) {
     text: text
   }
   var requestData = {
-    uri: bot.botkit.config.slack_root_url + 'chat.postMessage',
+    uri: bot.botkit.config.slackRootUrl + 'chat.postMessage',
     method: 'POST',
     headers: {
       'Authorization': 'Bearer ' + bot.botkit.config.appToken
@@ -58,6 +58,5 @@ api['sendMessage'] = function(bot, channel, text) {
     }
   });
 };
-
 
 module.exports = api;
