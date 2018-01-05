@@ -30,7 +30,7 @@ module.exports = function(controller) {
     console.log('Cron backend server health check running.');
     request(bot.botkit.config.rootPath + 'ping', function (error, response, body) {
       if (!error && response.statusCode == 200) {
-        console.log('body');
+        // console.log('body');
         console.log(body);
       } else {
         console.log('Send mail to admin Timesheet backend server down.');

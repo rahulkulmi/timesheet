@@ -27,7 +27,7 @@ utility['getDayTotalHours'] = function(hash) {
       total = hr + ':';
     }
     if (min < 10) {
-      total += min + '0';
+      total += '0' + min;
     } else {
       total += min;
     }
