@@ -111,7 +111,7 @@ utility['convertMinToHour'] = function(totalMin) {
       totalHours = hr + ':';
     }
     if (min < 10) {
-      totalHours += min + '0';
+      totalHours += '0' + min;
     } else {
       totalHours += min;
     }
