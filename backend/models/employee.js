@@ -13,7 +13,12 @@ var employeeSchema = new Schema({
   email: { type: String, index: true },
   password: { type: String, index: true },
   profileImgSmall: { type: String },
-  profileImg: { type: String }
+  profileImg: { type: String },
+  status: {
+    type: String,
+    enum: ['employee', 'admin'],
+    default: 'employee'
+  }
 });
 
 employeeSchema.methods.comparePassword = function(password) {

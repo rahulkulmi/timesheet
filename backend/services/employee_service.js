@@ -23,7 +23,7 @@ service['getDetailById'] = function(reqData, callback) {
 
 service['getEmployeeList'] = function(callback) {
   try {
-    Employee.find({}, null, {sort: {fullName: 1}}, function(err, employeeRes) {
+    Employee.find({status: 'employee'}, null, {sort: {fullName: 1}}, function(err, employeeRes) {
       if (err) return callback(err);
       if (employeeRes) {
         return callback(null, employeeRes);

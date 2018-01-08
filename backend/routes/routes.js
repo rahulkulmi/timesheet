@@ -10,6 +10,7 @@ module.exports = function(app, router) {
   // api routes
   router.post('/auth/login', authController.userLogin);
 
+  router.get('/employee', validate.validateAdminToken, employeeController.getEmployeeList);
   router.get('/employee/detail', validate.validateToken, employeeController.getDetailById);
   router.put('/employee/reset/password', validate.validateToken, employeeController.resetPassword);
 
