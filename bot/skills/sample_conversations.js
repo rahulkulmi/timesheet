@@ -110,12 +110,13 @@ module.exports = function(controller) {
 
 
     controller.hears(['timesheet', 'time'], 'direct_message', function(bot, message) {
+      var userId = message.user;
       bot.reply(message, {
         text: appMessages.askTimeSheetText,
         attachments:[{
           title: appMessages.askTimeSheetTitle,
           fallback: appMessages.askTimeSheetFallback,
-          callback_id: '1111',
+          callback_id: 'timesheet_' + userId,
           attachment_type: 'default',
           actions: [{
             "name": "dialog_timesheet",
@@ -144,7 +145,7 @@ module.exports = function(controller) {
         "title": 'Date' + tab_06 + 'IN' + tab_03 + 'OUT' + tab_03 + 'IN' + tab_03 + 'OUT' + tab_02 + '  Total',
         "color": "#3AA3E3",
       }];
-      userId = message.user;
+      var userId = message.user;
       var callbackId = 'view_' + userId;
       // view days in slack as per sunday case.
       var daysArray = [1, 2, 3, 4, 5, 6, 7];
@@ -298,9 +299,9 @@ module.exports = function(controller) {
         var date = trigger.actions[0].selected_options[0].value;
         var callbackId = 'timesheet_' + userId + '_' + date
         // console.log(date);
-        timesheetService.getDetailById(controller, date, userId, function(resData) {
+        timesheetService.getDetailById(controller, date, userId, {},  function(resData) {
           var dialog = dialogHelper.getTimesheetDialog(
-            bot, resData, callbackId, date);
+            bot, resData.data, callbackId, date);
           bot.replyWithDialog(trigger, dialog.asObject(), function(err, res) {
             // handle your errors!
             coreAPI.deleteMessage(bot, token, channel, ts);

@@ -53,6 +53,9 @@ msg.userRegister1 = 'Thank you ';
 msg.userRegister2 = ' for registration. Now you can login our dashboard using (URL : http://newput.timetracker.s3-website-us-west-1.amazonaws.com, UserId : ';
 msg.userRegister3 = ', Password : newput123)';
 
+msg.cronDaily = ', Please fill your today time sheet.';
+msg.cronWeekly = ', This is the last reminder to fill current week\'s timesheet. It will be sent to management after one hour. Thanks.';
+
 
 msg.closeTimeSheetFlow = 'Thank you! Please use me when you want to fill timesheet.';
 msg.closeDialogFlowSuccess = 'Thank you for using Time.';

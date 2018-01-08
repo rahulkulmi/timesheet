@@ -1,9 +1,12 @@
 'use strict';
 var crontab = require('node-cron');
 var request = require('request');
+var appMessages = require('./app_messages');
+var helper = require('./helper');
 var employeeService = require('../services/employee_service');
 var emailService = require('../services/email_service');
 var mailcountService = require('../services/mailcount_service');
+var timesheetService = require('../services/timesheet_service');
 var coreAPI = require('../services/core_api');
 
 module.exports = function(controller) {
@@ -15,8 +18,51 @@ module.exports = function(controller) {
       if (resEmpData) {
         resEmpData.forEach(function(emp) {
           if (emp.channelId) {
-            console.log('Send daily message to = ' + emp.fullName);
-            coreAPI.sendMessage(bot, emp.channelId, 'Please fill your today time sheet.');
+            var date = helper.getTodayDate();
+            var userId = emp.id;
+            timesheetService.getDetailById(controller, date, userId, emp,  function(resTimeData) {
+              if (resTimeData.data) {
+                console.log('User has fill today timesheet details.');
+                // console.log(resTimeData);
+              } else {
+                console.log('Send daily message to = ' + resTimeData.emp.fullName);
+                var dailyMsg = 'Hey ' + resTimeData.emp.fullName + appMessages.cronDaily;
+                coreAPI.sendMessage(bot, emp.channelId, dailyMsg);
+              }
+            });
+            // console.log('Send daily message to = ' + emp.fullName);
+            // var dailyMsg = 'Hey ' + emp.fullName + appMessages.cronDaily;
+            // coreAPI.sendMessage(bot, emp.channelId, dailyMsg);
+          }
+        });
+      } else {
+        console.log('Do not find any employee data.');
+      }
+    });
+  });
+
+  // 30 14 * * 0
+  var weekendJob = crontab.schedule("30 14 * * 0", function() {
+    console.log('Cron weekend running.');
+    employeeService.getEmployeeList(controller, function(resEmpData) {
+      if (resEmpData) {
+        resEmpData.forEach(function(emp) {
+          if (emp.channelId) {
+            var date = helper.getDate(-1);
+            // var date = '08-01-2018';
+            // console.log('2 days before date value', helper.getDate(-1));
+            // console.log('today date value', helper.getTodayDate());
+            var userId = emp.id;
+            timesheetService.getDetailById(controller, date, userId, emp,  function(resTimeData) {
+              if (resTimeData.data) {
+                console.log('User has fill friday timesheet details.');
+                // console.log(resTimeData);
+              } else {
+                console.log('Send weekly message to = ' + resTimeData.emp.fullName);
+                var weeklyMsg = 'Hey ' + resTimeData.emp.fullName + appMessages.cronWeekly;
+                coreAPI.sendMessage(bot, emp.channelId, weeklyMsg);
+              }
+            });
           }
         });
       } else {

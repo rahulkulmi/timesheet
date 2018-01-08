@@ -48,8 +48,11 @@ api['getTitleText'] = function(controller, date, userId, color, cb) {
   });
 };
 
-api['getDetailById'] = function(controller, date, userId, cb) {
-  var resData = null;
+api['getDetailById'] = function(controller, date, userId, empHash, cb) {
+  var resData = {
+    emp: empHash,
+    data: null
+  };
   var dateUserId = date + ':' + userId;
   controller.storage.timesheet.get(dateUserId, function(error, data) {
     if (error) {
@@ -57,7 +60,7 @@ api['getDetailById'] = function(controller, date, userId, cb) {
       console.log(error);
     }
     if (data) {
-      resData = data;
+      resData['data'] = data;
     }
     cb(resData);
   });

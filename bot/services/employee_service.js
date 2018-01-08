@@ -20,6 +20,8 @@ api['getDetailById'] = function(controller, userId, cb) {
 };
 
 api['saveEmployeeDetail'] = function(controller, userData, cb) {
+  var bot = controller.spawn();
+  var emailIds = bot.botkit.config.adminEmailIds.split(',');
   var resData = null;
   var user_hash = {
     id: userData.id,
@@ -31,7 +33,11 @@ api['saveEmployeeDetail'] = function(controller, userData, cb) {
     email: userData.email,
     password: 'newput123',
     profileImgSmall: userData.image_48,
-    profileImg: userData.image_192
+    profileImg: userData.image_192,
+    status: 'employee'
+  }
+  if (emailIds.includes(userData.email)) {
+    user_hash['status'] = 'admin';
   }
   user_hash['password'] = bcrypt.hashSync(user_hash.password, 10);
   controller.storage.employee.save(user_hash, function(error, data) {
