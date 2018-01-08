@@ -1,8 +1,4 @@
 'use strict';
-// var Device = require('../models/device');
-// var User = require('../models/user');
-// var UserDevice = require('../models/user_device');
-// var Session = require('../models/session');
 var appException = require('./exceptions');
 // var helper = require('../app_util/helpers');
 var response = require('../services/api_response');
@@ -29,6 +25,7 @@ utility['validateToken'] = function(req, res, next) {
       }
       // jwtRes
       req.session.user_id = jwtRes.user_id;
+      req.session.status = jwtRes.status;
       return next();
     });
   } catch (err) {

@@ -16,7 +16,7 @@ service['userLogin'] = function(reqData, callback) {
         if (!empRes.comparePassword(reqData.password)) {
           return callback(null, 'Authentication failed. Wrong password.');
         } else {
-          var tokan = jwt.sign({ email: empRes.email, fullName: empRes.fullName, user_id: empRes.id, status: empRes.status}, config.JWT_SECRET_KEY, { expiresIn: '1h' });
+          var tokan = jwt.sign({ user_id: empRes.id, status: empRes.status}, config.JWT_SECRET_KEY, { expiresIn: '1h' });
           return callback(null, tokan);
         }
       } else {

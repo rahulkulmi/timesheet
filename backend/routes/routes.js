@@ -10,7 +10,7 @@ module.exports = function(app, router) {
   // api routes
   router.post('/auth/login', authController.userLogin);
 
-  router.get('/employee', validate.validateAdminToken, employeeController.getEmployeeList);
+  // Routes for employee use
   router.get('/employee/detail', validate.validateToken, employeeController.getDetailById);
   router.put('/employee/reset/password', validate.validateToken, employeeController.resetPassword);
 
@@ -22,6 +22,11 @@ module.exports = function(app, router) {
   router.get('/ping', miscController.pingServer);
 
   // router.get('/auth/status', validate.validateDeviceIdDeviceToken, authController.userStatus);
+
+  // Routes for admin use
+  router.get('/admin/employee', validate.validateAdminToken, employeeController.getEmployeeList);
+
+  router.get('/admin/timesheet', validate.validateAdminToken, timesheetController.getMonthlyTimeSheet);
 
   app.use('/rest', router);
 };
