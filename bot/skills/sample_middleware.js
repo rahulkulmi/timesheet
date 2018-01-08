@@ -10,6 +10,9 @@ module.exports = function(controller) {
         } else if (message.type == 'bot_message') {
           console.log('Bot message for cron response.');
           next();
+        } else if (message.type == 'dialog_submission') {
+          console.log('Dialog submission message for dialog box.');
+          next();
         } else {
           global.start = new Date().getTime();
           global.timeout = setTimeout(function() {
@@ -17,7 +20,6 @@ module.exports = function(controller) {
             var msg = 'This is not related to text event.'
             console.log('RCVD: ', message);
             if (message.event && message.event.text) {
-            // if (message.event.text) {
               msg = message.event.text
             }
             var error = new Error('[' + new Date() + '] Request did not respond within 20 seconds. User text message : ' + msg);

@@ -122,34 +122,6 @@ module.exports = function(controller) {
             "text": appMessages.askTimeSheetActionsText,
             "type": "select",
             "options": helper.getDayOptionList()
-            // "options": [{
-            //   "text": helper.getDate(1) + ' - Monday',
-            //   "value": helper.getDate(1)
-            // }, {
-            //   "text": helper.getDate(2) + ' - Tuesday',
-            //   "value": helper.getDate(2)
-            // }, {
-            //   "text": helper.getDate(3) + ' - Wednesday',
-            //   "value": helper.getDate(3)
-            // }, {
-            //   "text": helper.getDate(4) + ' - Thursday',
-            //   "value": helper.getDate(4)
-            // }, {
-            //   "text": helper.getDate(5) + ' - Friday',
-            //   "value": helper.getDate(5)
-            // }, {
-            //   "text": helper.getDate(6) + ' - Saturday',
-            //   "value": helper.getDate(6)
-            // }, {
-            //   "text": helper.getDate(7) + ' - Sunday',
-            //   "value": helper.getDate(7)
-            // }] //,
-            // "confirm": {
-            //   "title": appMessages.askTimeSheetConfirmTitle,
-            //   "text": appMessages.askTimeSheetConfirmText,
-            //   "ok_text": "Yes",
-            //   "dismiss_text": "No"
-            // }
           }, {
               "name":"no",
               "text": "No",
@@ -174,53 +146,60 @@ module.exports = function(controller) {
       }];
       userId = message.user;
       var callbackId = 'view_' + userId;
+      // view days in slack as per sunday case.
+      var daysArray = [1, 2, 3, 4, 5, 6, 7];
+      var todayDate = new Date();
+      var todayDay = todayDate.getDay();
+      if (todayDay == 0) {
+        daysArray = [-6, -5, -4, -3, -2, -1, 0];
+      }
 
       async.series([
         // Get value for day 1.
   			function(callback) {
-          timesheetService.getTitleText(controller, helper.getDate(1), userId, '#FF0000', function(resData) {
+          timesheetService.getTitleText(controller, helper.getDate(daysArray[0]), userId, '#FF0000', function(resData) {
             attachmentArray.push(resData);
             return callback();
           });
   			},
         // Get value for day 2.
   			function(callback) {
-          timesheetService.getTitleText(controller, helper.getDate(2), userId, '#4C9900', function(resData) {
+          timesheetService.getTitleText(controller, helper.getDate(daysArray[1]), userId, '#4C9900', function(resData) {
             attachmentArray.push(resData);
             return callback();
           });
   			},
         // Get value for day 3.
   			function(callback) {
-          timesheetService.getTitleText(controller, helper.getDate(3), userId, '#FF9933', function(resData) {
+          timesheetService.getTitleText(controller, helper.getDate(daysArray[2]), userId, '#FF9933', function(resData) {
             attachmentArray.push(resData);
             return callback();
           });
   			},
         // Get value for day 4.
   			function(callback) {
-          timesheetService.getTitleText(controller, helper.getDate(4), userId, '#B266FF', function(resData) {
+          timesheetService.getTitleText(controller, helper.getDate(daysArray[3]), userId, '#B266FF', function(resData) {
             attachmentArray.push(resData);
             return callback();
           });
   			},
         // Get value for day 5.
   			function(callback) {
-          timesheetService.getTitleText(controller, helper.getDate(5), userId, '#CC6600', function(resData) {
+          timesheetService.getTitleText(controller, helper.getDate(daysArray[4]), userId, '#CC6600', function(resData) {
             attachmentArray.push(resData);
             return callback();
           });
   			},
         // Get value for day 6.
   			function(callback) {
-          timesheetService.getTitleText(controller, helper.getDate(6), userId, '#CCCC00', function(resData) {
+          timesheetService.getTitleText(controller, helper.getDate(daysArray[5]), userId, '#CCCC00', function(resData) {
             attachmentArray.push(resData);
             return callback();
           });
   			},
         // Get value for day 7.
   			function(callback) {
-          timesheetService.getTitleText(controller, helper.getDate(7), userId, '#00CCCC', function(resData) {
+          timesheetService.getTitleText(controller, helper.getDate(daysArray[6]), userId, '#00CCCC', function(resData) {
             attachmentArray.push(resData);
             return callback();
           });
