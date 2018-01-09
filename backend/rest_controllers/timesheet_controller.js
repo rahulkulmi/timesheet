@@ -13,7 +13,7 @@ api['getMonthlyTimeSheet'] = function(req, res) {
     // var reqData = req.body;
     var reqData = helper.prepareMonthlyStartEndDate(req.query);
     reqData['userId'] = req.session.user_id;
-    if (req.session.status == 'admin') {
+    if (req.session.status == 'admin' && reqData.user_id) {
       reqData['userId'] = reqData.user_id;
     }
     var updatedHash = helper.prepareFormattedStartEndDate(reqData);
