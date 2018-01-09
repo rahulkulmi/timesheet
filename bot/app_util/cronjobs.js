@@ -22,17 +22,14 @@ module.exports = function(controller) {
             var userId = emp.id;
             timesheetService.getDetailById(controller, date, userId, emp,  function(resTimeData) {
               if (resTimeData.data) {
-                console.log('User has fill today timesheet details.');
                 // console.log(resTimeData);
+                console.log('Do not send daily message to employee = ' + resTimeData.emp.fullName);
               } else {
-                console.log('Send daily message to = ' + resTimeData.emp.fullName);
+                console.log('Send daily message to employee = ' + resTimeData.emp.fullName);
                 var dailyMsg = 'Hey ' + resTimeData.emp.fullName + appMessages.cronDaily;
                 coreAPI.sendMessage(bot, emp.channelId, dailyMsg);
               }
             });
-            // console.log('Send daily message to = ' + emp.fullName);
-            // var dailyMsg = 'Hey ' + emp.fullName + appMessages.cronDaily;
-            // coreAPI.sendMessage(bot, emp.channelId, dailyMsg);
           }
         });
       } else {
@@ -55,10 +52,10 @@ module.exports = function(controller) {
             var userId = emp.id;
             timesheetService.getDetailById(controller, date, userId, emp,  function(resTimeData) {
               if (resTimeData.data) {
-                console.log('User has fill friday timesheet details.');
                 // console.log(resTimeData);
+                console.log('Do not send weekly message to employee = ' + resTimeData.emp.fullName);
               } else {
-                console.log('Send weekly message to = ' + resTimeData.emp.fullName);
+                console.log('Send weekly message to employee = ' + resTimeData.emp.fullName);
                 var weeklyMsg = 'Hey ' + resTimeData.emp.fullName + appMessages.cronWeekly;
                 coreAPI.sendMessage(bot, emp.channelId, weeklyMsg);
               }

@@ -54,7 +54,7 @@ api['saveEmployeeDetail'] = function(controller, userData, cb) {
 
 api['getEmployeeList'] = function(controller, cb) {
   var resData = null;
-  controller.storage.employee.all(function(error, data) {
+  controller.storage.employee.find({status: 'employee'}, function(error, data) {
     if (error) {
       console.log('Error inside employee getEmployeeList()');
       console.log(error);
