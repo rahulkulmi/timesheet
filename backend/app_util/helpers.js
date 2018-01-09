@@ -172,4 +172,39 @@ utility['calculateTotalHours'] = function(resArray) {
   return totalHours;
 };
 
+utility['getTimesheetDataArray'] = function(empList, fileName, startDate, endDate) {
+  var reqHashArray = [];
+  empList.forEach(function(emp) {
+    var hash = {
+      fileName: fileName,
+      empName: emp.fullName,
+      empEmail: emp.email,
+      month: utility.getCurrentMonthName(),
+      year: utility.getCurrentYear(),
+      userId: emp.id,
+      startDate: startDate,
+      endDate: endDate,
+      formattedStartDate: startDate,
+      formattedEndDate: endDate
+    };
+    var updatedHash = utility.prepareFormattedStartEndDate(hash);
+    reqHashArray.push(updatedHash);
+  });
+
+  return reqHashArray;
+};
+
+utility['getHoursheetData'] = function(reqData) {
+  var hash = {
+    fileName: reqData.fileName,
+    startDate: reqData.startDate,
+    endDate: reqData.endDate,
+    formattedStartDate: reqData.startDate,
+    formattedEndDate: reqData.endDate
+  };
+  var updatedHash = utility.prepareFormattedStartEndDate(hash);
+
+  return updatedHash;
+};
+
 module.exports = utility;

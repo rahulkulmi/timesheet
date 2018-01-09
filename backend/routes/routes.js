@@ -21,12 +21,11 @@ module.exports = function(app, router) {
 
   router.get('/ping', miscController.pingServer);
 
-  // router.get('/auth/status', validate.validateDeviceIdDeviceToken, authController.userStatus);
-
   // Routes for admin use
   router.get('/admin/employee', validate.validateAdminToken, employeeController.getEmployeeList);
 
   router.get('/admin/timesheet', validate.validateAdminToken, timesheetController.getMonthlyTimeSheet);
+  router.get('/admin/graph/hoursheet', validate.validateAdminToken, timesheetController.getMonthlyHourSheet);
 
   app.use('/rest', router);
 };

@@ -11,22 +11,27 @@ var api = {};
 
 api['sendHourSheet'] = function(req, res) {
   try {
+    var reqData = {
+      fileName: 'hoursheet.html',
+      startDate: helper.getMonthStartDate(),
+      endDate: helper.getTodayDate()
+    };
     employeeService.getEmployeeList(function(err, empRes) {
       if (err) response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err);
       if (empRes) {
         var recordArray = [];
         var count = 1;
         empRes.forEach(function(element) {
-          var mailData = getHourData('hoursheet.html', helper.getMonthStartDate(), helper.getTodayDate());
+          var mailData = helper.getHoursheetData(reqData);
           mailData['userId'] = element.id;
           var recordHash = {
             empName: element.fullName,
             totalHours: '00:00'
           };
           // calculate total hours
-          getTotalHoursSheetData(mailData, function(error, dataRes) {
+          timesheetService.getTotalHoursByDate(mailData, function(error, dataRes) {
             if (dataRes) {
-              recordHash['totalHours'] = dataRes.totalHours;
+              recordHash['totalHours'] = dataRes;
             }
             recordArray.push(recordHash);
             if (empRes.length == count) {
@@ -43,8 +48,8 @@ api['sendHourSheet'] = function(req, res) {
         });
       } else {
         // no employee found
-        console.log('no employee found.');
-        response.successResponse(req, res, 'no employee found.');
+        console.log('No employee found.');
+        response.successResponse(req, res, 'No employee found.');
       }
     });
   } catch (err) {
@@ -57,7 +62,7 @@ api['sendTimeSheet'] = function(req, res) {
     employeeService.getEmployeeList(function(err, empRes) {
       if (err) response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err);
       if (empRes) {
-        var hashArray = getSheetDataArray(empRes, 'timesheet.html', helper.getMonthStartDate(), helper.getTodayDate());
+        var hashArray = helper.getTimesheetDataArray(empRes, 'timesheet.html', helper.getMonthStartDate(), helper.getTodayDate());
 
         hashArray.forEach(function(element) {
           getTotalHoursSheetData(element, function(error, dataRes) {
@@ -97,51 +102,6 @@ function getTotalHoursSheetData(reqData, callback) {
       return callback(null, null);
     }
   });
-}
-
-function getSheetDataArray(empList, fileName, startDate, endDate) {
-  var reqHashArray = [];
-  empList.forEach(function(emp) {
-    var hash = {
-      fileName: fileName,
-      empName: emp.fullName,
-      empEmail: emp.email,
-      month: helper.getCurrentMonthName(),
-      year: helper.getCurrentYear(),
-      timeSheetData: [],
-      hourSheetData: [],
-      totalHours: '00:00',
-      userId: emp.id,
-      startDate: startDate,
-      endDate: endDate,
-      formattedStartDate: startDate,
-      formattedEndDate: endDate
-    };
-    var updatedHash = helper.prepareFormattedStartEndDate(hash);
-    reqHashArray.push(updatedHash);
-  });
-
-  return reqHashArray;
-}
-
-function getHourData(fileName, startDate, endDate) {
-  var hash = {
-    fileName: fileName,
-    empName: '',
-    month: helper.getCurrentMonthName(),
-    year: helper.getCurrentYear(),
-    timeSheetData: [],
-    hourSheetData: [],
-    totalHours: '00:00',
-    userId: '',
-    startDate: startDate,
-    endDate: endDate,
-    formattedStartDate: startDate,
-    formattedEndDate: endDate
-  };
-  var updatedHash = helper.prepareFormattedStartEndDate(hash);
-
-  return updatedHash;
 }
 
 module.exports = api;

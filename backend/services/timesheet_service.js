@@ -1,25 +1,9 @@
 'use strict';
 var Timesheet = require('../models/timesheet');
-// var Session = require('../models/session');
 var helper = require('../app_util/helpers');
 
 // public
 var service = {};
-
-// service['getMonthlyData'] = function(reqData, callback) {
-//   try {
-//     Timesheet.find({userId: reqData.userId, date: { $gte: reqData.startDate, $lte: reqData.endDate }}, function(err, feedRes) {
-//       if (err) return callback(err);
-//       if (feedRes) {
-//         return callback(null, feedRes);
-//       } else {
-//         return callback(null, null);
-//       }
-//     });
-//   } catch (err) {
-//     return callback(err);
-//   }
-// };
 
 service['getTimesheetByDate'] = function(reqData, callback) {
   try {
@@ -31,6 +15,23 @@ service['getTimesheetByDate'] = function(reqData, callback) {
         return callback(null, feedRes, reqData);
       } else {
         return callback(null, null, null);
+      }
+    });
+  } catch (err) {
+    return callback(err);
+  }
+};
+
+service['getTotalHoursByDate'] = function(reqData, callback) {
+  try {
+    service.getTimesheetByDate(reqData, function(err, dataRes) {
+      if (err) return callback(null);
+      if (dataRes) {
+        return callback(null, helper.calculateTotalHours(dataRes));
+      } else {
+        // no timesheet found
+        console.log('No timesheet found');
+        return callback(null, null);
       }
     });
   } catch (err) {
