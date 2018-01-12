@@ -12,6 +12,7 @@ var coreAPI = require('../services/core_api');
 module.exports = function(controller) {
   var bot = controller.spawn();
   // 0 4,12,17 * * 1-6
+  // 9:30, 5:30, 10:30 (mon-sat)
   var dailyJob = crontab.schedule("0 4,12,17 * * 1-6", function() {
     console.log('Cron daily running.');
     employeeService.getEmployeeList(controller, function(resEmpData) {
@@ -48,7 +49,6 @@ module.exports = function(controller) {
             var date = helper.getDate(-1);
             // var date = '08-01-2018';
             // console.log('2 days before date value', helper.getDate(-1));
-            // console.log('today date value', helper.getTodayDate());
             var userId = emp.id;
             timesheetService.getDetailById(controller, date, userId, emp,  function(resTimeData) {
               if (resTimeData.data) {

@@ -21,9 +21,10 @@ msg.viewTimeSheetBtnFallback = 'Do you want to close the timesheet?';
 
 
 msg.helpText = 'These are available commands:';
-msg.helpTSText = 'timesheet : To enter time sheet detail.';
+msg.helpTSText = 'timesheet/time : To enter time sheet detail.';
 msg.helpViewText = 'view : To view your current week\'s timesheet.';
 msg.helpRegistrationText = 'register : To register your information to access dashboard.';
+msg.helpDashBoardText = 'dashboard : To view dashboard url.';
 
 
 msg.dialogTextStatus = 'Status';
@@ -52,6 +53,7 @@ msg.dialogTextHomeOutPh = '23:00';
 msg.userRegister1 = 'Thank you ';
 msg.userRegister2 = ' for registration. Now you can login our dashboard using (URL : http://newput.timetracker.s3-website-us-west-1.amazonaws.com, UserId : ';
 msg.userRegister3 = ', Password : newput123)';
+msg.userDashBoardUrl = 'http://newput.timetracker.s3-website-us-west-1.amazonaws.com';
 
 msg.cronDaily = ', Please fill your today\'s time sheet.';
 msg.cronWeekly = ', This is the last reminder to fill current week\'s timesheet. It will be sent to management after one hour. Thanks.';

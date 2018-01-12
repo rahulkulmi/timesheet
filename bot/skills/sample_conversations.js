@@ -269,6 +269,12 @@ module.exports = function(controller) {
       });
     });
 
+    controller.hears(['dashboard', '.*'], 'direct_message', function(bot, message) {
+      bot.reply(message, {
+        text: appMessages.userDashBoardUrl
+      });
+    });
+
     controller.hears(['help', '.*'], 'direct_message', function(bot, message) {
       bot.reply(message, {
         text: appMessages.helpText,
@@ -281,6 +287,9 @@ module.exports = function(controller) {
         }, {
           title: appMessages.helpRegistrationText,
           color: '#B266FF'
+        }, {
+          title: appMessages.helpDashBoardText,
+          color: '#FF0000'
         }]
       });
     });
