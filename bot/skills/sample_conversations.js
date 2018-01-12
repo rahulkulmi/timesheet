@@ -269,7 +269,7 @@ module.exports = function(controller) {
       });
     });
 
-    controller.hears(['dashboard', '.*'], 'direct_message', function(bot, message) {
+    controller.hears(['dashboard'], 'direct_message', function(bot, message) {
       bot.reply(message, {
         text: appMessages.userDashBoardUrl
       });
