@@ -1,6 +1,7 @@
 'use strict';
 var request = require('request');
 var bcrypt = require('bcrypt');
+var helper = require('../app_util/helper');
 
 // public
 var api = {};
@@ -27,9 +28,9 @@ api['saveEmployeeDetail'] = function(controller, userData, cb) {
     id: userData.id,
     teamId: userData.teamId,
     channelId: userData.channelId,
-    firstName: userData.first_name,
-    lastName: userData.last_name,
-    fullName: userData.real_name,
+    firstName: helper.getCapitalizeName(userData.first_name),
+    lastName: helper.getCapitalizeName(userData.last_name),
+    fullName: helper.getCapitalizeName(userData.real_name),
     email: userData.email,
     password: 'newput123',
     profileImgSmall: userData.image_48,

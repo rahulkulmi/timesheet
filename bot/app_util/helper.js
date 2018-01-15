@@ -107,4 +107,13 @@ utility['getDayOptionList'] = function() {
   return optionsArray;
 };
 
+utility['getCapitalizeName'] = function(name) {
+  var updatedName = '';
+  var nameArray = name.toLowerCase().split(' ');
+  nameArray.forEach(function(element) {
+    updatedName += ' ' + element.charAt(0).toUpperCase() + element.slice(1);
+  });
+  return updatedName.trim();
+};
+
 module.exports = utility;
