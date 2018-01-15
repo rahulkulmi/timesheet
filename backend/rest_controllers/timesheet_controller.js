@@ -50,16 +50,23 @@ api['getMonthlyHourSheet'] = function(req, res) {
         empRes.forEach(function(element) {
           graphData['userId'] = element.id;
           var recordHash = {
+            userId: element.id,
             empName: element.fullName,
             totalHours: '00:00'
           };
+          recordArray.push(recordHash);
           // calculate total hours
           timesheetService.getTotalHoursByDate(graphData, function(error, dataRes) {
             if (dataRes) {
-              recordHash['totalHours'] = dataRes;
+              // recordHash['totalHours'] = dataRes;
+              for (var i = 0; i < recordArray.length; i++) {
+                if (recordArray[i].userId === graphData.userId) {
+                  recordArray[i].totalHours = dataRes;
+                }
+              }
             }
-            recordArray.push(recordHash);
-            if (empRes.length == count) {
+            // recordArray.push(recordHash);
+            if (empRes.length === count) {
               response.successResponse(req, res, recordArray);
             }
             count += 1;
