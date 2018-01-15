@@ -39,8 +39,8 @@ module.exports = function(controller) {
     });
   });
 
-  // 30 14 * * 0
-  var weekendJob = crontab.schedule("30 14 * * 0", function() {
+  // 07:00 PM
+  var weekendJob = crontab.schedule("30 13 * * 0", function() {
     console.log('Cron weekend running.');
     employeeService.getEmployeeList(controller, function(resEmpData) {
       if (resEmpData) {

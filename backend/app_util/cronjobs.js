@@ -7,13 +7,15 @@ var mailcountService = require('../services/mailcount_service');
 
 function startCronJobs() {
 
-  var weekHoursheet = crontab.schedule("35 15 * * 0", function() {
+  // 08:05 PM
+  var weekHoursheet = crontab.schedule("35 14 * * 0", function() {
     request(config.ROOT_PATH + 'email/hoursheet', function (error, response, body) {
       log.info('Cron weekly hoursheet running.');
      });
   });
 
-  var weekTimesheet = crontab.schedule("30 15 * * 0", function() {
+  // 08:00 PM
+  var weekTimesheet = crontab.schedule("30 14 * * 0", function() {
     request(config.ROOT_PATH + 'email/timesheet', function (error, response, body) {
       log.info('Cron weekly timesheet running.');
      });
