@@ -50,23 +50,19 @@ api['getMonthlyHourSheet'] = function(req, res) {
         empRes.forEach(function(element) {
           graphData['userId'] = element.id;
           var recordHash = {
-            userId: element.id,
             empName: element.fullName,
             totalHours: '00:00'
           };
-          recordArray.push(recordHash);
           // calculate total hours
           timesheetService.getTotalHoursByDate(graphData, function(error, dataRes) {
             if (dataRes) {
-              // recordHash['totalHours'] = dataRes;
-              for (var i = 0; i < recordArray.length; i++) {
-                if (recordArray[i].userId === graphData.userId) {
-                  recordArray[i].totalHours = dataRes;
-                }
-              }
+              recordHash['totalHours'] = dataRes;
             }
-            // recordArray.push(recordHash);
+            recordArray.push(recordHash);
             if (empRes.length === count) {
+              recordArray.sort(function(a, b) {
+                return compareStrings(a.empName, b.empName);
+              })
               response.successResponse(req, res, recordArray);
             }
             count += 1;
@@ -84,3 +80,12 @@ api['getMonthlyHourSheet'] = function(req, res) {
 };
 
 module.exports = api;
+
+// private
+function compareStrings(a, b) {
+  // Assuming you want case-insensitive comparison
+  a = a.toLowerCase();
+  b = b.toLowerCase();
+
+  return (a < b) ? -1 : (a > b) ? 1 : 0;
+};
