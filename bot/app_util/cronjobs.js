@@ -46,8 +46,7 @@ module.exports = function(controller) {
       if (resEmpData) {
         resEmpData.forEach(function(emp) {
           if (emp.channelId) {
-            var date = helper.getDate(-1);
-            // var date = '08-01-2018';
+            var date = helper.getDate(-2);
             // console.log('2 days before date value', helper.getDate(-1));
             var userId = emp.id;
             timesheetService.getDetailById(controller, date, userId, emp,  function(resTimeData) {
