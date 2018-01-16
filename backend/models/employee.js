@@ -14,6 +14,7 @@ var employeeSchema = new Schema({
   password: { type: String, index: true },
   profileImgSmall: { type: String },
   profileImg: { type: String },
+  notificationStatus: { type: Boolean, default: false },
   status: {
     type: String,
     enum: ['employee', 'admin'],

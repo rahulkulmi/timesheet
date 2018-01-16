@@ -54,6 +54,24 @@ service['resetPassword'] = function(reqData, callback) {
   }
 };
 
+service['resetNotification'] = function(reqData, callback) {
+  try {
+    var options = { upsert: true, new: true };
+    var query = { id: reqData.userId };
+    var empJson = { notificationStatus: reqData.notificationStatus};
+    Employee.findOneAndUpdate(query, empJson, options, function(err, employeeRes) {
+      if (err) return callback(err);
+      if (employeeRes) {
+        return callback(null, employeeRes);
+      } else {
+        return callback(null, null);
+      }
+    });
+  } catch (err) {
+    return callback(err);
+  }
+};
+
 service['sendMailToUserId'] = function(reqData, callback) {
   try {
     mailService.sendWeeklyTimesheet(reqData, callback);

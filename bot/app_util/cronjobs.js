@@ -18,7 +18,7 @@ module.exports = function(controller) {
     employeeService.getEmployeeList(controller, function(resEmpData) {
       if (resEmpData) {
         resEmpData.forEach(function(emp) {
-          if (emp.channelId) {
+          if (emp.channelId && emp.notificationStatus === true) {
             var date = helper.getTodayDate();
             var userId = emp.id;
             timesheetService.getDetailById(controller, date, userId, emp,  function(resTimeData) {
@@ -45,7 +45,7 @@ module.exports = function(controller) {
     employeeService.getEmployeeList(controller, function(resEmpData) {
       if (resEmpData) {
         resEmpData.forEach(function(emp) {
-          if (emp.channelId) {
+          if (emp.channelId && emp.notificationStatus === true) {
             var date = helper.getDate(-2);
             // console.log('2 days before date value', helper.getDate(-1));
             var userId = emp.id;

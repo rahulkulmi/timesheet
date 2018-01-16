@@ -13,6 +13,7 @@ module.exports = function(app, router) {
   // Routes for employee use
   router.get('/employee/detail', validate.validateToken, employeeController.getDetailById);
   router.put('/employee/reset/password', validate.validateToken, employeeController.resetPassword);
+  router.put('/employee/reset/notification', validate.validateToken, employeeController.resetNotification);
 
   router.get('/timesheet', validate.validateToken, timesheetController.getMonthlyTimeSheet);
 

@@ -53,4 +53,20 @@ api['resetPassword'] = function(req, res) {
   }
 };
 
+api['notification'] = function(req, res) {
+  try {
+    var reqData = req.body;
+    reqData['userId'] = req.session.user_id;
+    employeeService.resetNotification(reqData, function(err, empRes) {
+      if (err) {
+        response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err.stack);
+      } else {
+        response.successResponse(req, res, empRes);
+      }
+    });
+  } catch (err) {
+    response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err.stack);
+  }
+};
+
 module.exports = api;
