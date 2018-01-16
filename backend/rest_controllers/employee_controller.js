@@ -53,7 +53,7 @@ api['resetPassword'] = function(req, res) {
   }
 };
 
-api['notification'] = function(req, res) {
+api['resetNotification'] = function(req, res) {
   try {
     var reqData = req.body;
     reqData['userId'] = req.session.user_id;
