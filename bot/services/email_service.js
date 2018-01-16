@@ -18,7 +18,7 @@ function sendMailTransporter(bot, mailOptions) {
 var api = {};
 
 api['sendNotificationMail'] = function(bot) {
-  var emailIds = bot.botkit.config.adminEmailIds.split(',');
+  var emailIds = bot.botkit.config.healthCheckEmailIds.split(',');
   var mailOptions = {
     from: 'Timesheet Notification <timesheet@newput.com>',
     to: emailIds,

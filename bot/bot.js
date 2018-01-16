@@ -71,6 +71,7 @@ var bot_options = {
   slackRootUrl: process.env.slackRootUrl,
   appToken: process.env.appToken,
   adminEmailIds: process.env.adminEmailIds,
+  healthCheckEmailIds: process.env.healthCheckEmailIds,
   sendGridKey: process.env.sendGridKey,
   rootPath: process.env.rootPath
   // studio_token: process.env.studio_token,
