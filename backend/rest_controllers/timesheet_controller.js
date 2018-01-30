@@ -50,6 +50,7 @@ api['getMonthlyHourSheet'] = function(req, res) {
         empRes.forEach(function(element) {
           graphData['userId'] = element.id;
           var recordHash = {
+            empId: element.id,
             empName: element.fullName,
             totalHours: '00:00'
           };
