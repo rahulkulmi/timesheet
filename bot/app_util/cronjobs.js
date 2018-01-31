@@ -67,8 +67,8 @@ module.exports = function(controller) {
     });
   });
 
-  // 10:00 PM
-  var month31DayJob = crontab.schedule("40 16 31 1,3,5,7,8,10,12 *", function() {
+  // 09:00 PM
+  var month31DayJob = crontab.schedule("30 15 31 1,3,5,7,8,10,12 *", function() {
     console.log('Cron 31 days monthend notification running.');
     employeeService.getEmployeeList(controller, function(resEmpData) {
       if (resEmpData) {
