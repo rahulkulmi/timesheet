@@ -67,6 +67,60 @@ module.exports = function(controller) {
     });
   });
 
+  // 09:00 PM
+  var month31DayJob = crontab.schedule("30 15 31 1,3,5,7,8,10,12 *", function() {
+    console.log('Cron 31 days monthend notification running.');
+    employeeService.getEmployeeList(controller, function(resEmpData) {
+      if (resEmpData) {
+        resEmpData.forEach(function(emp) {
+          if (emp.channelId && emp.notificationStatus === true) {
+            console.log('Send monthend message to every employee = ' + resTimeData.emp.fullName);
+            var monthEndMsg = 'Hey ' + resTimeData.emp.fullName + appMessages.cronMonthEnd;
+            coreAPI.sendMessage(bot, emp.channelId, monthEndMsg);
+          }
+        });
+      } else {
+        console.log('Do not find any employee data.');
+      }
+    });
+  });
+
+  // 09:00 PM
+  var month30DayJob = crontab.schedule("30 15 30 4,6,9,11 *", function() {
+    console.log('Cron 30 days monthend notification running.');
+    employeeService.getEmployeeList(controller, function(resEmpData) {
+      if (resEmpData) {
+        resEmpData.forEach(function(emp) {
+          if (emp.channelId && emp.notificationStatus === true) {
+            console.log('Send monthend message to every employee = ' + resTimeData.emp.fullName);
+            var monthEndMsg = 'Hey ' + resTimeData.emp.fullName + appMessages.cronMonthEnd;
+            coreAPI.sendMessage(bot, emp.channelId, monthEndMsg);
+          }
+        });
+      } else {
+        console.log('Do not find any employee data.');
+      }
+    });
+  });
+
+  // 09:00 PM
+  var month28DayJob = crontab.schedule("30 15 28 2 *", function() {
+    console.log('Cron 28 days monthend notification running.');
+    employeeService.getEmployeeList(controller, function(resEmpData) {
+      if (resEmpData) {
+        resEmpData.forEach(function(emp) {
+          if (emp.channelId && emp.notificationStatus === true) {
+            console.log('Send monthend message to every employee = ' + resTimeData.emp.fullName);
+            var monthEndMsg = 'Hey ' + resTimeData.emp.fullName + appMessages.cronMonthEnd;
+            coreAPI.sendMessage(bot, emp.channelId, monthEndMsg);
+          }
+        });
+      } else {
+        console.log('Do not find any employee data.');
+      }
+    });
+  });
+
   // Check backend server health
   var healthJob = crontab.schedule("*/5 * * * *", function() {
     console.log('Cron backend server health check running.');

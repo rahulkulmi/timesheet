@@ -57,6 +57,7 @@ msg.userDashBoardUrl = 'http://newput.timetracker.s3-website-us-west-1.amazonaws
 
 msg.cronDaily = ', Please fill your today\'s time sheet.';
 msg.cronWeekly = ', This is the last reminder to fill current week\'s timesheet. It will be sent to management after one hour. Thanks.';
+msg.cronMonthEnd = ', This is the last reminder to fill current month\'s timesheet. It will be sent to management after three hour. Thanks.';
 
 
 msg.closeTimeSheetFlow = 'Thank you! Please use me when you want to fill timesheet.';
