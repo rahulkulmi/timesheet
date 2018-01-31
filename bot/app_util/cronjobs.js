@@ -68,14 +68,14 @@ module.exports = function(controller) {
   });
 
   // 10:00 PM
-  var month31DayJob = crontab.schedule("30 16 31 1,3,5,7,8,10,12 *", function() {
+  var month31DayJob = crontab.schedule("40 16 31 1,3,5,7,8,10,12 *", function() {
     console.log('Cron 31 days monthend notification running.');
     employeeService.getEmployeeList(controller, function(resEmpData) {
       if (resEmpData) {
         resEmpData.forEach(function(emp) {
           if (emp.channelId && emp.notificationStatus === true) {
             console.log('Send monthend message to every employee = ' + emp.fullName);
-            var monthEndMsg = 'Hey ' + resTimeData.emp.fullName + appMessages.cronMonthEnd;
+            var monthEndMsg = 'Hey ' + emp.fullName + appMessages.cronMonthEnd;
             coreAPI.sendMessage(bot, emp.channelId, monthEndMsg);
           }
         });
@@ -93,7 +93,7 @@ module.exports = function(controller) {
         resEmpData.forEach(function(emp) {
           if (emp.channelId && emp.notificationStatus === true) {
             console.log('Send monthend message to every employee = ' + emp.fullName);
-            var monthEndMsg = 'Hey ' + resTimeData.emp.fullName + appMessages.cronMonthEnd;
+            var monthEndMsg = 'Hey ' + emp.fullName + appMessages.cronMonthEnd;
             coreAPI.sendMessage(bot, emp.channelId, monthEndMsg);
           }
         });
@@ -111,7 +111,7 @@ module.exports = function(controller) {
         resEmpData.forEach(function(emp) {
           if (emp.channelId && emp.notificationStatus === true) {
             console.log('Send monthend message to every employee = ' + emp.fullName);
-            var monthEndMsg = 'Hey ' + resTimeData.emp.fullName + appMessages.cronMonthEnd;
+            var monthEndMsg = 'Hey ' + emp.fullName + appMessages.cronMonthEnd;
             coreAPI.sendMessage(bot, emp.channelId, monthEndMsg);
           }
         });
