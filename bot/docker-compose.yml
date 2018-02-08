@@ -7,7 +7,7 @@ mongodb:
     - "27017:27017"
 
 application:
-  image: newput/bot:2.0
+  image: newput/bot:3.0
   container_name: ts-bot-server
   volumes:
     - ./:/ts-bot

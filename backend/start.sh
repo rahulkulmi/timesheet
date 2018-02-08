@@ -3,4 +3,4 @@
 cd /backend
 npm install
 
-pm2-docker process.yml
+pm2-runtime process.yml

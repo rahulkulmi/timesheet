@@ -31,5 +31,5 @@ EXPOSE 8085
 # ENTRYPOINT ["node"]
 # Defines your runtime(define default command)
 # pm2 start app.js --max-memory-restart 120M -i 4
-# CMD ["pm2-docker", "process.yml"]
+# CMD ["pm2-runtime", "process.yml"]
 CMD ["/start.sh"]
