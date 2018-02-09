@@ -36,7 +36,8 @@ app.use(function(req, res, next) {
 
   // intercept OPTIONS method
   if ('OPTIONS' === req.method) {
-    next();
+    return res.send(200);
+    // next();
   } else if (req.originalUrl.slice(0, 6) === '/rest/') {
     global.start = new Date().getTime();
     global.timeout = setTimeout(function() {
@@ -63,10 +64,17 @@ app.use(function(req, res, next) {
   response.errorResponse(req, res, appException.ROUTE_NOT_FOUND());
 });
 // Add error handler
-app.use(function (err, req, res, next) {
+app.use(function(err, req, res, next) {
   log.error(err);
-  response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err.stack);
-})
+  if (res.headersSent) {
+    return next(err);
+  }
+  if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+    return response.errorResponse(req, res, appException.VALIDATION_EXCEPTION(err.stack));
+  } else {
+    return response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(err.stack));
+  }
+});
 
 // finally ready to listen
 app.listen(config.PORT, function() {
