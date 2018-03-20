@@ -39,4 +39,47 @@ service['getTotalHoursByDate'] = function(reqData, callback) {
   }
 };
 
+service['addTimeSheetEntryByDate'] = function(reqData, callback) {
+  try {
+    var regex = new RegExp('([0-1][0-9]|2[0-9]):([0-5][0-9])');
+    var error = new Error('Validation Error');
+    if (reqData.officeIn && (!regex.test(reqData.officeIn) || reqData.officeIn.length != 5)) {
+      return callback(error);
+    } else if (reqData.officeOut && (!regex.test(reqData.officeOut) || reqData.officeOut.length != 5)) {
+      return callback(error);
+    } else if (reqData.homeIn && (!regex.test(reqData.homeIn) || reqData.homeIn.length != 5)) {
+      return callback(error);
+    } else if (reqData.homeOut && (!regex.test(reqData.homeOut) || reqData.homeOut.length != 5)) {
+      return callback(error);
+    } else if (!reqData.dateString || !reqData.userId) {
+      return callback(error);
+    }
+
+    var query = { id: reqData.dateString + ':' + reqData.userId }
+    var tsHash = {
+      id: reqData.dateString + ':' + reqData.userId,
+      userId: reqData.userId,
+      officeIn: reqData.officeIn,
+      officeOut: reqData.officeOut,
+      homeIn: reqData.homeIn,
+      homeOut: reqData.homeOut,
+      dayTotal: helper.getDayTotalHours(reqData),
+      status: reqData.status,
+      date: helper.getDateByString(reqData.dateString),
+      dateString: reqData.dateString
+    }
+
+    Timesheet.findOneAndUpdate(query, tsHash, function(err, tsRes) {
+      if (err) return callback(err);
+      if (tsRes) {
+        return callback(null, tsRes);
+      } else {
+        return callback(null, null);
+      }
+    });
+  } catch (err) {
+    return callback(err);
+  }
+};
+
 module.exports = service;

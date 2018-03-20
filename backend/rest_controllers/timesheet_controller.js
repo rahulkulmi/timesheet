@@ -80,6 +80,22 @@ api['getMonthlyHourSheet'] = function(req, res) {
   }
 };
 
+api['addTimeSheetEntryByDate'] = function(req, res) {
+  try {
+    var reqData = req.body;
+    resData['status'] = 'ADDED BY ADMIN'
+    timesheetService.addTimeSheetEntryByDate(resData, function(err, timesheetRes) {
+      if (err) {
+        response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err.stack);
+      } else {
+        response.successResponse(req, res, timesheetRes);
+      }
+    });
+  } catch (err) {
+    response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err.stack);
+  }
+};
+
 module.exports = api;
 
 // private

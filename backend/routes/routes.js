@@ -27,6 +27,7 @@ module.exports = function(app, router) {
 
   router.get('/admin/timesheet', validate.validateAdminToken, timesheetController.getMonthlyTimeSheet);
   router.get('/admin/graph/hoursheet', validate.validateAdminToken, timesheetController.getMonthlyHourSheet);
+  router.post('/timesheet/entry', validate.validateAdminToken, timesheetController.addTimeSheetEntryByDate);
 
   app.use('/rest', router);
 };
