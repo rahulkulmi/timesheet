@@ -83,8 +83,8 @@ api['getMonthlyHourSheet'] = function(req, res) {
 api['addTimeSheetEntryByDate'] = function(req, res) {
   try {
     var reqData = req.body;
-    resData['status'] = 'ADDED BY ADMIN'
-    timesheetService.addTimeSheetEntryByDate(resData, function(err, timesheetRes) {
+    reqData['status'] = '<b>ADDED BY ADMIN</b>'
+    timesheetService.addTimeSheetEntryByDate(reqData, function(err, timesheetRes) {
       if (err) {
         response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err.stack);
       } else {
