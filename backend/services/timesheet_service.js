@@ -55,6 +55,7 @@ service['addTimeSheetEntryByDate'] = function(reqData, callback) {
       return callback(error);
     }
 
+    var options = { upsert: true, new: true }
     var query = { id: reqData.dateString + ':' + reqData.userId }
     var tsHash = {
       id: reqData.dateString + ':' + reqData.userId,
@@ -69,7 +70,7 @@ service['addTimeSheetEntryByDate'] = function(reqData, callback) {
       dateString: reqData.dateString
     }
 
-    Timesheet.findOneAndUpdate(query, tsHash, function(err, tsRes) {
+    Timesheet.findOneAndUpdate(query, tsHash, options, function(err, tsRes) {
       if (err) return callback(err);
       if (tsRes) {
         return callback(null, tsRes);
