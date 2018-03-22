@@ -35,7 +35,7 @@ api['saveEmployeeDetail'] = function(controller, userData, cb) {
     password: 'newput123',
     profileImgSmall: userData.image_48,
     profileImg: userData.image_192,
-    notificationStatus: false,
+    notificationStatus: true,
     status: 'employee'
   }
   if (emailIds.includes(userData.email)) {
