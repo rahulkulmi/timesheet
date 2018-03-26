@@ -74,6 +74,7 @@ service['sendTimeSheet'] = function(reqData, callback) {
     var template = handlebars.compile(html);
 
     var htmlToSend = template({
+      message: 'Timesheet Of Employee',
       sheetData: reqData.timesheetData,
       empName: reqData.empName,
       empEmail: reqData.empEmail,
@@ -89,6 +90,37 @@ service['sendTimeSheet'] = function(reqData, callback) {
       subject: 'Employee Timesheet Date : ' + helper.getTodayDate(),
       html: htmlToSend
     };
+
+    sendMailTransporter(mailOptions, callback);
+  });
+}
+
+service['sendSingleTimeSheet'] = function(reqData, callback) {
+  var filePath = path.join(__dirname, '..', 'template/') + reqData.fileName;
+
+  readHTMLFile(filePath, function(err, html) {
+    if (err) return callback(err);
+    var template = handlebars.compile(html);
+
+    var htmlToSend = template({
+      message: reqData.message,
+      sheetData: reqData.timesheetData,
+      empName: reqData.empName,
+      empEmail: reqData.empEmail,
+      month: reqData.month,
+      year: reqData.year,
+      totalHours: reqData.totalHours
+    });
+
+    var mailOptions = {
+      from: 'Newput Timesheet <timesheet@newput.com>',
+      to: reqData.toEmailIds.split(','),
+      subject: reqData.subject,
+      html: htmlToSend
+    };
+    if (reqData.ccEmailIds) {
+      mailOptions['cc'] = reqData.ccEmailIds.split(',');
+    }
 
     sendMailTransporter(mailOptions, callback);
   });

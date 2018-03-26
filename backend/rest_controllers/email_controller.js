@@ -88,6 +88,43 @@ api['sendTimeSheet'] = function(req, res) {
   }
 };
 
+api['sendSingleTimeSheet'] = function(req, res) {
+  try {
+    var reqData = req.body;
+    employeeService.getDetailById(reqData, function(err, empRes) {
+      if (err) response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err);
+      if (empRes) {
+        var emailHash = helper.getTimesheetData(empRes, 'timesheet.html', reqData.startDate, reqData.endDate);
+
+        getTotalHoursSheetData(emailHash, function(error, dataRes) {
+          dataRes['subject'] = reqData.subject;
+          dataRes['message'] = reqData.message;
+          dataRes['toEmailIds'] = reqData.toEmailIds;
+          if (reqData.ccEmailIds) {
+            dataRes['ccEmailIds'] = reqData.ccEmailIds;
+          }
+          emailService.sendSingleTimeSheet(dataRes, function(error, mailRes) {
+            if (error) {
+              console.log(error);
+              response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), error.stack);
+            }
+            if (mailRes) {
+              console.log(mailRes[0].statusCode);
+              response.successResponse(req, res, 'Mail send.');
+            }
+          });
+        });
+      } else {
+        // no employee found
+        console.log('no employee found.');
+        response.successResponse(req, res, 'No employee found.');
+      }
+    });
+  } catch (err) {
+    response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err.stack);
+  }
+};
+
 // private
 function getTotalHoursSheetData(reqData, callback) {
   timesheetService.getTimesheetByDate(reqData, function(err, timesheetRes, reqData) {

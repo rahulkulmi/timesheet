@@ -3,9 +3,25 @@ var response = require('../services/api_response');
 var employeeService = require('../services/employee_service');
 var appException = require('../app_util/exceptions');
 var helper = require('../app_util/helpers');
+var config = require('../app_util/config');
 
 // public
 var api = {};
+
+api['getAdminList'] = function(req, res) {
+  try {
+    employeeService.getEmployeeList(function(err, empRes) {
+      if (err) {
+        response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err.stack);
+      } else {
+        var emailIds = config.EMAIL_IDS.split(',');
+        response.successResponse(req, res, emailIds);
+      }
+    });
+  } catch (err) {
+    response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err.stack);
+  }
+};
 
 api['getEmployeeList'] = function(req, res) {
   try {

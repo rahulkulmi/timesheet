@@ -24,10 +24,14 @@ module.exports = function(app, router) {
 
   // Routes for admin use
   router.get('/admin/employee', validate.validateAdminToken, employeeController.getEmployeeList);
+  router.get('/admin', validate.validateAdminToken, employeeController.getAdminList);
 
   router.get('/admin/timesheet', validate.validateAdminToken, timesheetController.getMonthlyTimeSheet);
   router.get('/admin/graph/hoursheet', validate.validateAdminToken, timesheetController.getMonthlyHourSheet);
   router.post('/timesheet/entry', validate.validateAdminToken, timesheetController.addTimeSheetEntryByDate);
+
+  router.put('/email/timesheet', validate.validateAdminToken,
+  emailController.sendSingleTimeSheet);
 
   app.use('/rest', router);
 };
