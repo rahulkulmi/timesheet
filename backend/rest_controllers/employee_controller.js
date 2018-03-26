@@ -10,12 +10,11 @@ var api = {};
 
 api['getAdminList'] = function(req, res) {
   try {
-    employeeService.getEmployeeList(function(err, empRes) {
+    employeeService.getAdminList(function(err, empRes) {
       if (err) {
         response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err.stack);
       } else {
-        var emailIds = config.EMAIL_IDS.split(',');
-        response.successResponse(req, res, emailIds);
+        response.successResponse(req, res, empRes);
       }
     });
   } catch (err) {

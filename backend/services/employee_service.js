@@ -36,6 +36,21 @@ service['getEmployeeList'] = function(callback) {
   }
 };
 
+service['getAdminList'] = function(callback) {
+  try {
+    Employee.find({status: 'admin'}, null, {sort: {fullName: 1}}, function(err, employeeRes) {
+      if (err) return callback(err);
+      if (employeeRes) {
+        return callback(null, employeeRes);
+      } else {
+        return callback(null, null);
+      }
+    });
+  } catch (err) {
+    return callback(err);
+  }
+};
+
 service['resetPassword'] = function(reqData, callback) {
   try {
     var options = { upsert: true, new: true };
