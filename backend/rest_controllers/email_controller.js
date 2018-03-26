@@ -97,6 +97,8 @@ api['sendSingleTimeSheet'] = function(req, res) {
         var emailHash = helper.getTimesheetData(empRes, 'timesheet.html', reqData.startDate, reqData.endDate);
 
         getTotalHoursSheetData(emailHash, function(error, dataRes) {
+          dataRes['month'] = reqData.month;
+          dataRes['year'] = reqData.year;
           dataRes['subject'] = reqData.subject;
           dataRes['message'] = reqData.message;
           dataRes['toEmailIds'] = reqData.toEmailIds;

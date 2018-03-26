@@ -30,7 +30,7 @@ module.exports = function(app, router) {
   router.get('/admin/graph/hoursheet', validate.validateAdminToken, timesheetController.getMonthlyHourSheet);
   router.post('/timesheet/entry', validate.validateAdminToken, timesheetController.addTimeSheetEntryByDate);
 
-  router.put('/email/timesheet', validate.validateAdminToken,
+  router.put('/email/emptimesheet', validate.validateAdminToken,
   emailController.sendSingleTimeSheet);
 
   app.use('/rest', router);
