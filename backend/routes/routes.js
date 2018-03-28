@@ -17,9 +17,6 @@ module.exports = function(app, router) {
 
   router.get('/timesheet', validate.validateToken, timesheetController.getMonthlyTimeSheet);
 
-  router.get('/email/timesheet', emailController.sendTimeSheet);
-  router.get('/email/hoursheet', emailController.sendHourSheet);
-
   router.get('/ping', miscController.pingServer);
 
   // Routes for admin use
@@ -28,9 +25,9 @@ module.exports = function(app, router) {
 
   router.get('/admin/timesheet', validate.validateAdminToken, timesheetController.getMonthlyTimeSheet);
   router.get('/admin/graph/hoursheet', validate.validateAdminToken, timesheetController.getMonthlyHourSheet);
-  router.post('/timesheet/entry', validate.validateAdminToken, timesheetController.addTimeSheetEntryByDate);
+  router.post('/admin/timesheet/entry', validate.validateAdminToken, timesheetController.addTimeSheetEntryByDate);
 
-  router.put('/email/emptimesheet', validate.validateAdminToken,
+  router.put('/admin/email/timesheet', validate.validateAdminToken,
   emailController.sendSingleTimeSheet);
 
   app.use('/rest', router);
