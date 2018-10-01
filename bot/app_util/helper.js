@@ -93,7 +93,7 @@ utility['getDayOptionList'] = function() {
     todayDay = 7;
     for (var i=1; i<=todayDay; i++) {
       var getDate = utility.getDate(i-7);
-      if (getDate.slice(3, 5) === todayMonth) {
+      if (getDate.slice(3, 5) == todayMonth) {
         var listHash = {
           text: getDate + dayNames[i - 1],
           value: getDate
@@ -104,7 +104,7 @@ utility['getDayOptionList'] = function() {
   } else {
     for (var i=1; i<=todayDay; i++) {
       var getDate = utility.getDate(i);
-      if (getDate.slice(3, 5) === todayMonth) {
+      if (getDate.slice(3, 5) == todayMonth) {
         var listHash = {
           text: getDate + dayNames[i - 1],
           value: getDate
