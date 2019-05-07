@@ -54,7 +54,8 @@ service['sendHourSheet'] = function(reqData, callback) {
       endDate: reqData.endDate
     });
 
-    var emailIds = config.EMAIL_IDS.split(',');
+    // var emailIds = config.EMAIL_IDS.split(',');
+    var emailIds = reqData.EMAIL_IDS.split(',');
     var mailOptions = {
       from: 'Newput Hoursheet <timesheet@newput.com>',
       to: emailIds,
@@ -83,7 +84,8 @@ service['sendTimeSheet'] = function(reqData, callback) {
       totalHours: reqData.totalHours
     });
 
-    var emailIds = config.EMAIL_IDS.split(',');
+    // var emailIds = config.EMAIL_IDS.split(',');
+    var emailIds = reqData.EMAIL_IDS.split(',');
     var mailOptions = {
       from: 'Newput Timesheet <timesheet@newput.com>',
       to: emailIds,

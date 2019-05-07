@@ -10,7 +10,7 @@ var timesheetService = require('../services/timesheet_service');
 var emailService = require('../services/email_service');
 
 // private
-function sendHourSheet() {
+function sendHourSheet(EMAIL_IDS) {
   try {
     var reqData = {
       fileName: 'hoursheet.html',
@@ -41,6 +41,7 @@ function sendHourSheet() {
             recordArray.push(recordHash);
             if (empRes.length == count) {
               mailData['hoursheetData'] = recordArray;
+              mailData['EMAIL_IDS'] = EMAIL_IDS;
               emailService.sendHourSheet(mailData, function(error, mailRes) {
                 if (error) {
                   log.info('Error: emailService.sendHourSheet()');
@@ -68,7 +69,7 @@ function sendHourSheet() {
   }
 }
 
-function sendTimeSheet() {
+function sendTimeSheet(EMAIL_IDS) {
   try {
     employeeService.getEmployeeList(function(err, empRes) {
       if (err) {
@@ -81,6 +82,7 @@ function sendTimeSheet() {
 
         hashArray.forEach(function(element) {
           getTotalHoursSheetData(element, function(error, dataRes) {
+            dataRes['EMAIL_IDS'] = EMAIL_IDS;
             emailService.sendTimeSheet(dataRes, function(error, mailRes) {
               if (error) {
                 log.info('Error: emailService.sendTimeSheet()');
@@ -130,49 +132,49 @@ function startCronJobs() {
   // 08:05 PM
   var weekHoursheet = crontab.schedule("35 14 * * 0", function() {
     log.info('Cron weekly hoursheet running.');
-    sendHourSheet();
+    sendHourSheet(config.WEEKLY_EMAIL_IDS);
   });
 
   // 08:00 PM
   var weekTimesheet = crontab.schedule("30 14 * * 0", function() {
     log.info('Cron weekly timesheet running.');
-    sendTimeSheet();
+    sendTimeSheet(config.WEEKLY_EMAIL_IDS);
   });
 
   // 11:55 PM
   var monthHoursheet31Day = crontab.schedule("25 18 31 1,3,5,7,8,10,12 *", function() {
     log.info('Cron monthly 31Day hoursheet running.');
-    sendHourSheet();
+    sendHourSheet(config.MONTHLY_EMAIL_IDS);
   });
 
   // 11:59 PM
   var monthTimesheet31Day = crontab.schedule("29 18 31 1,3,5,7,8,10,12 *", function() {
     log.info('Cron monthly 31Day timesheet running.');
-    sendTimeSheet();
+    sendTimeSheet(config.MONTHLY_EMAIL_IDS);
   });
 
   // 11:55 PM
   var monthHoursheet30Day = crontab.schedule("25 18 30 4,6,9,11 *", function() {
     log.info('Cron monthly 30Day hoursheet running.');
-    sendHourSheet();
+    sendHourSheet(config.MONTHLY_EMAIL_IDS);
   });
 
   // 11:59 PM
   var monthTimesheet30Day = crontab.schedule("29 18 30 4,6,9,11 *", function() {
     log.info('Cron monthly 30Day timesheet running.');
-    sendTimeSheet();
+    sendTimeSheet(config.MONTHLY_EMAIL_IDS);
   });
 
   // 11:55 PM
   var monthHoursheet28Day = crontab.schedule("25 18 28 2 *", function() {
     log.info('Cron monthly 28Day hoursheet running.');
-    sendHourSheet();
+    sendHourSheet(config.MONTHLY_EMAIL_IDS);
   });
 
   // 11:59 PM
   var monthTimesheet28Day = crontab.schedule("59 18 28 2 *", function() {
     log.info('Cron monthly 28Day timesheet running.');
-    sendTimeSheet();
+    sendTimeSheet(config.MONTHLY_EMAIL_IDS);
   });
 
   var healthJob = crontab.schedule("*/5 * * * *", function() {
