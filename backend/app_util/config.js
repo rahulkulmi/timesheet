@@ -13,8 +13,8 @@ function appConfig() {
     mongoose = require('mongoose');
 
     // var uri = env.MONGO_URI + env.MONGO_DB;
-    var uri = 'mongodb://' + process.env.MONGODB_PORT_27017_TCP_ADDR + ':' + process.env.MONGODB_PORT_27017_TCP_PORT + '/slackdb';
-    //var uri = 'mongodb://127.0.0.1:27017/slackdb';
+    //var uri = 'mongodb://' + process.env.MONGODB_PORT_27017_TCP_ADDR + ':' + process.env.MONGODB_PORT_27017_TCP_PORT + '/slackdb';
+    var uri = 'mongodb://127.0.0.1:27017/slackdb';
     var options = {
       useMongoClient: true,
       socketTimeoutMS: 0,
@@ -38,7 +38,7 @@ function appConfig() {
     ADMIN_EMAIL_IDS: process.env.ADMIN_EMAIL_IDS,
     BOT_ROOT_PATH: process.env.BOT_ROOT_PATH,
 
-    //MONGOOSE_INSTANCE: initDB()
+    MONGOOSE_INSTANCE: initDB()
   };
 }
 

@@ -6,12 +6,14 @@ module.exports = function(app, router) {
   var employeeController = require('../rest_controllers/employee_controller');
   var emailController = require('../rest_controllers/email_controller');
   var miscController = require('../rest_controllers/misc_controller');
+  
 
   // api routes
   router.post('/auth/login', authController.userLogin);
 
   // Routes for employee use
   router.get('/employee/detail', validate.validateToken, employeeController.getDetailById);
+  router.get('/employee/detail/:id', validate.validateAdminToken, employeeController.getEmployeeDetailById);
   router.put('/employee/reset/password', validate.validateToken, employeeController.resetPassword);
   router.put('/employee/reset/notification', validate.validateToken, employeeController.resetNotification);
 
@@ -29,6 +31,8 @@ module.exports = function(app, router) {
 
   router.put('/admin/email/timesheet', validate.validateAdminToken,
   emailController.sendSingleTimeSheet);
+
+  
 
   app.use('/rest', router);
 };
