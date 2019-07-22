@@ -89,11 +89,9 @@ api['getEmployeeDetailById'] = function(req, res) {
   try {
     var reqData = req.body;
     reqData['userId'] = req.params.id;
-    Employee.findOne({ id: 'U0DDYUNSD' }, function(err, feedRes) {
+    Employee.findOne({ id: req.session.user_id }, function(err, feedRes) {
       if (err) response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err.stack);;
-      if (feedRes) {
-        console.log(feedRes);
-        if(feedRes.status == 'admin'){
+      if (feedRes && feedRes.status == 'admin') {
           employeeService.getDetailById(reqData, function(err, empRes) {
             if (err) {
               response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err.stack);
@@ -101,12 +99,8 @@ api['getEmployeeDetailById'] = function(req, res) {
               response.successResponse(req, res, empRes);
             }
           });
-        } else {
-          response.successResponse(req, res, {});
-        }
-        
       } else {
-        response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err.stack);
+        response.errorResponse(req, res, appException.RECORD_NOT_FOUND(), err.stack);
       }
     });
     

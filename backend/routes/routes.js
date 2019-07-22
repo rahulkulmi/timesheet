@@ -7,7 +7,6 @@ module.exports = function(app, router) {
   var emailController = require('../rest_controllers/email_controller');
   var miscController = require('../rest_controllers/misc_controller');
   
-
   // api routes
   router.post('/auth/login', authController.userLogin);
 
