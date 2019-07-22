@@ -12,10 +12,14 @@ function appConfig() {
     }
     mongoose = require('mongoose');
 
-    // var uri = env.MONGO_URI + env.MONGO_DB;
-    var uri = 'mongodb://' + process.env.MONGODB_PORT_27017_TCP_ADDR + ':' + process.env.MONGODB_PORT_27017_TCP_PORT + '/slackdb';
-    // var uri = 'mongodb://127.0.0.1:27017/slackdb';
-    console.log(uri);
+     var uri = process.env.MONGODB_URI_URI || process.env.MONGO_URI+ process.env.MONGO_DB;
+
+    // Production app uri for mongodb
+    //var uri = 'mongodb://' + process.env.MONGODB_PORT_27017_TCP_ADDR + ':' + process.env.MONGODB_PORT_27017_TCP_PORT + '/slackdb';
+    
+    // heroku uri for mongodb
+    //var uri = 'mongodb://heroku_salary_slip:newput123@ds151997.mlab.com:51997/heroku_08lcthpj'
+
     var options = {
       useMongoClient: true,
       socketTimeoutMS: 0,
