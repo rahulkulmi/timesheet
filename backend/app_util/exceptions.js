@@ -16,6 +16,10 @@ module.exports = {
     return {'rcode': 404, 'httpCode': 503,
       'message': 'File not found', 'customMsg': customMsg};
   },
+  INVALID_FILE_ERROR: function(customMsg) {
+    return {'rcode': 422, 'httpCode': 422,
+      'message': 'Invalid file format.', 'customMsg': customMsg};
+  },
   RECORD_NOT_FOUND: function(customMsg) {
     return {'rcode': 404, 'httpCode': 503,
       'message': 'Record not found', 'customMsg': customMsg};
