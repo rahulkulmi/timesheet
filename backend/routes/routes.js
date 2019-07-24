@@ -6,7 +6,8 @@ module.exports = function(app, router) {
   var employeeController = require('../rest_controllers/employee_controller');
   var emailController = require('../rest_controllers/email_controller');
   var miscController = require('../rest_controllers/misc_controller');
-  
+  var salarySlipController = require('../rest_controllers/salary_slip_controller'); 
+
   // api routes
   router.post('/auth/login', authController.userLogin);
 
@@ -31,7 +32,8 @@ module.exports = function(app, router) {
   router.put('/admin/email/timesheet', validate.validateAdminToken,
   emailController.sendSingleTimeSheet);
 
-  
+  // Routes for salary slip
+  router.post('/admin/upload', validate.validateAdminToken, salarySlipController.uploadSingleFile);
 
   app.use('/rest', router);
 };
