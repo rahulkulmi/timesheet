@@ -25,7 +25,7 @@ api['getAdminList'] = function(req, res) {
 
 api['getEmployeeList'] = function(req, res) {
   try {
-    employeeService.getEmployeeList(function(err, empRes) {
+    employeeService.getEmployeeList({status: 'employee'}, function(err, empRes) {
       if (err) {
         response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err.stack);
       } else {
@@ -36,6 +36,22 @@ api['getEmployeeList'] = function(req, res) {
     response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err.stack);
   }
 };
+
+// api for getting list of all employees
+api['getAllEmployeeList'] = function(req, res) {
+  try {
+    employeeService.getEmployeeList(null, function(err, empRes) {
+      if (err) {
+        response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err.stack);
+      } else {
+        response.successResponse(req, res, empRes);
+      }
+    });
+  } catch (err) {
+    response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err.stack);
+  }
+};
+
 
 api['getDetailById'] = function(req, res) {
   try {
@@ -85,6 +101,7 @@ api['resetNotification'] = function(req, res) {
   }
 };
 
+//api for getting employee detail when admin logged in
 api['getEmployeeDetailById'] = function(req, res) {
   try {
     var reqData = req.body;
