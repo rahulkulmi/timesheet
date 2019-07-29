@@ -7,6 +7,8 @@ var utility = {};
 utility['daysInMonth'] = function(year, month) {
   return new Date(year, month, 0).getDate();
 };
+utility['monthsInAYear'] = ['January', 'February', 'March', 'April', 'May', 'June',
+'July', 'August', 'September', 'October', 'November', 'December'];
 
 utility['getDate'] = function(userDay) {
   var todayDate = new Date();

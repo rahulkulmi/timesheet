@@ -23,6 +23,7 @@ module.exports = function(app, router) {
 
   // Routes for admin use
   router.get('/admin/employee', validate.validateAdminToken, employeeController.getEmployeeList);
+  router.get('/admin/employees', validate.validateAdminToken, employeeController.getAllEmployeeList)
   router.get('/admin', validate.validateAdminToken, employeeController.getAdminList);
 
   router.get('/admin/timesheet', validate.validateAdminToken, timesheetController.getMonthlyTimeSheet);
