@@ -1,0 +1,5 @@
+id,employee_email,employee_designation,month,year,basic,hra,lta,advance_bonus,advance_gratuity,professional_allownance,gross_salary,net_salary_payable,professional_tax,tds,esic,pf,total_deductions,bank_name,account_no,ifsc,esic_no,pf_uan
+123,abc@newput.com,senior developer,7,2019,16000,6400,2000,1333,770,3497,30000,29792,208,,,,208,SBI,12313123,asdada1213,Not Applicable,Not Applicable
+222,bcd@newput.com, backend developer,7,2019,20000,8000,3000,1333,770,3497,45000,43792,208,1000,,,1208,PNB,123433213123,as1231dsdada1213,Not Applicable,Not Applicable
+121,efgd@newput.com,mobile application developer,7,2019,18000,7000,2500,1333,770,3497,40000,38792,208,,,,208,BOI,983433213123,qw1231dsdada1213,Not Applicable,Not Applicable
+341,hik@newput.com,front end developer,7,2019,25000,9000,4000,1333,770,3497,55000,52700,208,1200,,,1408,UBI,8768733123,asqw1dsdada1213,Not Applicable,Not Applicable

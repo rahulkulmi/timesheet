@@ -3,6 +3,7 @@ var mongoose = require('../app_util/config').MONGOOSE_INSTANCE;
 var Schema = mongoose.Schema;
 
 var salaryDetailSchema = new Schema({
+  employeeFullName: {type: String},
   employeeEmail: { type: String, index: true },
   employeeDesignation: { type: String },
   month: { type: String },

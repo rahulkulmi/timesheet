@@ -36,7 +36,9 @@ service['uploadSingle'] = function(req, res, callback) {
             fs.createReadStream(req.file.path)
             .pipe(csv())
             .on('data', (data) => 
-            Salarydetail.collection.insert({employeeEmail: data.employee_email,
+            Salarydetail.collection.insert({
+                employeeFullName: data.employee_fullName,
+                employeeEmail: data.employee_email,
                 employeeDesignation: data.employee_designation,
                 month: appHelpers.monthsInAYear[data.month - 1],
                 year: data.year,
@@ -67,7 +69,7 @@ service['uploadSingle'] = function(req, res, callback) {
                 fs.unlink(req.file.path, function(){
                     console.log('file deleted');
                 })
-                Salarydetail.find(null, function(err, resp){
+                Salarydetail.find({month: appHelpers.monthsInAYear[new Date().getMonth()], year: new Date().getFullYear()}, null, {sort: {month: 1, year: 1}}, function(err, resp){
                     if(err) {
                         return callback(err);
                     }
