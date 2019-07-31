@@ -4,6 +4,7 @@ var Schema = mongoose.Schema;
 
 var salaryDetailSchema = new Schema({
   employeeFullName: {type: String},
+  empID: {type: String},
   employeeEmail: { type: String, index: true },
   employeeDesignation: { type: String },
   month: { type: String },
