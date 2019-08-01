@@ -18,7 +18,11 @@ module.exports = {
   },
   INVALID_FILE_ERROR: function(customMsg) {
     return {'rcode': 422, 'httpCode': 422,
-      'message': 'Invalid file format.', 'customMsg': customMsg};
+      'message': 'Invalid file format', 'customMsg': customMsg};
+  },
+  INVALID_CSV: function(customMsg) {
+    return {'rcode': 422, 'httpCode': 422,
+      'message': 'CSV file does not have required fields.', 'customMsg': customMsg};
   },
   RECORD_NOT_FOUND: function(customMsg) {
     return {'rcode': 404, 'httpCode': 503,
