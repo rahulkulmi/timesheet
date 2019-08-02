@@ -24,6 +24,7 @@ var salaryDetailSchema = new Schema({
   bankName: { type: String },
   accountNo: { type: String },
   ifscNo: { type: String },
+  esic: {type: String},
   esicNo: { type: Number },
   pfUAN: { type: Number },
 });

@@ -69,6 +69,7 @@ service['uploadSingle'] = function(request, res, callback) {
                       bankName: data.bank_name,
                       accountNo: data.account_no,
                       ifscNo: data.ifsc,
+                      esic:data.esic,
                       esicNo: data.esic_no,
                       pfUAN: data.pf_UAN}, function(err, resp){
                           if (err){ 
