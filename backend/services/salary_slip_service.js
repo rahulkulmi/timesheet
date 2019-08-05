@@ -31,6 +31,7 @@ var service = {};
 
 service['uploadSingle'] = function(request, res, callback) {
   try {
+    var CSVData = [];
     uploadSingle(request, res, function(err){
         if(err){
             return callback(err);
@@ -38,65 +39,91 @@ service['uploadSingle'] = function(request, res, callback) {
             fs.createReadStream(request.file.path)
             .pipe(csv())
             .on('data', (data) => {
-              var hasAllKeys = appHelpers.validCSVKeys.every(function (item){
-                return data.hasOwnProperty(item);
-              });
-              if(hasAllKeys) {
-                Employee.findOne({'email': data.employee_email}, null, null, function(err, response) {
-                  if(err) {
-                      return callback(err);
-                  }
-                  else {
-                    Salarydetail.collection.insert({
-                      employeeFullName: data.employee_fullName,
-                      empID: response.id,
-                      employeeEmail: data.employee_email,
-                      employeeDesignation: data.employee_designation,
-                      month: appHelpers.monthsInAYear[data.month - 1].toLowerCase(),
-                      year: data.year,
-                      basic: data.basic,
-                      hra: data.hra,
-                      lta: data.lta,
-                      advanceBonus: data.advance_bonus,
-                      advanceGratuity: data.advance_gratuity,
-                      professionalAllowance: data.professional_allowance,
-                      grossSalary: data.gross_salary,
-                      netSalaryPayable: data.net_salary_payable,
-                      professionalTax: data.professional_tax,
-                      tds: data.tds,
-                      pf: data.pf,
-                      totalDeductions: data.total_deductions,
-                      bankName: data.bank_name,
-                      accountNo: data.account_no,
-                      ifscNo: data.ifsc,
-                      esic:data.esic,
-                      esicNo: data.esic_no,
-                      pfUAN: data.pf_UAN}, function(err, resp){
-                          if (err){ 
-                              return err;
-                          } else {
-                           console.log("CSV record inserted", resp);
-                          }
-                      })
-                  } 
-                
-                })
-              } else {
-                return callback(appException.INVALID_CSV());
+              try{
+                var hasAllKeys = appHelpers.validCSVKeys.every(function (item){
+                  return data.hasOwnProperty(item);
+                });
+                if(hasAllKeys) {
+                  CSVData.push(data);
+                } else {
+                    return callback(appException.INVALID_CSV());
+                }
+              } catch (err) {
+                return callback(err);
               }
             })
             .on('end', () => {
-                fs.unlink(request.file.path, function(){
-                    console.log('file deleted');
-                })
-                Salarydetail.find({month: appHelpers.monthsInAYear[new Date().getMonth()].toLowerCase(), year: new Date().getFullYear()}, null, {sort: {month: 1, year: 1}}, function(err, resp){
-                    if(err) {
-                        return callback(appException.INTERNAL_SERVER_ERROR());
-                    }
-                    else {
-                        return callback(null, resp)
-                    }
-                });
+                try {
+                    fs.unlink(request.file.path, function(){
+                      console.log('file deleted');
+                    })
+                    var salaryData = [];
+                    CSVData.forEach(function(item){
+                      Employee.findOne({'email': item.employee_email}, null, null, function(err, response) {
+                        if(err) {
+                            return callback(err);
+                        } else {
+                          var row = {
+                            employeeFullName: item.employee_fullName,
+                            empID: response.id,
+                            employeeEmail: item.employee_email,
+                            employeeDesignation: item.employee_designation,
+                            month: appHelpers.monthsInAYear[item.month - 1].toLowerCase(),
+                            year: item.year,
+                            basic: item.basic,
+                            hra: item.hra,
+                            lta: item.lta,
+                            advanceBonus: item.advance_bonus,
+                            advanceGratuity: item.advance_gratuity,
+                            professionalAllowance: item.professional_allowance,
+                            grossSalary: item.gross_salary,
+                            netSalaryPayable: item.net_salary_payable,
+                            professionalTax: item.professional_tax,
+                            tds: item.tds,
+                            pf: item.pf,
+                            totalDeductions: item.total_deductions,
+                            bankName: item.bank_name,
+                            accountNo: item.account_no,
+                            ifscNo: item.ifsc,
+                            esic:item.esic,
+                            esicNo: item.esic_no,
+                            pfUAN: item.pf_UAN
+                          }
+                          salaryData.push(row);
+                        }
+                        if(salaryData.length == CSVData.length) {
+                          Salarydetail.find({month: appHelpers.monthsInAYear[new Date().getMonth()].toLowerCase(), year: new Date().getFullYear()}, null, {sort: {month: 1, year: 1}}, function(err, resp){
+                            if(err) {
+                                return callback(appException.INTERNAL_SERVER_ERROR());
+                            }else {
+                              if(resp.length == 0) {
+                                Salarydetail.collection.insertMany(salaryData, null, function(err, resp) {
+                                  if(err){
+                                    return callback(appException.INTERNAL_SERVER_ERROR())
+                                  } else {
+                                    return callback(null, resp.ops);
+                                  }
+                                });
+                              }else {
+                                Salarydetail.collection.remove({month: salaryData[0].month,  year: salaryData[0].year}, false, function(err, resp){
+                                  Salarydetail.collection.insertMany(salaryData, null, function(err, resp) {
+                                    if(err){
+                                      return callback(appException.INTERNAL_SERVER_ERROR())
+                                    } else {
+                                      return callback(null, resp.ops);
+                                    }
+                                  })
+                                });
+                              }
+                            }
+                          });
+                          
+                        }
+                      });
+                  });
+                } catch(e) {
+                  return callback(e);
+                }
             });
             
         }

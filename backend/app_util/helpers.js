@@ -265,6 +265,6 @@ utility['getDateByString'] = function(dateString) {
   return date;
 };
 
-utility['validCSVKeys'] = ['employee_email','employee_fullName', 'employee_designation','month','year','basic', 'hra', 'lta','advance_bonus', 'advance_gratuity', 'professional_allownance', 'gross_salary', 'net_salary_payable', 'professional_tax', 'tds', 'esic', 'pf', 'total_deductions', 'bank_name', 'account_no', 'ifsc', 'esic_no', 'pf_uan']
+utility['validCSVKeys'] = ['employee_email','employee_fullName', 'employee_designation','month','year','basic', 'hra', 'lta','advance_bonus', 'advance_gratuity', 'professional_allowance', 'gross_salary', 'net_salary_payable', 'professional_tax', 'tds', 'esic', 'pf', 'total_deductions', 'bank_name', 'account_no', 'ifsc', 'esic_no', 'pf_uan']
 
 module.exports = utility;
