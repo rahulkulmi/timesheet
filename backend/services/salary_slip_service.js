@@ -1,12 +1,29 @@
 var multer  =   require('multer');
 var path = require('path');
+const mustacheExpress = require('mustache')
+const puppeteer = require('puppeteer')
 var appException = require('../app_util/exceptions');
 var uploadFolderPath = path.resolve('public/uploads');
 var Salarydetail = require('../models/salarydetail');
 var Employee = require('../models/employee');
 var appHelpers = require('../app_util/helpers');
+var emailService = require('./email_service');
 var csv = require('csv-parser')
-const fs = require('fs')
+const fs = require('fs');
+
+var salaryItemsInfo = [
+  {employeeFullName: "Name"}, {employeeDesignation: "Designation"} , 
+  {basic: "Basic"} , {professionalTax: "Professional Tax"} ,
+  {hra: "HRA"}, {tds: "TDS"}, {lta: "LTA"}, 
+  {esic: "ESIC"}, {advanceBonus: "Advance Bonus"} ,
+  {pf: "PF"} , {advanceGratuity: "Advance Gratuity"} , {} , 
+  {professionalAllowance: "Professional Allowance"}, {} ,
+  {grossSalary: "Gross Salary"} , {totalDeductions: "Total Deductions"} ,
+  {netSalaryPayable: "Net Salary Payable Rs", isHeading: true} , 
+  {bank: "Bank"} , {accountNo: "Account No"} , 
+  {ifsc: "IFSC"} , {esicNo: "ESIC No"} , {pfUAN: "PF UAN"}
+];
+
 var storage = multer.diskStorage({ //multers disk storage settings
   destination: function (req, file, cb) {
       cb(null, uploadFolderPath)
@@ -33,13 +50,13 @@ service['uploadSingle'] = function(request, res, callback) {
   try {
     var CSVData = [];
     uploadSingle(request, res, function(err){
-        if(err){
+        if(err) {
             return callback(err);
         } else {
             fs.createReadStream(request.file.path)
             .pipe(csv())
             .on('data', (data) => {
-              try{
+              try {
                 var hasAllKeys = appHelpers.validCSVKeys.every(function (item){
                   return data.hasOwnProperty(item);
                 });
@@ -58,68 +75,72 @@ service['uploadSingle'] = function(request, res, callback) {
                       console.log('file deleted');
                     })
                     var salaryData = [];
+                    var emailsNotFound = [];
                     CSVData.forEach(function(item){
                       Employee.findOne({'email': item.employee_email}, null, null, function(err, response) {
                         if(err) {
                             return callback(err);
                         } else {
-                          var row = {
-                            employeeFullName: item.employee_fullName,
-                            empID: response.id,
-                            employeeEmail: item.employee_email,
-                            employeeDesignation: item.employee_designation,
-                            month: appHelpers.monthsInAYear[item.month - 1].toLowerCase(),
-                            year: item.year,
-                            basic: item.basic,
-                            hra: item.hra,
-                            lta: item.lta,
-                            advanceBonus: item.advance_bonus,
-                            advanceGratuity: item.advance_gratuity,
-                            professionalAllowance: item.professional_allowance,
-                            grossSalary: item.gross_salary,
-                            netSalaryPayable: item.net_salary_payable,
-                            professionalTax: item.professional_tax,
-                            tds: item.tds,
-                            pf: item.pf,
-                            totalDeductions: item.total_deductions,
-                            bankName: item.bank_name,
-                            accountNo: item.account_no,
-                            ifscNo: item.ifsc,
-                            esic:item.esic,
-                            esicNo: item.esic_no,
-                            pfUAN: item.pf_UAN
-                          }
-                          salaryData.push(row);
-                        }
-                        if(salaryData.length == CSVData.length) {
-                          Salarydetail.find({month: appHelpers.monthsInAYear[new Date().getMonth()].toLowerCase(), year: new Date().getFullYear()}, null, {sort: {month: 1, year: 1}}, function(err, resp){
-                            if(err) {
+                          if(response == null) {
+                            emailsNotFound.push(item.employee_email)
+                          } else {
+                            var row = {
+                              employeeFullName: item.employee_fullName,
+                              empID: response.id,
+                              employeeEmail: item.employee_email,
+                              employeeDesignation: item.employee_designation,
+                              month: appHelpers.monthsInAYear[item.month - 1].toLowerCase(),
+                              year: item.year,
+                              basic: parseFloat(item.basic),
+                              hra: parseFloat(item.hra),
+                              lta: parseFloat(item.lta),
+                              advanceBonus: parseFloat(item.advance_bonus),
+                              advanceGratuity: parseFloat(item.advance_gratuity),
+                              professionalAllowance: parseFloat(item.professional_allowance),
+                              grossSalary: parseFloat(item.gross_salary),
+                              netSalaryPayable: parseFloat(item.net_salary_payable),
+                              professionalTax: parseFloat(item.professional_tax),
+                              tds: parseFloat(item.tds),
+                              pf: parseFloat(item.pf),
+                              totalDeductions: parseFloat(item.total_deductions),
+                              bankName: item.bank_name,
+                              accountNo: item.account_no,
+                              ifscNo: item.ifsc,
+                              esic:item.esic,
+                              esicNo: item.esic_no,
+                              pfUAN: item.pf_UAN
+                            }
+                            salaryData.push(row);
+                          } 
+                          if((salaryData.length + emailsNotFound.length) == CSVData.length) {
+                            Salarydetail.find({month: appHelpers.monthsInAYear[new Date().getMonth()].toLowerCase(), year: new Date().getFullYear()}, null, {sort: {month: 1, year: 1}}, function(err, resp){
+                              if(err) {
                                 return callback(appException.INTERNAL_SERVER_ERROR());
-                            }else {
-                              if(resp.length == 0) {
-                                Salarydetail.collection.insertMany(salaryData, null, function(err, resp) {
-                                  if(err){
-                                    return callback(appException.INTERNAL_SERVER_ERROR())
-                                  } else {
-                                    return callback(null, resp.ops);
-                                  }
-                                });
-                              }else {
-                                Salarydetail.collection.remove({month: salaryData[0].month,  year: salaryData[0].year}, false, function(err, resp){
+                              } else {
+                                if(resp.length == 0) {
                                   Salarydetail.collection.insertMany(salaryData, null, function(err, resp) {
-                                    if(err){
+                                    if(err) {
                                       return callback(appException.INTERNAL_SERVER_ERROR())
                                     } else {
-                                      return callback(null, resp.ops);
+                                      return callback(null, {'employeeData': resp.ops, 'invalidEmails': emailsNotFound});
                                     }
-                                  })
-                                });
+                                  });
+                                }else {
+                                  Salarydetail.collection.remove({month: salaryData[0].month,  year: salaryData[0].year}, false, function(err, resp){
+                                    Salarydetail.collection.insertMany(salaryData, null, function(err, resp) {
+                                      if(err) {
+                                        return callback(appException.INTERNAL_SERVER_ERROR())
+                                      } else {
+                                        return callback(null, {'employeeData': resp.ops, 'invalidEmails': emailsNotFound});
+                                      }
+                                    })
+                                  });
+                                }
                               }
-                            }
-                          });
-                          
+                            });
+                          }
                         }
-                      });
+                    });
                   });
                 } catch(e) {
                   return callback(e);
@@ -147,5 +168,106 @@ service['getEmployeeSalarySlips'] = function(reqData, callback) {
         return callback(err);
     }
 };
+
+service['generatePDfSendEmail'] = function(reqData, callback) {
+  try {
+    Salarydetail.find({month: reqData.month, year: reqData.year}, null, {sort: {month: 1, year: 1}}, function(err, data){
+      if(err) {
+          return callback(appException.INTERNAL_SERVER_ERROR());
+      }
+      else {
+        fs.readFile(path.resolve('template/salaryslip.html'), "utf8", function (error, pgResp) {
+          if (error) {
+              return callback(error)
+          } else {
+            if(data.length > 0) {
+              if (!fs.existsSync('salary-slips/'+data[0].month+ '-'+ data[0].year)){
+                fs.mkdirSync('salary-slips/'+data[0].month+ '-'+ data[0].year);
+              }
+              data.forEach(element => {
+                loadTemplateAndPrepareData(reqData, element, pgResp, function(err, resp){
+                  if(err) {
+                    return callback(err);
+                  }else{
+                    return callback(null, resp);
+                  }
+                  
+                });
+              });
+              return callback(null, {message: 'Your request is under process.'});
+            } 
+            else {
+              return callback(null, appException.RECORD_NOT_FOUND());
+            }
+            
+          }
+      });
+      }
+  });
+  } catch (err) {
+      return callback(err);
+  }
+};
+
+function loadTemplateAndPrepareData(reqData, data, template, callback) {
+    var salaryDisplayItems = [];
+    for (var i = 0; i < salaryItemsInfo.length; i++) {
+        var itemInfo = salaryItemsInfo[i];
+        salaryDisplayItems.push({
+          itemLabel: itemInfo[Object.keys(itemInfo)[0]],
+          itemValue: convertAmount(data[Object.keys(itemInfo)[0]]),
+          isHeading: itemInfo.isHeading
+        });
+    } 
+    salaryDisplayItems.splice(2, 0, {itemLabel: "Earnings", itemValue: "Amount(Rs)", isHeading: true},
+    {itemLabel: "Deductions" , itemValue: "Amount(Rs)", isHeading: true});
+    var templateWithData = mustacheExpress.render(template, {'salaryDisplayItems': salaryDisplayItems, 'currentMonth': appHelpers.monthsInAYear[reqData.month], 'currentYear': reqData.year, 'currentMonthDays': new Date(reqData.year, reqData.month, 0).getDate() });
+  
+    generatePdf(templateWithData, salaryDisplayItems, data).then(function(){
+      emailService.sendSalarySlipEmail(data, 'salary-slips/'+ data.month + '-' + data.year + '/'+ salaryDisplayItems[0].itemValue.split(' ').join('_') + '_'+ data.month + '_' + data.year+ '.pdf', function(err, resp){
+        if(err) {
+          return callback(err);
+        }
+      });
+    })
+    .catch(function(error){
+      return callback(error);
+    });
+}
+
+function convertAmount(value){
+  if (value && typeof(value) == 'number') {
+    const arrayOfDigit = value.toString().split('.');
+    let lastThreeDigits = arrayOfDigit[0].substring(arrayOfDigit[0].length - 3);
+    const otherNumbers = arrayOfDigit[0].substring(0, arrayOfDigit[0].length - 3);
+    if (otherNumbers != '' && otherNumbers != '-') {
+      lastThreeDigits = ',' + lastThreeDigits;
+    }
+    let formatedAmount = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + lastThreeDigits;
+    if (arrayOfDigit.length > 1) {
+      formatedAmount +=  ',' + arrayOfDigit[1];
+    }
+    return formatedAmount;
+  } else {
+    return value;
+  }
+}
+
+async function generatePdf(html, info, userData) {
+  try {
+    var browser = await puppeteer.launch();
+    var page = await browser.newPage();
+    await page.setContent(html);
+    await page.emulateMedia('screen');
+    await page.pdf({
+      path: path.join(path.resolve('salary-slips/'+ userData.month + '-' + userData.year), info[0].itemValue.split(' ').join('_') + '_'+ userData.month + '_' + userData.year+ '.pdf'),//path.resolve('/public/a.pdf'),
+      format: 'A3',
+      printBackground: true
+    });
+    await browser.close();
+  }catch(e) {
+    return e
+  }
+}
 
 module.exports = service;

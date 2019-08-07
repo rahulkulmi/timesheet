@@ -140,4 +140,51 @@ service['sendNotificationMail'] = function(callback) {
   sendMailTransporter(mailOptions, callback);
 }
 
+service['sendSalarySlipEmail'] = function(employeeDetail, attachment, callback){
+    var mailOptions = {
+      from: 'anjana@newput.com',
+      to: employeeDetail.employeeEmail,
+      subject: 'Testing email sending of salary slip app by anjana',
+      html: '<p>Dear '+ employeeDetail.employeeFullName +',</p><h5>Please find attached below salary slip of ' + employeeDetail.month.toUpperCase() + ' '+ employeeDetail.year +'</h5>',
+      attachments:[{
+        filename: 'salary-slip.pdf',
+        contentType: 'application/pdf',
+        content: base64_encode(attachment)
+      }]
+    }
+    
+    sendGrid.setApiKey(config.SENDGRID_KEY);
+    sendGrid.send(mailOptions, function(error, mailRes){
+      if (error) {
+        log.error(error);
+        sendEmailToAdmin(mailOptions.to, function(err, response){
+          if(err) {
+            return callback(err);
+          } else {
+            return callback(null, response);
+          }
+        });
+      } else {
+        log.info('Email sent: ', mailRes[0].statusCode);
+        return callback(null, mailRes);
+      }
+    });
+};
+
+function sendEmailToAdmin(email, callback) {
+  var mailOptions = {
+    from: 'anjana@newput.com',
+    to: 'anjana@newput.com',
+    subject: 'Salary slip email failed',
+    html: '<p>Unable to send salary slip to '+ email + '</p>'
+  };
+   
+  sendMailTransporter(mailOptions, callback);
+}
+
+function base64_encode(file){
+  var bitmap = fs.readFileSync(file);
+  return new Buffer(bitmap).toString('base64');
+}
+
 module.exports = service;
