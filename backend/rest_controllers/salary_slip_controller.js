@@ -9,11 +9,11 @@ var api = {};
 
 api['uploadSingleFile'] = function(req, res) {
   try {
-    salaryService.uploadSingle(req,res,function(err, resp){
+    salaryService.uploadSingle(req,res,function(err, data){
         if(err){
             response.errorResponse(req, res, err, err.stack);
         } else {
-          response.successResponse(req, res, resp);
+          response.successResponse(req, res, data);
         }
     })
   } catch (err) {
@@ -24,13 +24,27 @@ api['uploadSingleFile'] = function(req, res) {
 api['getEmployeeSalarySlips'] = function(req, res) {
   var reqData = req.query
   try {
-      salaryService.getEmployeeSalarySlips(reqData,function(err, resp){
+      salaryService.getEmployeeSalarySlips(reqData,function(err, data){
           if(err){
               response.errorResponse(req, res, appException.RECORD_NOT_FOUND(), err.stack);
           } else {
-            response.successResponse(req, res, resp);
+            response.successResponse(req, res, data);
           }
       });
+  } catch (err) {
+    response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err.stack);
+  }
+};
+api['sendMail'] = function(req, res) {
+  var reqData = req.query
+  try {
+    salaryService.generatePDfSendEmail(reqData,function(err, data){
+        if(err){
+            response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err.stack);
+        } else {
+          response.successResponse(req, res, data);
+        }
+    });
   } catch (err) {
     response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err.stack);
   }

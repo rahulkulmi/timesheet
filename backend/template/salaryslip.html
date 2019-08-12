@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>SalaryApplication</title>
+        <base href="/">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" type="image/x-icon" href="http://www.newput.com/wp/wp-content/uploads/2016/01/favicon.ico">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="manifest" href="manifest.json">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
+        <!-- <script src="file:///Users/vipinjoshi/Documents/training/SalaryAppSlipPageHtmlpart/style.js"></script> -->
+        <meta name="theme-color" content="#1976d2">
+        <style>
+            .salary-slip-wrapper {
+                border: 1px solid #000000;
+                font-weight: 500;
+                min-height: 300px;
+                text-align: center;
+                width: 100%;
+                margin-top: 40px;
+            }
+
+            .head-container {
+                border-bottom: 1px solid black; 
+            }
+
+            .company-details {
+                text-align: center;
+            }
+                
+            .company-name {
+                font-size: 20px;
+                font-weight: 700;
+            }
+                    
+            .company-address {
+                font-size: 17px;
+                font-weight: 600;
+            }
+
+            .days-month {
+                text-align: right;
+                padding-right: 10px;
+            }
+
+            .salary-content .col-sm-3 {
+                border: 1px solid black;
+                border-top: none;
+                font-size: 14px;
+                text-align: left;
+            }
+
+            .authority-seal {
+                border-bottom: 0;
+                text-align: center;
+            }
+
+            .seal-img {
+                margin-top: 20px;
+                width: 100px;
+            }
+
+            .sign-sections {
+                border-left: 1px solid black;
+                padding: 0;
+            }
+                    
+            .sign {
+                border-bottom: 1px solid black;
+                min-height: 100px;
+                text-align: right;
+            }
+            
+            .sign-img {
+                margin-right: 100px;
+                margin-top: 15px;
+            }
+
+            .sign-content {
+                text-align: right;
+                padding-right: 10px;
+            }
+                    
+            .bold-head {
+                font-weight: 800;
+            }
+
+            .bold-text {
+                font-weight: 800;
+            }
+
+            .salary-content div.col-sm-3:nth-child(odd) {
+                border-left: 0;
+                border-right: 0;
+            }
+                
+            .salary-content div.col-sm-3:nth-child(4n+0) {
+                border-right: 0;
+            }
+
+            #watermark {
+                bottom: 180px;
+                color: gray;
+                font-size: 60px;
+                left: 230px;
+                opacity: 0.1;
+                position: absolute;
+                transform: rotate(-50deg);
+                z-index: 99;
+            }
+
+            .btn-container {
+                margin-bottom: 15px;
+                padding-top: 15px;
+            }
+                
+            .action-btn-container {
+                text-align: right;
+            }
+
+            .print-btn,.mail-btn {
+                margin-right: 10px;
+            }
+            
+            .back-btn,.print-btn,.mail-btn {
+                background-color: #337AB7;
+                font-size: 14px;
+            }
+
+            @media (max-width: 768px) {
+
+                #watermark {
+                    display: none;
+                }
+            }
+
+            @media print {
+                .btn-primary {
+                    display: none;
+                }
+            }
+        </style>
+<body onload="" >
+    <p id="person">
+        <div class="row">
+            <div class="col-sm-10 offset-sm-1 salary-slip-wrapper">
+                <div class="row head-container">
+                    <div class="col-sm-6 offset-sm-3 company-details">
+                        <div class="company-name">NEWPUT INFOTECH PVT LTD.</div>
+                        <div class="company-address">314 D M Tower, 21/1 Race Course Road Indore</div>
+                        <div class="company-address">CIN U723000MP2006PTC018697</div>
+                        <div class="company-address">
+                            Salary slip for the month of {{currentMonth}} {{currentYear}}
+                        </div>
+                    </div>
+                    <div class="col-sm-12 days-month">
+                        No of Days {{currentMonthDays}}
+                    </div>
+                </div>
+                <div class="row salary-content">
+                    {{#salaryDisplayItems}}
+                    <div class="col-sm-3 col-6 {{#isHeading}} bold-text{{/isHeading}}">{{itemLabel}}</div>
+                    <div class="col-sm-3 col-6 {{#isHeading}} bold-text{{/isHeading}}">{{itemValue}}</div>
+                    {{/salaryDisplayItems}}
+                    <div class="col-3 authority-seal">
+                        <img class="seal-img" src="file:///Users/vipinjoshi/Documents/training/SalaryAppSlipPageHtmlpart/company-seal.png">
+                    </div>
+                    <div class="col-9 sign-sections">
+                        <div class="sign">
+                            <img class="sign-img" src="file:///Users/vipinjoshi/Documents/training/SalaryAppSlipPageHtmlpart/signature.png">
+                        </div>
+                        <div class="sign-content">
+                            Authorised Signatory
+                        </div>
+                    </div>
+                    <div id="watermark">
+                        CONFIDENTIAL
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </p>
+</body>
+</html>

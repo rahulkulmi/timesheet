@@ -25,8 +25,8 @@ var salaryDetailSchema = new Schema({
   accountNo: { type: String },
   ifscNo: { type: String },
   esic: {type: String},
-  esicNo: { type: Number },
-  pfUAN: { type: Number },
+  esicNo: { type: String },
+  pfUAN: { type: String },
 });
 
 module.exports = mongoose.model('Salarydetail', salaryDetailSchema, 'salarydetail');
