@@ -7,6 +7,7 @@ module.exports = function(app, router) {
   var emailController = require('../rest_controllers/email_controller');
   var miscController = require('../rest_controllers/misc_controller');
   var salarySlipController = require('../rest_controllers/salary_slip_controller'); 
+  var comapnyController = require('../rest_controllers/company_controller');
 
   // api routes
   router.post('/auth/login', authController.userLogin);
@@ -37,5 +38,10 @@ module.exports = function(app, router) {
   router.post('/admin/upload', validate.validateAdminToken, salarySlipController.uploadSingleFile);
   router.get('/employee/salary_slips', validate.validateAdminToken, salarySlipController.getEmployeeSalarySlips);
   router.get('/admin/send_email', validate.validateAdminToken, salarySlipController.sendMail);
+
+  //routes for company
+  router.get('/admin/company_detail', validate.validateAdminToken, comapnyController.getDetail);
+  router.post('/admin/add_company_info', validate.validateAdminToken, comapnyController.addCompanyInfo);
+  router.put('/admin/update_company_info', validate.validateAdminToken, comapnyController.updateCompanyInfo);
   app.use('/rest', router);
 };
