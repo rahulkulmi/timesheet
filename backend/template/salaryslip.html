@@ -1,17 +1,12 @@
 <!doctype html>
 <html lang="en">
     <head>
-        <meta charset="utf-8">
-        <title>SalaryApplication</title>
-        <base href="/">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="icon" type="image/x-icon" href="http://www.newput.com/wp/wp-content/uploads/2016/01/favicon.ico">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="manifest" href="manifest.json">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
-        <!-- <script src="file:///Users/vipinjoshi/Documents/training/SalaryAppSlipPageHtmlpart/style.js"></script> -->
-        <meta name="theme-color" content="#1976d2">
         <style>
             .salary-slip-wrapper {
                 border: 1px solid #000000;
@@ -54,7 +49,7 @@
             }
 
             .seal-img {
-                margin: 20px 0px 0px 40px;
+                margin: 20px 0px 0px 20px;
                 width: 100px;
             }
 
@@ -107,15 +102,23 @@
                 -webkit-transform: rotate(-50deg);
                 z-index: 99;
             }
+            .salary-items {
+                width:25%;
+                float:left;
+                border: solid 1px;
+                min-height:30px;
+                text-align:left;
+                padding-left: 10px;
+            }
         </style>
 <body>
     <p id="person">
             <div class="salary-slip-wrapper">
                 <div class="row head-container">
                     <div class="col-sm-6 offset-sm-3 company-details">
-                        <div class="company-name">{{compData.companyName}}</div>
-                        <div class="company-address">{{compData.companyAdd}}</div>
-                        <div class="company-address">CIN {{compData.cinNumber}}</div>
+                        <div class="company-name">{{companyData.companyName}}</div>
+                        <div class="company-address">{{companyData.companyAdd}}</div>
+                        <div class="company-address">CIN {{companyData.cinNumber}}</div>
                         <div class="company-address">
                             Salary slip for the month of {{currentMonth}} {{currentYear}}
                         </div>
@@ -126,17 +129,16 @@
                 </div>
                 <div class="salary-content">
                     {{#salaryDisplayItems}}
-                    <div class="{{#isHeading}} bold-text{{/isHeading}}" style="width:25%; float:left; border: solid 1px; min-height:30px; text-align:left; padding-left: 10px">{{itemLabel}}</div>
-                    <div class="{{#isHeading}} bold-text{{/isHeading}}" style="width:25%; float:left; border: solid 1px; min-height:30px; text-align:left;padding-left: 10px">{{itemValue}}</div>
+                    <div class="salary-items col-sm-3 {{#isHeading}} bold-text{{/isHeading}}">{{itemLabel}}</div>
+                    <div class="salary-items col-sm-3 {{#isHeading}} bold-text{{/isHeading}}">{{itemValue}}</div>
                     {{/salaryDisplayItems}}
-                    <!-- <div style="clear:both;"></div> -->
                     <div class="row" style="margin:0">
                         <div class="authority-seal col-sm-12">
-                                <img class="seal-img" src="data:image/png;base64, {{compData.companySeal}}">
+                                <img class="seal-img" src="data:image/png;base64, {{companyData.companySeal}}">
                         </div>
                         <div class="sign-sections col-sm-12">
                             <div class="sign">
-                                <img class="sign-img" src="data:image/png;base64, {{compData.directorSign}}">
+                                <img class="sign-img" src="data:image/png;base64, {{companyData.directorSign}}">
                             </div>
                             <div class="sign-content" style="border-top: 1px solid;">
                                 Authorised Signatory

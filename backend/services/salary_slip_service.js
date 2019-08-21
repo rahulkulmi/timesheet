@@ -86,7 +86,7 @@ service['uploadSingle'] = function(request, res, callback) {
                             emailsNotFound.push(item.employee_email)
                           } else {
                             var row = {
-                              employeeFullName: item.employee_fullName,
+                              employeeFullName: response.fullName,
                               empID: response.id,
                               employeeEmail: item.employee_email,
                               employeeDesignation: item.employee_designation,
@@ -183,9 +183,9 @@ service['generatePDfSendEmail'] = function(reqData, callback) {
           } else {
             if(data.length > 0) {
               if (!fs.existsSync(path.join(__dirname, '../salary-slips/'+data[0].month+ '-'+ data[0].year+'/'))){
-                fs.mkdirSync(path.join(__dirname, '../salary-slips/'+data[0].month+ '-'+ data[0].year+'/'), {recursive: true});
+                fs.mkdirSync(path.join(__dirname, '../salary-slips/'+data[0].month+ '-'+ data[0].year+'/'));
               }
-              companyService.getDetail({cin: 'U72300MP2006PTC018697'}, function(err, companyData){
+              companyService.getDetail(function(err, companyData){
                 if(err){
                   return callback(err);
                 } else {
@@ -220,15 +220,16 @@ function loadTemplateAndPrepareData(reqData, data, template, compData, callback)
     var salaryDisplayItems = [];
     for (var i = 0; i < salaryItemsInfo.length; i++) {
         var itemInfo = salaryItemsInfo[i];
+        var itemkey = Object.keys(itemInfo)[0]
         salaryDisplayItems.push({
-          itemLabel: itemInfo[Object.keys(itemInfo)[0]],
-          itemValue: (Object.keys(itemInfo)[0] == 'esicNo' && convertAmount(data[Object.keys(itemInfo)[0]]) == null) ? 'Not Applicable': convertAmount(data[Object.keys(itemInfo)[0]]),
+          itemLabel: itemInfo[itemkey],
+          itemValue: (itemkey == 'esicNo' && convertAmount(data[itemkey]) == null) ? 'Not Applicable': convertAmount(data[itemkey]),
           isHeading: itemInfo.isHeading
         });
     } 
     salaryDisplayItems.splice(2, 0, {itemLabel: "Earnings", itemValue: "Amount(Rs)", isHeading: true},
     {itemLabel: "Deductions" , itemValue: "Amount(Rs)", isHeading: true});
-    var htmlToSend = mustacheExpress.render(template, {'salaryDisplayItems': salaryDisplayItems, 'currentMonth': appHelpers.monthsInAYear[reqData.month - 1], 'currentYear': reqData.year, 'currentMonthDays': new Date(reqData.year, reqData.month, 0).getDate(), 'compData':compData });
+    var htmlToSend = mustacheExpress.render(template, {'salaryDisplayItems': salaryDisplayItems, 'currentMonth': appHelpers.monthsInAYear[reqData.month - 1], 'currentYear': reqData.year, 'currentMonthDays': new Date(reqData.year, reqData.month, 0).getDate(), 'companyData':compData });
     pdf.create(htmlToSend, {
       "directory": path.resolve('salary-slips/'+ data.month + '-' + data.year), 
       "format": "A3",
