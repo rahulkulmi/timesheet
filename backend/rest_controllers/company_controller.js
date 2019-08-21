@@ -5,8 +5,9 @@ var response = require('../services/api_response');
 var api = {};
 
 api['getDetail'] = function(req, res) {
+    var reqData = req.query;
     try {
-        companyService.getDetail(function(err, data) {
+        companyService.getDetail(reqData, function(err, data) {
           if (err) {
               response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err);
           } else {

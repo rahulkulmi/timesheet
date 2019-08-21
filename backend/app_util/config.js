@@ -35,7 +35,7 @@ function appConfig() {
     PORT: process.env.PORT,
     SECRET_KEY: process.env.SECRET_KEY,
     JWT_SECRET_KEY: process.env.JWT_SECRET_KEY,
-    SENDGRID_KEY: process.env.SENDGRID_KEY,
+    SENDGRID_KEY: process.env.SENDGRID_API_KEY,
     //EMAIL_IDS: process.env.EMAIL_IDS,
     WEEKLY_EMAIL_IDS: process.env.WEEKLY_EMAIL_IDS,
     MONTHLY_EMAIL_IDS: process.env.MONTHLY_EMAIL_IDS,

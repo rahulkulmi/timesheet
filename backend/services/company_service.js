@@ -3,9 +3,9 @@ var Company = require('../models/company');
 
 var service = {};
 
-service['getDetail'] = function(callback) {
+service['getDetail'] = function(reqData, callback) {
   try {
-    Company.find({}, function(err, companyData) {
+    Company.findOne({cinNumber: reqData.cin}, function(err, companyData) {
       if (err) return callback(err);
       if (companyData) {
         return callback(null, companyData);

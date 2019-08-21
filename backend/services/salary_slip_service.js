@@ -1,15 +1,16 @@
 var multer  =   require('multer');
 var path = require('path');
 const mustacheExpress = require('mustache')
-const puppeteer = require('puppeteer')
 var appException = require('../app_util/exceptions');
 var uploadFolderPath = path.resolve('public/uploads');
 var Salarydetail = require('../models/salarydetail');
 var Employee = require('../models/employee');
 var appHelpers = require('../app_util/helpers');
 var emailService = require('./email_service');
+var companyService = require('./company_service');
 var csv = require('csv-parser')
 const fs = require('fs');
+var pdf = require('html-pdf');
 
 var salaryItemsInfo = [
   {employeeFullName: "Name"}, {employeeDesignation: "Designation"} , 
@@ -181,18 +182,24 @@ service['generatePDfSendEmail'] = function(reqData, callback) {
               return callback(error)
           } else {
             if(data.length > 0) {
-              if (!fs.existsSync('salary-slips/'+data[0].month+ '-'+ data[0].year)){
-                fs.mkdirSync('salary-slips/'+data[0].month+ '-'+ data[0].year);
+              if (!fs.existsSync(path.join(__dirname, '../salary-slips/'+data[0].month+ '-'+ data[0].year+'/'))){
+                fs.mkdirSync(path.join(__dirname, '../salary-slips/'+data[0].month+ '-'+ data[0].year+'/'), {recursive: true});
               }
-              data.forEach(element => {
-                loadTemplateAndPrepareData(reqData, element, pgResp, function(err, resp){
-                  if(err) {
-                    return callback(err);
-                  }else{
-                    return callback(null, resp);
-                  }
-                  
-                });
+              companyService.getDetail({cin: 'U72300MP2006PTC018697'}, function(err, companyData){
+                if(err){
+                  return callback(err);
+                } else {
+                  data.forEach(element => {
+                    loadTemplateAndPrepareData(reqData, element, pgResp, companyData, function(err, resp){
+                      if(err) {
+                        return callback(err);
+                      }else{
+                        return callback(null, resp);
+                      }
+                      
+                    });
+                  });
+                }
               });
               return callback(null, {message: 'Your request is under process.'});
             } 
@@ -209,30 +216,35 @@ service['generatePDfSendEmail'] = function(reqData, callback) {
   }
 };
 
-function loadTemplateAndPrepareData(reqData, data, template, callback) {
+function loadTemplateAndPrepareData(reqData, data, template, compData, callback) {
     var salaryDisplayItems = [];
     for (var i = 0; i < salaryItemsInfo.length; i++) {
         var itemInfo = salaryItemsInfo[i];
         salaryDisplayItems.push({
           itemLabel: itemInfo[Object.keys(itemInfo)[0]],
-          itemValue: convertAmount(data[Object.keys(itemInfo)[0]]),
+          itemValue: (Object.keys(itemInfo)[0] == 'esicNo' && convertAmount(data[Object.keys(itemInfo)[0]]) == null) ? 'Not Applicable': convertAmount(data[Object.keys(itemInfo)[0]]),
           isHeading: itemInfo.isHeading
         });
     } 
     salaryDisplayItems.splice(2, 0, {itemLabel: "Earnings", itemValue: "Amount(Rs)", isHeading: true},
     {itemLabel: "Deductions" , itemValue: "Amount(Rs)", isHeading: true});
-    var templateWithData = mustacheExpress.render(template, {'salaryDisplayItems': salaryDisplayItems, 'currentMonth': appHelpers.monthsInAYear[reqData.month], 'currentYear': reqData.year, 'currentMonthDays': new Date(reqData.year, reqData.month, 0).getDate() });
-  
-    generatePdf(templateWithData, salaryDisplayItems, data).then(function(){
-      emailService.sendSalarySlipEmail(data, 'salary-slips/'+ data.month + '-' + data.year + '/'+ salaryDisplayItems[0].itemValue.split(' ').join('_') + '_'+ data.month + '_' + data.year+ '.pdf', function(err, resp){
+    var htmlToSend = mustacheExpress.render(template, {'salaryDisplayItems': salaryDisplayItems, 'currentMonth': appHelpers.monthsInAYear[reqData.month - 1], 'currentYear': reqData.year, 'currentMonthDays': new Date(reqData.year, reqData.month, 0).getDate(), 'compData':compData });
+    pdf.create(htmlToSend, {
+      "directory": path.resolve('salary-slips/'+ data.month + '-' + data.year), 
+      "format": "A3",
+      "orientation": "landscape",
+      "type": "pdf"}).toBuffer(function(err, buffer){
         if(err) {
           return callback(err);
+        } else {
+          fs.writeFileSync(path.join(path.resolve('salary-slips/'+ data.month + '-' + data.year), salaryDisplayItems[0].itemValue.split(' ').join('_') + '_'+ data.month + '_' + data.year+ '.pdf'), buffer);
+          emailService.sendSalarySlipEmail(data, 'salary-slips/'+ data.month + '-' + data.year + '/'+ salaryDisplayItems[0].itemValue.split(' ').join('_') + '_'+ data.month + '_' + data.year+ '.pdf', function(err, resp){
+            if(err) {
+              return callback(err);
+            }
+          });
         }
       });
-    })
-    .catch(function(error){
-      return callback(error);
-    });
 }
 
 function convertAmount(value){
@@ -250,23 +262,6 @@ function convertAmount(value){
     return formatedAmount;
   } else {
     return value;
-  }
-}
-
-async function generatePdf(html, info, userData) {
-  try {
-    var browser = await puppeteer.launch();
-    var page = await browser.newPage();
-    await page.setContent(html);
-    await page.emulateMedia('screen');
-    await page.pdf({
-      path: path.join(path.resolve('salary-slips/'+ userData.month + '-' + userData.year), info[0].itemValue.split(' ').join('_') + '_'+ userData.month + '_' + userData.year+ '.pdf'),//path.resolve('/public/a.pdf'),
-      format: 'A3',
-      printBackground: true
-    });
-    await browser.close();
-  }catch(e) {
-    return e
   }
 }
 
