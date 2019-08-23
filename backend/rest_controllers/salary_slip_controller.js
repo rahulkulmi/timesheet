@@ -50,4 +50,19 @@ api['sendMail'] = function(req, res) {
   }
 };
 
+api['removeSalarySlip'] = function(req, res) {
+  var reqData = req.query
+  try {
+    salaryService.removeSalarySlip(reqData,function(err, data){
+        if(err){
+            response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err.stack);
+        } else {
+          response.successResponse(req, res, data);
+        }
+    });
+  } catch (err) {
+    response.errorResponse(req, res, appException.INTERNAL_SERVER_ERROR(), err.stack);
+  }
+};
+
 module.exports = api;

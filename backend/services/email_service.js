@@ -144,8 +144,8 @@ service['sendSalarySlipEmail'] = function(employeeDetail, attachment, callback){
     var mailOptions = {
       from: 'anjana@newput.com',
       to: employeeDetail.employeeEmail,
-      subject: 'Testing email sending of salary slip app by anjana',
-      html: '<p>Dear '+ employeeDetail.employeeFullName +',</p><h5>Please find attached below salary slip of ' + employeeDetail.month.toUpperCase() + ' '+ employeeDetail.year +'</h5>',
+      subject: 'CTC Slip for '+ employeeDetail.month.toUpperCase() + ' '+ employeeDetail.year,
+      html: '<h5>Dear '+ employeeDetail.employeeFullName +',</h5><p>Please find attached below salary slip </p>',
       attachments:[{
         filename: 'salary-slip.pdf',
         contentType: 'application/pdf',
@@ -166,6 +166,9 @@ service['sendSalarySlipEmail'] = function(employeeDetail, attachment, callback){
         });
       } else {
         log.info('Email sent: ', mailRes[0].statusCode);
+        fs.unlink(attachment, function(){
+          console.log('file deleted');
+        })
         return callback(null, mailRes);
       }
     });

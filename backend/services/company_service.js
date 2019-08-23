@@ -5,7 +5,7 @@ var service = {};
 
 service['getDetail'] = function(callback) {
   try {
-    Company.find({}, function(err, companyData) {
+    Company.findOne(function(err, companyData) {
       if (err) return callback(err);
       if (companyData) {
         return callback(null, companyData);
