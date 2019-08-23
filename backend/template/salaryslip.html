@@ -13,7 +13,7 @@
                 font-weight: 500;
                 min-height: 300px;
                 text-align: center;
-                margin: 30px;
+                margin: 50px;
                 font-size: 20px;
             }
             .company-details {
@@ -22,17 +22,19 @@
                 
             .company-name {
                 font-size: 20px;
-                font-weight: 700;
+                font-weight: 600;
             }
                     
             .company-address {
-                font-size: 17px;
+                font-size: 18px;
                 font-weight: 600;
             }
 
             .days-month {
                 text-align: right;
                 padding-right: 20px;
+                font-size: 16px;
+                font-weight: 600;
             }
 
             .salary-content .col-sm-3 {
@@ -83,20 +85,11 @@
                 font-weight: 800;
             }
 
-            .salary-content div.col-sm-3:nth-child(odd) {
-                border-left: 0;
-                border-right: 0;
-            }
-                
-            .salary-content div.col-sm-3:nth-child(4n+0) {
-                border-right: 0;
-            }
-
             #watermark {
-                bottom: 280px;
+                bottom: 230px;
                 color: gray;
                 font-size: 60px;
-                left: 30%;
+                left: 25%;
                 opacity: 0.1;
                 position: absolute;
                 -webkit-transform: rotate(-50deg);
@@ -106,15 +99,30 @@
                 width:25%;
                 float:left;
                 border: solid 1px;
-                min-height:30px;
-                text-align:left;
-                padding-left: 10px;
+                min-height: 25px;
+                text-align: left;
+                padding-left: 5px;
+            }
+            .salary-content .salary-items:nth-child(odd) {
+                border-left: 0;
+                border-right: 0;
+                border-top: 0;
+            }
+            .salary-content .salary-items:nth-child(even) {
+                border-top: 0;
+            }
+                
+            .salary-content .salary-items:nth-child(4n+0) {
+                border-right: 0;
+            }
+            .head-container{
+                border-bottom: 1px solid;
             }
         </style>
 <body>
     <p id="person">
             <div class="salary-slip-wrapper">
-                <div class="row head-container">
+                <div class="row head-container" style="margin:0;">
                     <div class="col-sm-6 offset-sm-3 company-details">
                         <div class="company-name">{{companyData.companyName}}</div>
                         <div class="company-address">{{companyData.companyAdd}}</div>
@@ -132,7 +140,7 @@
                     <div class="salary-items col-sm-3 {{#isHeading}} bold-text{{/isHeading}}">{{itemLabel}}</div>
                     <div class="salary-items col-sm-3 {{#isHeading}} bold-text{{/isHeading}}">{{itemValue}}</div>
                     {{/salaryDisplayItems}}
-                    <div class="row" style="margin:0">
+                    <div class="row" style="margin:0;">
                         <div class="authority-seal col-sm-12">
                                 <img class="seal-img" src="data:image/png;base64, {{companyData.companySeal}}">
                         </div>

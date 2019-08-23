@@ -9,6 +9,7 @@ var appHelpers = require('../app_util/helpers');
 var emailService = require('./email_service');
 var companyService = require('./company_service');
 var csv = require('csv-parser')
+var _ = require('underscore');
 const fs = require('fs');
 var pdf = require('html-pdf');
 
@@ -20,9 +21,9 @@ var salaryItemsInfo = [
   {pf: "PF"} , {advanceGratuity: "Advance Gratuity"} , {} , 
   {professionalAllowance: "Professional Allowance"}, {} ,
   {grossSalary: "Gross Salary"} , {totalDeductions: "Total Deductions"} ,
-  {netSalaryPayable: "Net Salary Payable Rs", isHeading: true} , 
-  {bank: "Bank"} , {accountNo: "Account No"} , 
-  {ifsc: "IFSC"} , {esicNo: "ESIC No"} , {pfUAN: "PF UAN"}
+  {netSalaryPayable: "Net Salary Payable", isHeading: true} , 
+  {bankName: "Bank"} , {accountNo: "Account No"} , 
+  {ifscNo: "IFSC"} , {esicNo: "ESIC No"} , {pfUAN: "PF UAN"}
 ];
 
 var storage = multer.diskStorage({ //multers disk storage settings
@@ -123,7 +124,7 @@ service['uploadSingle'] = function(request, res, callback) {
                                     if(err) {
                                       return callback(appException.INTERNAL_SERVER_ERROR())
                                     } else {
-                                      return callback(null, {'employeeData': resp.ops, 'invalidEmails': emailsNotFound});
+                                      return callback(null, {'employeeData': _.sortBy( resp.ops, 'employeeFullName'), 'invalidEmails': emailsNotFound});
                                     }
                                   });
                                 }else {
@@ -132,7 +133,7 @@ service['uploadSingle'] = function(request, res, callback) {
                                       if(err) {
                                         return callback(appException.INTERNAL_SERVER_ERROR())
                                       } else {
-                                        return callback(null, {'employeeData': resp.ops, 'invalidEmails': emailsNotFound});
+                                        return callback(null, {'employeeData': _.sortBy( resp.ops, 'employeeFullName'), 'invalidEmails': emailsNotFound});
                                       }
                                     })
                                   });
@@ -172,7 +173,14 @@ service['getEmployeeSalarySlips'] = function(reqData, callback) {
 
 service['generatePDfSendEmail'] = function(reqData, callback) {
   try {
-    Salarydetail.find({month: appHelpers.monthsInAYear[reqData.month - 1].toLowerCase(), year: reqData.year}, null, {sort: {month: 1, year: 1}}, function(err, data){
+    var query;
+    if(reqData.empEmails){
+      query = {month: appHelpers.monthsInAYear[reqData.month - 1].toLowerCase(), year: reqData.year, employeeEmail: { $in: reqData.empEmails.split(',')}}
+    } else {
+      query = {month: appHelpers.monthsInAYear[reqData.month - 1].toLowerCase(), year: reqData.year}
+    }
+    
+    Salarydetail.find(query, null, {sort: {month: 1, year: 1}}, function(err, data){
       if(err) {
           return callback(appException.INTERNAL_SERVER_ERROR());
       }
@@ -220,10 +228,10 @@ function loadTemplateAndPrepareData(reqData, data, template, compData, callback)
     var salaryDisplayItems = [];
     for (var i = 0; i < salaryItemsInfo.length; i++) {
         var itemInfo = salaryItemsInfo[i];
-        var itemkey = Object.keys(itemInfo)[0]
+        var itemkey = Object.keys(itemInfo)[0];
         salaryDisplayItems.push({
           itemLabel: itemInfo[itemkey],
-          itemValue: (itemkey == 'esicNo' && convertAmount(data[itemkey]) == null) ? 'Not Applicable': convertAmount(data[itemkey]),
+          itemValue: ((itemkey == 'esicNo' || itemkey == 'pfUAN') && !convertAmount(data[itemkey])) ? 'Not Applicable': convertAmount(data[itemkey]),
           isHeading: itemInfo.isHeading
         });
     } 
@@ -233,7 +241,6 @@ function loadTemplateAndPrepareData(reqData, data, template, compData, callback)
     pdf.create(htmlToSend, {
       "directory": path.resolve('salary-slips/'+ data.month + '-' + data.year), 
       "format": "A3",
-      "orientation": "landscape",
       "type": "pdf"}).toBuffer(function(err, buffer){
         if(err) {
           return callback(err);
@@ -265,5 +272,24 @@ function convertAmount(value){
     return value;
   }
 }
+
+service['removeSalarySlip'] = function(reqData, callback) {
+  try {
+      Salarydetail.remove({month: appHelpers.monthsInAYear[reqData.month - 1].toLowerCase(), year: reqData.year, employeeEmail: { $in: reqData.empEmails.split(',')}}, function(err, resp){
+          if(err) {
+              return callback(err);
+          }
+          else {
+            if(resp.result && resp.result.n > 1) {
+              return callback(null, {message: "SalarySlips has been deleted successfully"})
+            } else {
+              return callback(null, {message: "SalarySlip has been deleted successfully"});
+            }
+          }
+      });
+  } catch (err) {
+      return callback(err);
+  }
+};
 
 module.exports = service;
