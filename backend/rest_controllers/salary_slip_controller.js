@@ -23,6 +23,11 @@ api['uploadSingleFile'] = function(req, res) {
 
 api['getEmployeeSalarySlips'] = function(req, res) {
   var reqData = req.query
+  if (req.session.status == 'admin' && reqData.empID) {
+    reqData['empID'] = reqData.empID;
+  } else {
+    reqData['empID'] = req.session.user_id;
+  }
   try {
       salaryService.getEmployeeSalarySlips(reqData,function(err, data){
           if(err){
