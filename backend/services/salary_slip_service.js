@@ -74,7 +74,7 @@ service['uploadSingle'] = function(request, res, callback) {
             .on('end', () => {
                 try {
                     fs.unlink(request.file.path, function(){
-                      console.log('file deleted');
+                      console.log('file deleted ', request.file.path);
                     })
                     var salaryData = [];
                     var emailsNotFound = [];
@@ -112,35 +112,27 @@ service['uploadSingle'] = function(request, res, callback) {
                               esicNo: item.esic_no,
                               pfUAN: item.pf_UAN
                             }
-                            salaryData.push(row);
-                          } 
-                          if((salaryData.length + emailsNotFound.length) == CSVData.length) {
-                            Salarydetail.find({month: appHelpers.monthsInAYear[new Date().getMonth()].toLowerCase(), year: new Date().getFullYear()}, null, {sort: {month: 1, year: 1}}, function(err, resp){
+                            Salarydetail.collection.findOneAndUpdate({month: row.month, year: row.year, employeeEmail: row.employeeEmail}, row, {upsert: true}, function(err, response) {
                               if(err) {
                                 return callback(appException.INTERNAL_SERVER_ERROR());
                               } else {
-                                if(resp.length == 0) {
-                                  Salarydetail.collection.insertMany(salaryData, null, function(err, resp) {
+                                salaryData.push(row);
+                                if((salaryData.length + emailsNotFound.length) == CSVData.length) {
+                                  Salarydetail.find({month: row.month, year: row.year}, null, {sort: {month: 1, year: 1}}, function(err, salaries){
                                     if(err) {
-                                      return callback(appException.INTERNAL_SERVER_ERROR())
+                                      return callback(appException.INTERNAL_SERVER_ERROR());
                                     } else {
-                                      return callback(null, {'employeeData': _.sortBy( resp.ops, 'employeeFullName'), 'invalidEmails': emailsNotFound});
-                                    }
-                                  });
-                                }else {
-                                  Salarydetail.collection.remove({month: salaryData[0].month,  year: salaryData[0].year}, false, function(err, resp){
-                                    Salarydetail.collection.insertMany(salaryData, null, function(err, resp) {
-                                      if(err) {
-                                        return callback(appException.INTERNAL_SERVER_ERROR())
-                                      } else {
-                                        return callback(null, {'employeeData': _.sortBy( resp.ops, 'employeeFullName'), 'invalidEmails': emailsNotFound});
+                                      if(salaries.length == 0) {
+                                        return callback(appException.RECORD_NOT_FOUND())
+                                      }else {
+                                        return callback(null, {'employeeData': _.sortBy( salaries, 'employeeFullName'), 'invalidEmails': emailsNotFound});
                                       }
-                                    })
+                                    }
                                   });
                                 }
                               }
                             });
-                          }
+                          } 
                         }
                     });
                   });
