@@ -10,7 +10,7 @@ service['getDetail'] = function(callback) {
       if (companyData) {
         return callback(null, companyData);
       } else {
-        return callback(null, null);
+        return callback();
       }
     });
   } catch (err) {
@@ -24,9 +24,9 @@ service['addCompany'] = function(reqData, callback) {
         company.save(function(err, companyData) {
             if (err) return callback(err);
             if (companyData) {
-            return callback(null, companyData);
+              return callback(null, companyData);
             } else {
-            return callback(null, null);
+              return callback();
             }
         });
     } catch (err) {
@@ -40,7 +40,7 @@ service['updateCompany'] = function(req, callback) {
             if (companyData) {
                 return callback(null, companyData);
             } else {
-                return callback(null, null);
+                return callback();
             }
         });
     } catch (err) {

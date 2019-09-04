@@ -9,7 +9,7 @@ var methodOverride = require('method-override');
 var expressValidator = require('express-validator');
 var config = require('./app_util/config');
 var log = require('./app_util/logger');
-//var cronjob = require('./app_util/cronjobs');
+var cronjob = require('./app_util/cronjobs');
 var appException = require('./app_util/exceptions');
 var response = require('./services/api_response');
 

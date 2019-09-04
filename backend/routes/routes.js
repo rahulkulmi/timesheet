@@ -37,7 +37,7 @@ module.exports = function(app, router) {
   // Routes for salary slip
   router.post('/admin/upload', validate.validateAdminToken, salarySlipController.uploadSingleFile);
   router.get('/employee/salary_slips', validate.validateToken, salarySlipController.getEmployeeSalarySlips);
-  router.get('/admin/send_email', validate.validateAdminToken, salarySlipController.sendMail);
+  router.post('/admin/send_email', validate.validateAdminToken, salarySlipController.sendMail);
   router.delete('/admin/remove_salary_slip', validate.validateAdminToken, salarySlipController.removeSalarySlip);
 
   //routes for company

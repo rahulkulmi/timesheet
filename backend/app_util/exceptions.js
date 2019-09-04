@@ -13,7 +13,7 @@ module.exports = {
       'message': 'Bad request', 'customMsg': customMsg};
   },
   FILE_NOT_FOUND: function(customMsg) {
-    return {'rcode': 404, 'httpCode': 503,
+    return {'rcode': 404, 'httpCode': 404,
       'message': 'File not found', 'customMsg': customMsg};
   },
   INVALID_FILE_ERROR: function(customMsg) {
@@ -25,7 +25,7 @@ module.exports = {
       'message': 'CSV file does not have required fields.', 'customMsg': customMsg};
   },
   RECORD_NOT_FOUND: function(customMsg) {
-    return {'rcode': 404, 'httpCode': 503,
+    return {'rcode': 404, 'httpCode': 404,
       'message': 'Record not found', 'customMsg': customMsg};
   },
   VERIFICATION_EXCEPTION: function(customMsg) {

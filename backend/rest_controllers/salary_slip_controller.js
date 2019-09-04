@@ -28,6 +28,9 @@ api['getEmployeeSalarySlips'] = function(req, res) {
   } else {
     reqData['empID'] = req.session.user_id;
   }
+  if(!reqData.year) {
+    reqData['year'] = new Date().getFullYear();
+  }
   try {
       salaryService.getEmployeeSalarySlips(reqData,function(err, data){
           if(err){
@@ -41,7 +44,7 @@ api['getEmployeeSalarySlips'] = function(req, res) {
   }
 };
 api['sendMail'] = function(req, res) {
-  var reqData = req.query
+  var reqData = req.body
   try {
     salaryService.generatePDfSendEmail(reqData,function(err, data){
         if(err){
