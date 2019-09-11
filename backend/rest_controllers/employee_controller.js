@@ -2,9 +2,6 @@
 var response = require('../services/api_response');
 var employeeService = require('../services/employee_service');
 var appException = require('../app_util/exceptions');
-var helper = require('../app_util/helpers');
-var config = require('../app_util/config');
-var Employee = require('../models/employee');
 
 // public
 var api = {};

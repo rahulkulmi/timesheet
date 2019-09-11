@@ -1,17 +1,18 @@
 var multer  =   require('multer');
 var path = require('path');
 var mustacheExpress = require('mustache')
-var appException = require('../app_util/exceptions');
-var uploadFolderPath = path.resolve('public/');
-var Salarydetail = require('../models/salarydetail');
-var Employee = require('../models/employee');
-var appHelpers = require('../app_util/helpers');
-var emailService = require('./email_service');
-var companyService = require('./company_service');
 var csv = require('csv-parser')
 var underscore = require('underscore');
 var fs = require('fs');
 var pdf = require('html-pdf');
+var uploadFolderPath = path.resolve('public/');
+var Salarydetail = require('../models/salarydetail');
+var Employee = require('../models/employee');
+var appException = require('../app_util/exceptions');
+var appHelpers = require('../app_util/helpers');
+var emailService = require('./email_service');
+var companyService = require('./company_service');
+
 
 var salaryItemsInfo = [
   {employeeFullName: "Employee Name"}, {employeeDesignation: "Designation"} , 

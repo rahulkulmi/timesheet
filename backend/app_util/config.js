@@ -42,7 +42,7 @@ function appConfig() {
     ROOT_PATH: process.env.ROOT_PATH,
     ADMIN_EMAIL_IDS: process.env.ADMIN_EMAIL_IDS,
     BOT_ROOT_PATH: process.env.BOT_ROOT_PATH,
-    SALARY_ADMIN_EMAIL: process.env.SALARY_ADMIN_EMAIL || 'anjana@newput.com',
+    SALARY_ADMIN_EMAIL: process.env.SALARY_ADMIN_EMAIL,
 
     MONGOOSE_INSTANCE: initDB()
   };
