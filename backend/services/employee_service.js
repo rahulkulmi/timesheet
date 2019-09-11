@@ -41,7 +41,7 @@ service['getEmployeeList'] = function(callback) {
 
 service['getAllEmployeeList'] = function(callback) {
   try {
-    Employee.find({}, null, {sort: {fullName: 1}}, function(err, employeeRes) {
+    Employee.find({status: ['employee', 'admin']}, null, {sort: {fullName: 1}}, function(err, employeeRes) {
       if (err) {
         return callback(err);
       } else {
