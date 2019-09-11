@@ -199,14 +199,17 @@ service['generatePDfSendEmail'] = function(reqData, callback) {
               }
               companyService.getDetail(function(err, companyData){
                 if(err){
-                  return callback(err);
+                  //return callback(err);
+                  console.log('company service error', err);
                 } else {
                   data.forEach(element => {
                     loadTemplateAndPrepareData(reqData, element, pgResp, companyData, function(err, resp){
                       if(err) {
-                        return callback(err);
-                      } else{
-                        return callback(null, resp);
+                        //return callback(err);
+                        console.log("loadTemplateError", err);
+                      } else {
+                        console.log("success")
+                        //return callback(null, resp);
                       }
                       
                     });

@@ -166,7 +166,7 @@ service['sendSalarySlipEmail'] = function(employeeDetail, attachment, callback){
           }
         });
       } else {
-        log.info('Email sent: ', mailRes[0].statusCode);
+        log.info('Email sent to '+ employeeDetail.employeeEmail + '', mailRes[0].statusCode);
         fs.unlink(attachment, function(){
           console.log('file deleted ', attachment);
         })
