@@ -143,7 +143,8 @@ service['sendNotificationMail'] = function(callback) {
 service['sendSalarySlipEmail'] = function(employeeDetail, attachment, callback){ 
     var shortMonthName = helper.monthsInAYear[employeeDetail.month - 1].toUpperCase();
     var mailOptions = {
-      from: config.SALARY_ADMIN_EMAIL,
+      from: 'Vipin Joshi <vipin@newput.com>',
+      reply_to: config.SALARY_ADMIN_EMAIL,
       to: employeeDetail.employeeEmail,
       subject: 'CTC ' + shortMonthName.substring(0, 3) + ' ' + employeeDetail.year,
       html: '<h5>Dear ' + employeeDetail.employeeFullName + ',</h5><p>Please find attached below salary slip </p>',
