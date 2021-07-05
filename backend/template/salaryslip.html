@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" type="image/x-icon" href="http://www.newput.com/wp/wp-content/uploads/2016/01/favicon.ico">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="manifest" href="manifest.json">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
+        <style>
+            .salary-slip-wrapper {
+                border: 1px solid #000000;
+                font-weight: 500;
+                min-height: 300px;
+                text-align: center;
+                margin: 30px;
+                font-size: 18px;
+            }
+            .company-details {
+                text-align: center;
+            }
+                
+            .company-name {
+                font-size: 18px;
+                font-weight: 600;
+            }
+                    
+            .company-address {
+                font-size: 16px;
+                font-weight: 600;
+            }
+
+            .days-month {
+                text-align: right;
+                padding-right: 20px;
+                font-size: 14px;
+                font-weight: 600;
+            }
+
+            .salary-content .col-sm-3 {
+                border: 1px solid black;
+                font-size: 13px;
+                text-align: left;
+            }
+
+            .authority-seal {
+                border-right: 1px solid #000000;
+                float:left;
+                width:25.1%;
+                height: 140px;
+            }
+
+            .seal-img {
+                margin: 20px 0px 0px 20px;
+                width: 100px;
+            }
+
+            .sign-sections {
+                padding: 0;
+                float:right;
+                width:74.9%;
+            }
+                    
+            .sign {
+                min-height: 100px;
+                text-align: right;
+            }
+            
+            .sign-img {
+                margin-right: 80px;
+                margin-top: 15px;
+            }
+
+            .sign-content {
+                text-align: right;
+                padding: 5px 30px 5px;
+                border-top: 1px solid #000000;
+                font-size: 14px;
+            }
+                    
+            .bold-head {
+                font-weight: 800;
+            }
+
+            .bold-text {
+                font-weight: 800;
+            }
+
+            #watermark {
+                bottom: 220px;
+                color: gray;
+                font-size: 55px;
+                left: 25%;
+                opacity: 0.1;
+                position: absolute;
+                -webkit-transform: rotate(-50deg);
+                z-index: 99;
+            }
+            .salary-items {
+                width:25%;
+                float:left;
+                border: solid 1px;
+                min-height: 20px;
+                text-align: left;
+                padding-left: 5px;
+            }
+            .salary-content .salary-items:nth-child(odd) {
+                border-left: 0;
+                border-right: 0;
+                border-top: 0;
+            }
+            .salary-content .salary-items:nth-child(even) {
+                border-top: 0;
+            }
+                
+            .salary-content .salary-items:nth-child(4n+0) {
+                border-right: 0;
+            }
+            .head-container{
+                border-bottom: 1px solid;
+            }
+        </style>
+<body>
+    <p id="person">
+            <div class="salary-slip-wrapper">
+                <div class="row head-container" style="margin:0;">
+                    <div class="col-sm-6 offset-sm-3 company-details">
+                        <div class="company-name">{{companyData.companyName}}</div>
+                        <div class="company-address">{{companyData.companyAdd}}</div>
+                        <div class="company-address">CIN {{companyData.cinNumber}}</div>
+                        <div class="company-address">
+                            Salary slip for the month of {{currentMonth}} {{currentYear}}
+                        </div>
+                    </div>
+                    <div class="days-month">
+                        No of days {{currentMonthDays}}
+                    </div>
+                </div>
+                <div class="salary-content">
+                    {{#salaryDisplayItems}}
+                    <div class="salary-items col-sm-3 {{#isHeading}} bold-text{{/isHeading}}">{{itemLabel}}</div>
+                    <div class="salary-items col-sm-3 {{#isHeading}} bold-text{{/isHeading}}">{{itemValue}}</div>
+                    {{/salaryDisplayItems}}
+                    <div class="row" style="margin:0;">
+                        <div class="authority-seal col-sm-12">
+                                <img class="seal-img" src="data:image/png;base64, {{companyData.companySeal}}">
+                        </div>
+                        <div class="sign-sections col-sm-12">
+                            <div class="sign">
+                                <img class="sign-img" src="data:image/png;base64, {{companyData.directorSign}}">
+                            </div>
+                            <div class="sign-content" style="border-top: 1px solid;">
+                                Authorised Signatory
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="watermark">
+                        CONFIDENTIAL
+                    </div>
+                </div>
+            </div>
+    </div>
+    </p>
+</body>
+</html>

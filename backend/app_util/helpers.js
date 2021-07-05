@@ -7,6 +7,8 @@ var utility = {};
 utility['daysInMonth'] = function(year, month) {
   return new Date(year, month, 0).getDate();
 };
+utility['monthsInAYear'] = ['January', 'February', 'March', 'April', 'May', 'June',
+'July', 'August', 'September', 'October', 'November', 'December'];
 
 utility['getDate'] = function(userDay) {
   var todayDate = new Date();
@@ -262,5 +264,7 @@ utility['getDateByString'] = function(dateString) {
   var date = new Date(newDateString);
   return date;
 };
+
+utility['validCSVKeys'] = ['employee_email', 'employee_designation', 'month', 'year', 'basic', 'hra', 'lta', 'advance_bonus', 'advance_gratuity', 'professional_allowance', 'gross_salary', 'net_salary_payable', 'professional_tax', 'tds', 'esic', 'pf', 'total_deductions', 'bank_name', 'account_no', 'ifsc', 'esic_no', 'pf_uan']
 
 module.exports = utility;

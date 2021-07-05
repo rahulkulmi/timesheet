@@ -24,11 +24,32 @@ service['getDetailById'] = function(reqData, callback) {
 service['getEmployeeList'] = function(callback) {
   try {
     Employee.find({status: 'employee'}, null, {sort: {fullName: 1}}, function(err, employeeRes) {
-      if (err) return callback(err);
-      if (employeeRes) {
-        return callback(null, employeeRes);
+      if (err) {
+        return callback(err);
       } else {
-        return callback(null, null);
+        if (employeeRes) {
+          return callback(null, employeeRes);
+        } else {
+          return callback(null, null);
+        }
+      }
+    });
+  } catch (err) {
+    return callback(err);
+  }
+};
+
+service['getAllEmployeeList'] = function(callback) {
+  try {
+    Employee.find({status: ['employee', 'admin']}, null, {sort: {fullName: 1}}, function(err, employeeRes) {
+      if (err) {
+        return callback(err);
+      } else {
+        if (employeeRes) {
+          return callback(null, employeeRes);
+        } else {
+          return callback();
+        }
       }
     });
   } catch (err) {
